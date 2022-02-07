@@ -12,7 +12,10 @@ function App() {
       </div>
       {account && 
       <div>
-        <Punk address={account}/>
+        {[...new Array(100)].map((_, i) => {
+          return <Punk key={i} address={account}/>
+        })}
+        
       </div>}
       
     </div>

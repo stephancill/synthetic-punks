@@ -1,9 +1,9 @@
 import spritesheet from "../../punks.spritesheet/spritesheet.png"
 import {
-  spritesheet as spritesheetDescriptor, 
+  rangeRenderOrder,
   attributeRanges,
   typesRange,
-  getRange,
+  isInRange,
   ISprite,
   getAllInRangeWithCriteria
 } from "../../punks.spritesheet/spritesheet-csv"
@@ -18,7 +18,7 @@ export const Punk = ({address}: IPunkProps) => {
   const [imageData, setImageData] = useState("")
   const [attributes, setAttributes] = useState<Array<ISprite>>([])
 
-  const scale = 10
+  const scale = 5
   const size = 24
   const scaledSize = size * scale
   
@@ -33,6 +33,10 @@ export const Punk = ({address}: IPunkProps) => {
   sprite.src = spritesheet
 
   sprite.onload = () => {} // Chrome workaround
+
+  useEffect(() => {
+    generatePunk()
+  }, [])
 
   const drawSprite = (id: number) => {
     const x = id % 25
@@ -75,12 +79,16 @@ export const Punk = ({address}: IPunkProps) => {
     const selectedAttributeTypes = chooseRandom(Object.values(attributeRanges), numAttributes)
 
     let _attributes = selectedAttributeTypes.map(range => {
-      const options = getAllInRangeWithCriteria(range, [gender, "u"])
+      const options = getAllInRangeWithCriteria(range, [gender, "u"], [gender === "f" ? "s" : "l"])
       return chooseRandom(options)[0] as ISprite
-    }).filter(attr => attr !== undefined).sort((a, b) => a.id - b.id); // TODO: Ordering of beards and pipes
+    }).filter(attr => attr !== undefined)
 
-    [baseType, ..._attributes].forEach(sprite => {
-      drawSprite(sprite.id)
+    rangeRenderOrder.forEach(range => {
+      [baseType, ..._attributes].forEach(sprite => {
+        if (isInRange(sprite.id, range)) {
+          drawSprite(sprite.id)
+        }
+      })
     })
 
     setAttributes([baseType, ..._attributes])
@@ -89,13 +97,13 @@ export const Punk = ({address}: IPunkProps) => {
 
 
   return (
-    <div>
-      <div>Punk {address}</div>
-      <button onClick={() => generatePunk()}>Random</button>
-      <div>
+    <span style={{display: "inline-block"}}>
+      {/* <div>Punk {address}</div>
+      <button onClick={() => generatePunk()}>Random</button> */}
+      <span>
         <img src={imageData}></img>
-        {attributes.map(attr => <div key={attr.id}>{attr.name}</div>)}
-      </div>
-    </div>
+        {/* {attributes.map(attr => <div key={attr.id}>{attr.name}</div>)} */}
+      </span>
+    </span>
   )  
 }
