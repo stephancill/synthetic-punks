@@ -18,7 +18,7 @@ export const Punk = ({address}: IPunkProps) => {
   const [imageData, setImageData] = useState("")
   const [attributes, setAttributes] = useState<Array<ISprite>>([])
 
-  const scale = 5
+  const scale = 3
   const size = 24
   const scaledSize = size * scale
   
@@ -39,8 +39,10 @@ export const Punk = ({address}: IPunkProps) => {
   }, [])
 
   const drawSprite = (id: number) => {
+    
     const x = id % 25
     const y = Math.floor(id / 25)
+    console.log(id, x * size, y * size)
     ctx!.drawImage(sprite, x * size, y * size, size, size, 0, 0, size, size)
     return canvas.toDataURL("image/png")
   }
@@ -71,6 +73,7 @@ export const Punk = ({address}: IPunkProps) => {
   }
 
   const generatePunk = () => {
+    console.log("new punk")
     ctx!.clearRect(0, 0, size, size)
     
     const numAttributes = getAttributeCount()

@@ -56,7 +56,7 @@ out_im.show()
 
 csv_body = None
 with open("spritesheet-filtered.json", "w") as f:
-  csv_body = "\n".join([", ".join([str(i), *x.split(", ")[1:4]]) for i, x in enumerate(new_lines)])
+  csv_body = "\n".join([",".join([str(i), *x.split(", ")[1:4]]) for i, x in enumerate(new_lines)])
   with open("spritesheet-filtered.csv", "w") as csv_f:
     csv_f.write("id, name, gender, size\n"+csv_body)
   json_content = {"csv": csv_body}

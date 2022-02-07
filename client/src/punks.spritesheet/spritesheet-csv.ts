@@ -23,7 +23,7 @@ export interface IRange {
     endId: number
 }
 
-const spritesheetRaw = CSVToArray(descriptor, ", ")
+const spritesheetRaw = CSVToArray(descriptor, ",")
 export const spritesheet: Array<ISprite> = spritesheetRaw.map(row => {
     const [id, name, gender, size] = row
     return {
