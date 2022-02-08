@@ -12,3 +12,4 @@ artifacts
 types
 
 deployments/localhost
+dist

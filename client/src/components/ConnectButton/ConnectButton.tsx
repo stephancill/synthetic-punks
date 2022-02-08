@@ -1,18 +1,25 @@
-import { useEthers } from "@usedapp/core"
 import Web3Modal from "web3modal"
 import WalletConnectProvider from "@walletconnect/web3-provider"
 import { truncateAddress } from "../../utilities"
 import { useEffect } from "react"
+import { ethers, Signer } from "ethers"
+import { BaseProvider } from '@ethersproject/providers'
 
-export const ConnectButton = () => {
-  const {activate, deactivate, account} = useEthers()
+interface IConnectButtonProps {
+  signerOrProvider: Signer | BaseProvider | undefined
+  setSignerOrProvider: (arg0: Signer | BaseProvider | undefined) => void
+  address: string | undefined
+  setAddress: (arg0: string | undefined) => void
+}
 
+export const ConnectButton = ({signerOrProvider, setSignerOrProvider, address, setAddress} : IConnectButtonProps) => {
   useEffect(() => {
-    if (!account) {
+    if (!signerOrProvider) {
       (async () => {
         const isConnected = await checkHasConnected()
         if (isConnected) {
-          await activate(window.ethereum)
+          const provider = new ethers.providers.Web3Provider(window.ethereum)
+          setSignerOrProvider(provider)
         }
       })()
     }
@@ -50,18 +57,22 @@ export const ConnectButton = () => {
     })
     
     try {
-      const provider = await web3Modal.connect()
-      await activate(provider)
+      const connection = await web3Modal.connect()
+      const provider = new ethers.providers.Web3Provider(connection)
+      const signer = provider.getSigner(0)
+      const _address = await signer.getAddress()
+      setAddress(_address)
+      setSignerOrProvider(provider)
     } catch (error: any) {
       console.log(error)
     }
   }
 
   return (
-    !account 
+    !address
     ? 
       <button onClick={activateProvider}>Connect</button>
     :
-      <button onClick={() => deactivate()}>Disconnect {truncateAddress(account)}</button>
+    <button onClick={() => setSignerOrProvider(undefined)}>Disconnect {truncateAddress(address)}</button>
   )
 }

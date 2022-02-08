@@ -23,7 +23,6 @@ describe("SyntheticPunks", function () {
 
   it("should return tokenURI", async function () {
     let uri = await syntheticPunks.tokenURI(1)
-    console.log(uri)
     expect(uri).to.not.equal(undefined)
   })
 

@@ -21,9 +21,9 @@ contract SyntheticPunks is ERC721 {
     spritesheetRanges = _spritesheetRanges;
   }
 
-  // function tokenURI(address _address) public view returns (string memory) {
-  //   return tokenURI(tokenID(_address));
-  // }
+  function _tokenURI(address _address) public view returns (string memory) {
+    return tokenURI(tokenID(_address));
+  }
 
   function tokenID(address _address) public pure returns (uint256) {
     return uint256(uint160(_address));
@@ -54,7 +54,7 @@ contract SyntheticPunks is ERC721 {
     uint256 checks = randomUint(id, 1) % (spritesheetRanges.length - 1); // Number of bytes to check
     uint256[] memory attributes = new uint256[](checks);
     uint256 length = 0;
-    for (uint256 i; i <= checks; i++) {
+    for (uint256 i; i < checks; i++) {
       uint256 newAttribute = randomUint(id, 2+i) % (spritesheetRanges.length - 2) + 1; // Skip base category
       bool exists = contains(attributes, newAttribute);
       if (!exists) {

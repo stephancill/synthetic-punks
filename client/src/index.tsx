@@ -3,21 +3,11 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { Config, DAppProvider, Mainnet } from "@usedapp/core";
 
-const config: Config = {
-  readOnlyChainId: Mainnet.chainId,
-  readOnlyUrls: {
-    [Mainnet.chainId]: `https://mainnet.infura.io/v3/${process.env.REACT_APP_INFURA_PROJECT_ID}`,
-  },
-  autoConnect: false
-}
 
 ReactDOM.render(
   <React.StrictMode>
-    <DAppProvider config={config}>
-      <App />
-    </DAppProvider>
+    <App />
   </React.StrictMode>,
   document.getElementById("root")
 );

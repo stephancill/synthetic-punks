@@ -1,23 +1,53 @@
+import { Signer } from "ethers"
+import { BaseProvider, JsonRpcProvider } from '@ethersproject/providers'
+import { useEffect, useState } from "react"
 import "./App.css"
-import { useEthers } from "@usedapp/core"
 import { ConnectButton } from "./components/ConnectButton/ConnectButton"
 import { Punk } from "./components/Punk/Punk"
 
+const defaultProvider = new JsonRpcProvider("https://mainnet.infura.io/v3/a03218fc876c4ba9a720ba48cc3b8de9")
+
 function App() {
-  const {account} = useEthers()
+  const [signerOrProvider, setSignerOrProvider] = useState<Signer | BaseProvider | undefined>(undefined)
+  const [address, setAddress] = useState<string | undefined>(undefined)
+  const [searchQuery, setSearchQuery] = useState<string>("")
+  
+  useEffect(() => {
+    if (!signerOrProvider) {
+      setSignerOrProvider(defaultProvider)
+    }
+  }, [])
+  
   return (
     <div>
       <div>
-        <ConnectButton/>
+        <ConnectButton signerOrProvider={signerOrProvider} setSignerOrProvider={setSignerOrProvider} address={address} setAddress={setAddress}/>
       </div>
-      {account && 
       <div>
-        {[...new Array(200)].map((_, i) => {
-          return <Punk key={i} address={account}/>
-        })}
-        
+        <form onSubmit={async (e) => {
+          e.preventDefault()
+          if (searchQuery.indexOf(".") > -1) {
+            (async () => {
+              console.log("resolving", searchQuery)
+              const name = searchQuery
+              console.log(signerOrProvider)
+              const addr = await signerOrProvider?.resolveName(name)
+              console.log(addr)
+              addr && setAddress(addr)
+            })()
+          } else {
+            console.log("address", searchQuery)
+            setAddress(searchQuery)
+          }
+          
+        }}>
+          <input onChange={(e) => setSearchQuery(e.target.value)} type="text" placeholder="Search address or ENS" />
+        </form>
+      </div>
+      {address && signerOrProvider &&
+      <div>
+        <Punk address={address} signerOrProvider={signerOrProvider}/>
       </div>}
-      
     </div>
   )
 }
