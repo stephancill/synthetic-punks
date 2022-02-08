@@ -1,0 +1,138 @@
+id, name, gender, size
+0,Human 1,m,l
+1,Human 2,m,l
+2,Human 3,m,l
+3,Human 4,m,l
+4,Human Female 1,f,s
+5,Human Female 2,f,s
+6,Human Female 3,f,s
+7,Human Female 4,f,s
+8,Zombie,m,l
+9,Ape,m,l
+10,Alien,m,l
+11,3D Glasses,u,l
+12,3D Glasses,f,s
+13,Big Shades,u,l
+14,Big Shades,f,s
+15,Classic Shades,u,l
+16,Classic Shades,f,s
+17,Eye Mask,u,l
+18,Eye Mask,f,s
+19,Eye Patch,u,l
+20,Eye Patch,f,s
+21,Horned Rim Glasses,u,l
+22,Horned Rim Glasses,f,s
+23,Nerd Glasses,u,l
+24,Nerd Glasses,f,s
+25,Regular Shades,u,l
+26,Regular Shades,f,s
+27,Small Shades,u,l
+28,Small Shades,f,s
+29,VR,u,l
+30,VR,f,s
+31,Welding Goggles,f,s
+32,Blue Eye Shadow,f,s
+33,Green Eye Shadow,f,s
+34,Clown Eyes Blue,u,l
+35,Clown Eyes Blue,f,s
+36,Clown Eyes Green,u,l
+37,Clown Eyes Green,f,s
+38,Mole,m,l
+39,Mole,f,s
+40,Rosy Cheeks,m,l
+41,Rosy Cheeks,f,s
+42,Spots,m,l
+43,Spots,f,s
+44,Clown Nose,u,l
+45,Clown Nose,f,s
+46,Earring,u,l
+47,Earring,f,s
+48,Buck Teeth,m,l
+49,Frown,m,l
+50,Smile,m,l
+51,Cigarette,u,l
+52,Cigarette,f,s
+53,Medical Mask,u,l
+54,Medical Mask,f,s
+55,Pipe,u,l
+56,Pipe,f,s
+57,Vape,u,l
+58,Vape,f,s
+59,Gold Chain,m,l
+60,Silver Chain,m,l
+61,Big Beard,m,l
+62,Chinstrap,m,l
+63,Front Beard,m,l
+64,Front Beard Dark,m,l
+65,Goat,m,l
+66,Handlebars,m,l
+67,Luxurious Beard,m,l
+68,Mustache,m,l
+69,Muttonchops,m,l
+70,Normal Beard,m,l
+71,Normal Beard Black,m,l
+72,Shadow Beard,m,l
+73,Bandana,m,l
+74,Bandana,f,s
+75,Beanie,m,l
+76,Beanie,f,s
+77,Cap Forward,u,l
+78,Cap Forward,f,s
+79,Cowboy Hat,m,l
+80,Cowboy Hat,f,s
+81,Do-rag,m,l
+82,Do-rag,f,s
+83,Fedora,m,l
+84,Fedora,f,s
+85,Headband,u,l
+86,Headband,f,s
+87,Hoodie,m,l
+88,Hoodie,f,s
+89,Knitted Cap,u,l
+90,Knitted Cap,f,s
+91,Pilot Helmet,f,s
+92,Police Cap,m,l
+93,Police Cap,f,s
+94,Tassle Hat,f,s
+95,Tiara,f,s
+96,Top Hat,m,l
+97,Top Hat,f,s
+98,Cap,u,l
+99,Cap,f,s
+100,Blonde Short,f,s
+101,Crazy Hair,m,l
+102,Crazy Hair,f,s
+103,Dark Hair,f,s
+104,Frumpy Hair,m,l
+105,Frumpy Hair,f,s
+106,Half Shaved,f,s
+107,Messy Hair,u,l
+108,Messy Hair,f,s
+109,Mohawk,u,l
+110,Mohawk,f,s
+111,Mohawk Dark,u,l
+112,Mohawk Dark,f,s
+113,Mohawk Thin,u,l
+114,Mohawk Thin,f,s
+115,Orange Side,f,s
+116,Peak Spike,m,l
+117,Pigtails,f,s
+118,Pink With Hat,f,s
+119,Purple Hair,m,l
+120,Purple Hair,f,s
+121,Red Mohawk,f,s
+122,Shaved Head,m,l
+123,Shaved Head,f,s
+124,Straight Hair,f,s
+125,Straight Hair Blonde,f,s
+126,Straight Hair Dark,f,s
+127,Stringy Hair,m,l
+128,Stringy Hair,f,s
+129,Vampire Hair,m,l
+130,Wild Blonde,f,s
+131,Wild Hair,m,l
+132,Wild Hair,f,s
+133,Wild White Hair,f,s
+134,Blonde Bob,f,s
+135,Clown Hair Green,m,l
+136,Clown Hair Green,f,s

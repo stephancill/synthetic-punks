@@ -4,8 +4,15 @@
     "module": "commonjs",
     "strict": true,
     "esModuleInterop": true,
-    "outDir": "dist"
+    "outDir": "dist",
+    "types": ["node"],
+    "resolveJsonModule": true
   },
-  "include": ["./scripts", "./test", "./deploy", "./typechain"],
+  "references": [
+    { 
+      "path": "../lib"
+    }
+  ],
+  "include": ["./scripts", "./test", "./deploy", "./typechain", "./utils"],
   "files": ["./hardhat.config.ts"]
 }
