@@ -31,6 +31,7 @@ export const spritesheet: Array<ISprite> = spritesheetRaw.map(row => {
     }
 })
 
+// TODO: use calculated ranges
 export const typesRange: IRange = {startId: 0, endId: 10}
 export const eyesRange: IRange = {startId: 11, endId: 37}
 export const cheeksRange: IRange = {startId: 38, endId: 45}
@@ -61,6 +62,8 @@ export const rangeRenderOrder = [
     headAccessoriesRange,
     mouthAccessoriesRange,
 ]
+
+export {ranges, render_order as renderOrder} from "./spritesheet-filtered.json"
 
 export const isInRange = (id: number, range: IRange) => {
     return id >= range.startId && id <= range.endId
