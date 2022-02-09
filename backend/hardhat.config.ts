@@ -26,7 +26,7 @@ if (process.env.FORK) {
       chainId: 1,
       forking: {
         url: `https://mainnet.infura.io/v3/${process.env.INFURA_PROJECT_ID}`
-      }
+      },
     }
   }
 }
@@ -43,6 +43,10 @@ const config: HardhatUserConfig = {
   namedAccounts: {
     deployer: {
       default: 0,
+    },
+    withdrawAddress: {
+      31337: 0,
+      1: process.env.WITHDRAW_ADDRESS_MAINNET!
     }
   }
 }

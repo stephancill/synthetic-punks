@@ -2,12 +2,14 @@
 pragma solidity ^0.8.0;
 
 import "@rari-capital/solmate/src/tokens/ERC721.sol";
-// import "hardhat/console.sol";
 
 contract SyntheticPunks is ERC721 {
 
-  string public spritesheetImageData;
+  // TODO: Check if constants are cheaper
+  string public spritesheetImageData; // TODO: Move this to separate contract
   uint256[4][9] public spritesheetRanges;
+  uint256 public claimPrice = 0.02 ether;
+  address public withdrawAddress;
 
   enum Gender { Male, Female }
 
@@ -15,19 +17,34 @@ contract SyntheticPunks is ERC721 {
     string memory _name, 
     string memory _symbol, 
     string memory _spritesheetImageData, 
-    uint256[4][9] memory _spritesheetRanges
+    uint256[4][9] memory _spritesheetRanges,
+    address _withdrawAddress
   ) ERC721(_name, _symbol) {
     spritesheetImageData = _spritesheetImageData;
     spritesheetRanges = _spritesheetRanges;
+    withdrawAddress = _withdrawAddress;
+  }
+
+  function claim() public payable {
+    require(msg.value >= claimPrice, "");
+    _safeMint(msg.sender, uint256(uint160(msg.sender)));
+    uint256 refund = msg.value - claimPrice;
+    if (refund > 0) {
+      payable(msg.sender).transfer(refund);
+    }
+  }
+
+  function withdraw() public {
+    payable(withdrawAddress).transfer(address(this).balance);
   }
 
   function _tokenURI(address _address) public view returns (string memory) {
-    return tokenURI(tokenID(_address));
+    return tokenURI(uint256(uint160(_address)));
   }
 
-  function tokenID(address _address) public pure returns (uint256) {
-    return uint256(uint160(_address));
-  }
+  // function tokenID(address _address) public pure returns (uint256) {
+  //   return uint256(uint160(_address));
+  // }
 
   function tokenURI(uint256 id) public view override returns (string memory) {
     uint256[] memory attributeCategories = getAttributeCategories(id);
