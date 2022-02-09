@@ -9,7 +9,7 @@ npx hardhat node
 Optionally export ABIs:
 
 ```
-npx hardhat deploy --export-all ../client/src/deployments.json --network localhost
+npx hardhat deploy --export ../client/src/deployments.json --network localhost
 ```
 
 Use `FORK=mainnet` to fork mainnet on the localhost network.
