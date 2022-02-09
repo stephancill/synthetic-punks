@@ -5,6 +5,14 @@
 .container {
   text-align: center;
 }
+.textContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+b {
+  font-weight: 600;
+}
 
 .App-link {
   color: #61dafb;
@@ -27,15 +35,21 @@ h2 {
 
 h3 {
   text-align: center;
-  width: 300px;
+  width: 400px;
   font-size: 1rem;
   font-weight: 300;
+  text-align: left;
+}
+h4 {
+  font-size: 0.8rem;
 }
 
 .textGlow {
   color: #fff;
-  text-shadow: 0 0 7px #fff, 0 0 10px #fff, 0 0 21px #fff, 0 0 42px #0fa,
-    0 0 82px #0fa, 0 0 92px #0fa, 0 0 102px #0fa, 0 0 151px #0fa;
+  text-shadow: 0 0 7px #fff, 0 0 10px #fff, 0 0 21px #fff,
+    0 0 32px rgba(0, 255, 170, 0.584), 0 0 32px rgba(0, 255, 170, 0.584),
+    0 0 42px rgba(0, 255, 170, 0.584), 0 0 62px rgba(0, 255, 170, 0.584),
+    0 0 100px rgba(0, 255, 170, 0.584);
 }
 
 input {
@@ -92,4 +106,18 @@ input:hover {
 }
 .mintBtn:disabled:hover {
   background: none;
+}
+.footText {
+  color: #fff;
+}
+a {
+  color: #00b87b;
+  transition-duration: 0.2s;
+}
+a:hover {
+  color: white;
+  text-shadow: 0 0 4px #fff, 0 0 5px #fff, 0 0 10px #fff,
+    0 0 20px rgb(0, 255, 166, 0.4), 0 0 20px rgb(0, 255, 166, 0.5),
+    0 0 30px rgb(0, 255, 166, 0.5), 0 0 60px rgb(0, 255, 166, 0.5),
+    0 0 80px rgb(0, 255, 166, 0.5);
 }

@@ -89,7 +89,7 @@ function App() {
          <Punk address={address} signerOrProvider={signerOrProvider}/>
         </div>
       </div>}
-      <div className="container" style={{marginTop:"25px",marginBottom:"100px"}}>
+      <div className="container" style={{marginTop:"25px",marginBottom:"80px"}}>
         { !canClaim ? <></> : <>
           { alreadyClaimed ? <>
             <button className="mintBtn" disabled>
@@ -103,12 +103,22 @@ function App() {
         
         </>}
       </div>
-      <div className="container">
-        <h3 className="textGlow">
-          Synthetic Loot (or "Synth Loot") is a virtual form of Loot that every wallet has automatically and does not need to be minted.
-
-          Unlike original Loot which is generated based on a numeric identifier, Synthetic Loot is generated based on your Ethereum wallet address. Developers who are building on top of Loot can easily incorporate Synthetic Loot into their projects, allowing the entire Ethereum ecosystem to access their projects for free. 
-        </h3>
+      <div className="textContainer">
+        <div>
+          <h3 className="textGlow">
+          <b>Synthetic CryptoPunks</b> is inspired by the historical collection of 10,000 CryptoPunks by Larva Labs. It generates unique CryptoPunks for any  is a virtual form of Loot that every wallet has automatically and does not need to be minted.
+          </h3>
+          <h3 className="textGlow">
+          Unlike original Loot which is generated based on a numeric identifier, Synthetic Loot is generated based on your Ethereum wallet address. Developers who are building on top of Loot can easily incorporate Synthetic Loot into their projects, allowing the entire Ethereum ecosystem to access their projects for free.
+          </h3>
+        </div>
+      </div>
+      <div className="textContainer" style={{marginTop:"80px", marginLeft:"-0px"}}>
+      
+          <h4 className="footText">
+            Made by <a href="https://twitter.com/stephancill">@stephancill</a> and <a href="https://twitter.com/npm_luko">@npm_luko</a>
+          </h4>
+        
       </div>
     </div>
   )
