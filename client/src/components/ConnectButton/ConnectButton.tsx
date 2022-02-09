@@ -3,6 +3,7 @@ import WalletConnectProvider from "@walletconnect/web3-provider"
 import { truncateAddress } from "../../utilities"
 import { useEffect } from "react"
 import { ethers, Signer } from "ethers"
+import  style  from  "./ConnectButton.module.css"
 import { BaseProvider } from '@ethersproject/providers'
 
 interface IConnectButtonProps {
@@ -69,10 +70,12 @@ export const ConnectButton = ({signerOrProvider, setSignerOrProvider, address, s
   }
 
   return (
-    !address
-    ? 
-      <button onClick={activateProvider}>Connect</button>
+    <div className={style.container}>
+    {! address ?  
+      <button className={style.connectBtn} onClick={activateProvider}>Connect</button>
     :
-    <button onClick={() => setSignerOrProvider(undefined)}>Disconnect {truncateAddress(address)}</button>
+    <button className={style.connectBtn} onClick={() => setSignerOrProvider(undefined)}>Disconnect {truncateAddress(address)}</button>
+    }  
+    </div>  
   )
 }

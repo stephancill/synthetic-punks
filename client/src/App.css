@@ -12,6 +12,9 @@
     animation: App-logo-spin infinite 20s linear;
   }
 }
+.container {
+  text-align: center;
+}
 
 .App-header {
   background-color: #282c34;
@@ -35,4 +38,41 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+h1,
+h2 {
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: 400;
+}
+
+h1 {
+  font-size: 4.2rem;
+  transition: 0.2ms;
+}
+
+h2 {
+  font-size: 1.8rem;
+}
+
+input {
+  transition-duration: 0.2s;
+  width: 300px;
+  height: 40px;
+  border: white 1px solid;
+  background: white;
+  border-radius: 5px;
+  color: #00b87b;
+  font-size: 18px;
+  font-weight: bold;
+  box-shadow: 0 0 20px rgb(0, 255, 166, 0.3), 0 0 20px rgb(0, 255, 166, 0.3),
+    0 0 30px rgb(0, 255, 166, 0.3), 0 0 60px rgb(0, 255, 166, 0.3),
+    0 0 80px rgb(0, 255, 166, 0.3);
+}
+input:hover {
+  box-shadow: 0 0 4px #fff, 0 0 5px #fff, 0 0 10px #fff,
+    0 0 20px rgb(0, 255, 166, 0.4), 0 0 20px rgb(0, 255, 166, 0.5),
+    0 0 30px rgb(0, 255, 166, 0.5), 0 0 60px rgb(0, 255, 166, 0.5),
+    0 0 80px rgb(0, 255, 166, 0.5);
 }

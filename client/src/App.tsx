@@ -4,6 +4,9 @@ import { useEffect, useState } from "react"
 import "./App.css"
 import { ConnectButton } from "./components/ConnectButton/ConnectButton"
 import { Punk } from "./components/Punk/Punk"
+import { NeonText } from "./components/NeonText/NeonText"
+
+
 
 const defaultProvider = new JsonRpcProvider("https://mainnet.infura.io/v3/a03218fc876c4ba9a720ba48cc3b8de9")
 
@@ -11,19 +14,20 @@ function App() {
   const [signerOrProvider, setSignerOrProvider] = useState<Signer | BaseProvider | undefined>(undefined)
   const [address, setAddress] = useState<string | undefined>(undefined)
   const [searchQuery, setSearchQuery] = useState<string>("")
-  
+
   useEffect(() => {
     if (!signerOrProvider) {
       setSignerOrProvider(defaultProvider)
     }
   }, [])
-  
+
   return (
     <div>
-      <div>
-        <ConnectButton signerOrProvider={signerOrProvider} setSignerOrProvider={setSignerOrProvider} address={address} setAddress={setAddress}/>
+      <NeonText text={"SYNTHETIC PUNKS"} ></NeonText>
+      <div style={{marginTop:"100px"}}>
+        <ConnectButton  signerOrProvider={signerOrProvider} setSignerOrProvider={setSignerOrProvider} address={address} setAddress={setAddress}/>
       </div>
-      <div>
+      <div className={"container"} style={{marginTop:"40px"}}>
         <form onSubmit={async (e) => {
           e.preventDefault()
           if (searchQuery.indexOf(".") > -1) {
