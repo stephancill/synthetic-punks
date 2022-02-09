@@ -1,12 +1,11 @@
-import { Signer } from "ethers"
+import { ethers, Signer } from "ethers"
 import { BaseProvider, JsonRpcProvider } from '@ethersproject/providers'
 import { useEffect, useState } from "react"
 import "./App.css"
 import { ConnectButton } from "./components/ConnectButton/ConnectButton"
 import { Punk } from "./components/Punk/Punk"
 import { NeonText } from "./components/NeonText/NeonText"
-
-
+import deployments from "./deployments.json"
 
 const defaultProvider = new JsonRpcProvider("https://mainnet.infura.io/v3/a03218fc876c4ba9a720ba48cc3b8de9")
 
@@ -14,12 +13,48 @@ function App() {
   const [signerOrProvider, setSignerOrProvider] = useState<Signer | BaseProvider | undefined>(undefined)
   const [address, setAddress] = useState<string | undefined>(undefined)
   const [searchQuery, setSearchQuery] = useState<string>("")
+  const [canClaim, setCanClaim] = useState(false)
+  const [alreadyClaimed, setAlreadyClaimed] = useState(false)
+
 
   useEffect(() => {
     if (!signerOrProvider) {
       setSignerOrProvider(defaultProvider)
     }
-  }, [])
+    console.log(defaultProvider)
+  }, [signerOrProvider])
+
+  useEffect(() => {
+    console.log(signerOrProvider instanceof Signer,"s")
+    if (signerOrProvider instanceof Signer) {
+      (async () => {
+        const signerAddress = await (signerOrProvider as Signer).getAddress()
+        const contractAddress = deployments.contracts["SyntheticPunks"].address
+        const contractInterface = new ethers.utils.Interface( deployments.contracts["SyntheticPunks"].abi)
+        const syntheticPunk = new ethers.Contract(contractAddress, contractInterface, signerOrProvider)
+        const claimed = await syntheticPunk.claimed(signerAddress)
+        console.log(claimed,"already claimed")
+        setAlreadyClaimed(claimed)
+          // check claimed
+          // if false they can mint
+        setCanClaim(address?.toLowerCase()===signerAddress.toLowerCase())
+      })()
+    }
+  }, [signerOrProvider, address])
+
+  const claimNFT = async () => {
+    const contractAddress = deployments.contracts["SyntheticPunks"].address
+    const contractInterface = new ethers.utils.Interface( deployments.contracts["SyntheticPunks"].abi)
+    const syntheticPunk = new ethers.Contract(contractAddress, contractInterface, signerOrProvider)
+    const claimPrice = await syntheticPunk.claimPrice()
+    try {
+    const tx = await syntheticPunk.connect(signerOrProvider as Signer).claim({value: claimPrice})
+    console.log(tx) 
+    setAlreadyClaimed(true)
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   return (
     <div>
@@ -50,8 +85,31 @@ function App() {
       </div>
       {address && signerOrProvider &&
       <div>
-        <Punk address={address} signerOrProvider={signerOrProvider}/>
+        <div className="container">
+         <Punk address={address} signerOrProvider={signerOrProvider}/>
+        </div>
       </div>}
+      <div className="container" style={{marginTop:"25px",marginBottom:"100px"}}>
+        { !canClaim ? <></> : <>
+          { alreadyClaimed ? <>
+            <button className="mintBtn" disabled>
+              Claimed
+            </button>
+          </> : <>
+            <button className="mintBtn" onClick={()=>claimNFT()}>
+              Claim 0.02ETH
+            </button>
+          </>}
+        
+        </>}
+      </div>
+      <div className="container">
+        <h3 className="textGlow">
+          Synthetic Loot (or "Synth Loot") is a virtual form of Loot that every wallet has automatically and does not need to be minted.
+
+          Unlike original Loot which is generated based on a numeric identifier, Synthetic Loot is generated based on your Ethereum wallet address. Developers who are building on top of Loot can easily incorporate Synthetic Loot into their projects, allowing the entire Ethereum ecosystem to access their projects for free. 
+        </h3>
+      </div>
     </div>
   )
 }

@@ -27,10 +27,9 @@ export const Punk = ({address, signerOrProvider}: IPunkProps) => {
   }, [address, signerOrProvider])
 
   return (
-    <div style={{display: "inline-block"}}>
-      <div>{address}</div>
+    <div style={{display: "inline-block", paddingTop:"30px"}}>
       <span>
-        <img style={{width: "500px", border: "1px black solid"}} src={imageData}></img>
+        <img style={{width: "400px", border: "1px black solid", background:"#6A9480", borderRadius:"5px"}} src={imageData}></img>
         {/* {attributes.map(attr => <div key={attr.id}>{attr.name}</div>)} */}
       </span>
     </div>

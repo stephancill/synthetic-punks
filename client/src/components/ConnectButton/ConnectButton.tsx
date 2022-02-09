@@ -20,7 +20,8 @@ export const ConnectButton = ({signerOrProvider, setSignerOrProvider, address, s
         const isConnected = await checkHasConnected()
         if (isConnected) {
           const provider = new ethers.providers.Web3Provider(window.ethereum)
-          setSignerOrProvider(provider)
+          const signer = provider.getSigner(0)
+          setSignerOrProvider(signer)
         }
       })()
     }
@@ -63,7 +64,7 @@ export const ConnectButton = ({signerOrProvider, setSignerOrProvider, address, s
       const signer = provider.getSigner(0)
       const _address = await signer.getAddress()
       setAddress(_address)
-      setSignerOrProvider(provider)
+      setSignerOrProvider(signer)
     } catch (error: any) {
       console.log(error)
     }

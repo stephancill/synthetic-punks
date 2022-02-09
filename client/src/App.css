@@ -2,63 +2,45 @@
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
 .container {
   text-align: center;
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
 .App-link {
   color: #61dafb;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 h1,
 h2 {
   text-align: center;
-  text-transform: uppercase;
   font-weight: 400;
 }
 
 h1 {
+  text-transform: uppercase;
   font-size: 4.2rem;
-  transition: 0.2ms;
 }
 
 h2 {
   font-size: 1.8rem;
 }
 
+h3 {
+  text-align: center;
+  width: 300px;
+  font-size: 1rem;
+  font-weight: 300;
+}
+
+.textGlow {
+  color: #fff;
+  text-shadow: 0 0 7px #fff, 0 0 10px #fff, 0 0 21px #fff, 0 0 42px #0fa,
+    0 0 82px #0fa, 0 0 92px #0fa, 0 0 102px #0fa, 0 0 151px #0fa;
+}
+
 input {
   transition-duration: 0.2s;
-  width: 300px;
+  width: 396px;
   height: 40px;
   border: white 1px solid;
   background: white;
@@ -66,6 +48,8 @@ input {
   color: #00b87b;
   font-size: 18px;
   font-weight: bold;
+  outline: none;
+  text-align: center;
   box-shadow: 0 0 20px rgb(0, 255, 166, 0.3), 0 0 20px rgb(0, 255, 166, 0.3),
     0 0 30px rgb(0, 255, 166, 0.3), 0 0 60px rgb(0, 255, 166, 0.3),
     0 0 80px rgb(0, 255, 166, 0.3);
@@ -75,4 +59,37 @@ input:hover {
     0 0 20px rgb(0, 255, 166, 0.4), 0 0 20px rgb(0, 255, 166, 0.5),
     0 0 30px rgb(0, 255, 166, 0.5), 0 0 60px rgb(0, 255, 166, 0.5),
     0 0 80px rgb(0, 255, 166, 0.5);
+}
+.mintBtn {
+  transition-duration: 0.2s;
+  width: 400px;
+  height: 60px;
+  border: 4px solid #00b87b;
+  background: none;
+  border-radius: 5px;
+  color: #00b87b;
+  font-size: 24px;
+  font-weight: bold;
+  outline: none;
+  text-align: center;
+  box-shadow: 0 0 20px rgb(0, 255, 166, 0.3), 0 0 20px rgb(0, 255, 166, 0.3),
+    0 0 30px rgb(0, 255, 166, 0.3), 0 0 60px rgb(0, 255, 166, 0.3),
+    0 0 80px rgb(0, 255, 166, 0.3);
+}
+.mintBtn:hover {
+  color: #fff;
+  background: #00b87b;
+  box-shadow: 0 0 4px #fff, 0 0 5px #fff, 0 0 10px #fff,
+    0 0 20px rgb(0, 255, 166, 0.4), 0 0 20px rgb(0, 255, 166, 0.5),
+    0 0 30px rgb(0, 255, 166, 0.5), 0 0 60px rgb(0, 255, 166, 0.5),
+    0 0 80px rgb(0, 255, 166, 0.5);
+}
+
+.mintBtn:disabled {
+  box-shadow: none;
+  border: 4px solid #797979;
+  color: #797979;
+}
+.mintBtn:disabled:hover {
+  background: none;
 }

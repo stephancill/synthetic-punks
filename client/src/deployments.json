@@ -1,9 +1,9 @@
 {
   "name": "localhost",
-  "chainId": "1",
+  "chainId": "31337",
   "contracts": {
     "SyntheticPunks": {
-      "address": "0xCA8c8688914e0F7096c920146cd0Ad85cD7Ae8b9",
+      "address": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
       "abi": [
         {
           "inputs": [
@@ -26,6 +26,11 @@
               "internalType": "uint256[4][9]",
               "name": "_spritesheetRanges",
               "type": "uint256[4][9]"
+            },
+            {
+              "internalType": "address",
+              "name": "_withdrawAddress",
+              "type": "address"
             }
           ],
           "stateMutability": "nonpayable",
@@ -163,19 +168,34 @@
           "type": "function"
         },
         {
-          "inputs": [
-            {
-              "internalType": "uint256[]",
-              "name": "arr",
-              "type": "uint256[]"
-            },
+          "inputs": [],
+          "name": "claim",
+          "outputs": [],
+          "stateMutability": "payable",
+          "type": "function"
+        },
+        {
+          "inputs": [],
+          "name": "claimPrice",
+          "outputs": [
             {
               "internalType": "uint256",
-              "name": "element",
+              "name": "",
               "type": "uint256"
             }
           ],
-          "name": "contains",
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "",
+              "type": "address"
+            }
+          ],
+          "name": "claimed",
           "outputs": [
             {
               "internalType": "bool",
@@ -183,7 +203,7 @@
               "type": "bool"
             }
           ],
-          "stateMutability": "pure",
+          "stateMutability": "view",
           "type": "function"
         },
         {
@@ -202,7 +222,7 @@
               "type": "string"
             }
           ],
-          "stateMutability": "pure",
+          "stateMutability": "view",
           "type": "function"
         },
         {
@@ -563,6 +583,26 @@
           "name": "transferFrom",
           "outputs": [],
           "stateMutability": "nonpayable",
+          "type": "function"
+        },
+        {
+          "inputs": [],
+          "name": "withdraw",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
+        },
+        {
+          "inputs": [],
+          "name": "withdrawAddress",
+          "outputs": [
+            {
+              "internalType": "address",
+              "name": "",
+              "type": "address"
+            }
+          ],
+          "stateMutability": "view",
           "type": "function"
         }
       ]
