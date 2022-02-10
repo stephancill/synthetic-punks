@@ -1,8 +1,10 @@
-import { ethers } from "hardhat"
+import { ethers, network } from "hardhat"
 import { SyntheticPunks, SyntheticPunks__factory } from "../types"
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers"
 import { expect } from "chai"
 import { spritesheetImageData, allRanges } from "../utils/SpritesheetImageData"
+import isSvg from "is-svg"
+import { getENSReverseAddressOrZero } from "../utils/ENSReverseAddresses"
 
 describe("SyntheticPunks", function () {
   let signers: SignerWithAddress[]
@@ -12,8 +14,9 @@ describe("SyntheticPunks", function () {
   beforeEach(async function () {
     signers = await ethers.getSigners()
     withdrawSigner = signers[1]
+    const ensReverseAddress = getENSReverseAddressOrZero(network.config.chainId!)
     const syntheticPunksFactory = new SyntheticPunks__factory(signers[0])
-    syntheticPunks = await syntheticPunksFactory.deploy("Synthetic CryptoPunks", "sCRYPTOPUNKS", spritesheetImageData, allRanges, withdrawSigner.address)
+    syntheticPunks = await syntheticPunksFactory.deploy("Synthetic CryptoPunks", "sCRYPTOPUNKS", spritesheetImageData, allRanges, withdrawSigner.address, ensReverseAddress)
     await syntheticPunks.deployed()
   })
 
@@ -74,15 +77,20 @@ describe("SyntheticPunks", function () {
     expect(imageData.split(",")[1].length).to.be.greaterThan(0)
   })
 
-  it("should return tokenURI", async function () {
-    let uri = await syntheticPunks.tokenURI(1)
+  it("should return valid tokenURI", async function () {
+    // const uri = await syntheticPunks._tokenURI(signers[0].address)
+    const uri = await syntheticPunks._tokenURI("0x8d25687829D6b85d9e0020B8c89e3Ca24dE20a89")
     expect(uri).to.not.equal(undefined)
+    
+    const metadata = JSON.parse(atob(uri.split(",")[1]));
+    ["name", "description", "image"].forEach(key => expect(Object.keys(metadata)).to.contain(key))
+
+    const svg = atob(metadata.image.split(",")[1])
+    expect(isSvg(svg)).to.be.true
   })
 
-  // it("should generate random number", async function () {
-  //   const random = await Promise.all([...new Array(100)].map((_, i) => {
-  //     return Promise.all([...new Array(31)].map((_, j) => syntheticPunks.randomUint(i, j)))
-  //   }))
-  //   console.log(random)
-  // }) 
+  it("should return attributes", async function() {
+    const attributes = await syntheticPunks.getAttributes(0)
+    expect(attributes.length).to.be.gt(0)
+  })
 })

@@ -5,17 +5,17 @@ import "@nomiclabs/hardhat-ethers"
 import "hardhat-deploy"
 import dotenv from "dotenv"
 import { HardhatNetworkUserConfig } from "hardhat/types"
+import { SyntheticPunks } from "./types"
+import { getAttributeName } from "../lib"
 dotenv.config()
 
-// This is a sample Hardhat task. To learn how to create your own go to
-// https://hardhat.org/guides/create-task.html
-task("accounts", "Prints the list of accounts", async (args, hre) => {
-  const accounts = await hre.ethers.getSigners()
-
-  for (const account of accounts) {
-    console.log(await account.address)
-  }
-})
+task("attributes", "Prints the attributes for an address", async ({address}, {deployments, ethers}) => {
+  const SyntheticPunksContract = await deployments.get("SyntheticPunks")
+  const syntheticPunks = (new ethers.Contract(SyntheticPunksContract.address, SyntheticPunksContract.abi, ethers.provider) as SyntheticPunks)
+  const attributeIds = await syntheticPunks._getAttributes(address)
+  const attributeNames = attributeIds.map(id => getAttributeName(id.toNumber()))
+  console.log(attributeNames.join("\n"))
+}).addParam("address", "Address to look up attributes for")
 
 let hardhatNetwork: HardhatNetworkUserConfig = {}
 
@@ -34,7 +34,11 @@ if (process.env.FORK) {
 const config: HardhatUserConfig = {
   solidity: "0.8.0",
   networks: {
-    hardhat: hardhatNetwork
+    hardhat: hardhatNetwork,
+    rinkeby: {
+      url: `https://rinkeby.infura.io/v3/${process.env.INFURA_PROJECT_ID}`,
+      accounts: [process.env.DEFAULT_DEPLOYER_KEY!]
+    }
   },
   typechain: {
     outDir: "types",
@@ -46,7 +50,8 @@ const config: HardhatUserConfig = {
     },
     withdrawAddress: {
       31337: 0,
-      1: process.env.WITHDRAW_ADDRESS_MAINNET!
+      1: process.env.WITHDRAW_ADDRESS_MAINNET!,
+      4: 0
     }
   }
 }

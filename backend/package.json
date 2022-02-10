@@ -6,7 +6,8 @@
   "dependencies": {
     "@rari-capital/solmate": "^6.2.0",
     "dotenv": "^14.3.2",
-    "hardhat": "^2.8.3"
+    "hardhat": "^2.8.3",
+    "is-svg": "^4.3.2"
   },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.0",

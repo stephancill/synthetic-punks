@@ -1,4 +1,5 @@
 import {csv as descriptor} from "./spritesheet-filtered.json"
+export {ranges, render_order as renderOrder} from "./spritesheet-filtered.json"
 
 function CSVToArray( strData: string, strDelimiter: string ){
   strDelimiter = (strDelimiter || ",");
@@ -31,39 +32,9 @@ export const spritesheet: Array<ISprite> = spritesheetRaw.map(row => {
     }
 })
 
-// TODO: use calculated ranges
-export const typesRange: IRange = {startId: 0, endId: 10}
-export const eyesRange: IRange = {startId: 11, endId: 37}
-export const cheeksRange: IRange = {startId: 38, endId: 45}
-export const earsRange: IRange = {startId: 46, endId: 47}
-export const mouthRange: IRange = {startId: 48, endId: 50}
-export const mouthAccessoriesRange: IRange = {startId: 51, endId: 58}
-export const neckRange: IRange = {startId: 59, endId: 60}
-export const beardsRange: IRange = {startId: 61, endId: 72}
-export const headAccessoriesRange: IRange = {startId:  73, endId: 136}
-export const attributeRanges = {
-    eyesRange,
-    cheeksRange,
-    earsRange,
-    mouthRange,
-    neckRange,
-    beardsRange,
-    headAccessoriesRange,
-    mouthAccessoriesRange,
+export const getAttributeName = (id: number) => {
+    return spritesheet.find(sprite => sprite.id === id)?.name
 }
-export const rangeRenderOrder = [
-    typesRange,
-    eyesRange,
-    cheeksRange,
-    earsRange,
-    mouthRange,
-    neckRange,
-    beardsRange,
-    headAccessoriesRange,
-    mouthAccessoriesRange,
-]
-
-export {ranges, render_order as renderOrder} from "./spritesheet-filtered.json"
 
 export const isInRange = (id: number, range: IRange) => {
     return id >= range.startId && id <= range.endId

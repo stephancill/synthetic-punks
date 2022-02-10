@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react"
-import { ethers } from "ethers"
 import { Signer } from "ethers"
 import style from "./Punk.module.css"
 import { BaseProvider, JsonRpcProvider } from '@ethersproject/providers'
-import deployments from "./../../deployments.json"
+import { useSyntheticPunks } from "../../hooks/useSyntheticPunks"
+import { getAttributeName } from "../../../../lib"
 
 interface IPunkProps {
   address: string
@@ -13,32 +13,26 @@ interface IPunkProps {
 
 export const Punk = ({address, signerOrProvider}: IPunkProps) => {
   const [imageData, setImageData] = useState("")
-  const [showAtrributes, setShowAtrributes] = useState(false)
-
+  const [attributes, setAttributes] = useState<Array<string>>([])
+  const syntheticPunks = useSyntheticPunks(signerOrProvider instanceof Signer ? signerOrProvider.provider! : signerOrProvider as BaseProvider)
 
   useEffect(() => {
-    const contractAddress = deployments.contracts["SyntheticPunks"].address // TODO: Use mainnet deployment
-    const contractInterface = new ethers.utils.Interface( deployments.contracts["SyntheticPunks"].abi)
-    console.log(signerOrProvider)
-    const contract = new ethers.Contract(contractAddress, contractInterface, signerOrProvider);
     (async () => {
       console.log("loading")
-      console.log(address)
-      try {
-        const b64Metadata = await contract._tokenURI(address)
-        const _imageData = (JSON.parse(atob(b64Metadata.split(",")[1])) as any).image
-        console.log("done")
-        setImageData(_imageData)
-      } catch (error) {
-        console.log(error)
-      }
-      
+    try {
+      const b64Metadata = await syntheticPunks._tokenURI(address)
+      const _imageData = (JSON.parse(atob(b64Metadata.split(",")[1])) as any).image
+      console.log("done")
+      const attributeIds = await syntheticPunks._getAttributes(address)
+      const attributeNames = attributeIds.map(id => getAttributeName(id.toNumber())).filter(name => name !== undefined) as any as Array<string>
+      console.log(attributeNames)
+      setAttributes(attributeNames)
+      setImageData(_imageData)
+    } catch (error) {
+      console.log(error)
+    }
     })()
   }, [address, signerOrProvider])
-
-  const toggleShowAtrributes = () => {
-    setShowAtrributes(!showAtrributes)
-  }
 
   return (
     <div style={{display: "inline-block", paddingTop:"0px"}}>
@@ -46,16 +40,12 @@ export const Punk = ({address, signerOrProvider}: IPunkProps) => {
         <div>
           <img style={{width: "400px", border: "1px black solid", background:"#6A9480", borderRadius:"5px"}} src={imageData}></img>
         </div>
-        <div>
-         <button className={style.attributeBtn} onClick={()=>{toggleShowAtrributes()}}>Attributes</button>
-        </div>
-        {showAtrributes && 
-        <div style={{display:"flex"}}>
-          <div className={style.atrributes }>Coffee</div>
-          <div className={style.atrributes }>Coffee</div>
-          <div className={style.atrributes }>Coffee</div>
-          <div className={style.atrributes }>Coffee</div>
-          <div className={style.atrributes }>Coffee</div>
+        {attributes.length > 0 && 
+        <div style={{display:"flex"}} id="hello">
+
+          {attributes.map((attribute, i) => {
+            return <div key={i} className={style.atrributes }>{attribute}</div>
+          })}
         </div>
         }
       </span> 
