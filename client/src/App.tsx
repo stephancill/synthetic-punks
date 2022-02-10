@@ -106,10 +106,10 @@ function App() {
       <div className="textContainer">
         <div>
           <h3 className="textGlow">
-          <b>Synthetic CryptoPunks</b> is inspired by the historical collection of 10,000 CryptoPunks by Larva Labs. It generates unique CryptoPunks for any  is a virtual form of Loot that every wallet has automatically and does not need to be minted.
+          <b>Synthetic CryptoPunks</b> is inspired by the historical collection of 10,000 CryptoPunks by Larva Labs. It generates a unique, fully on-chain CryptoPunk for each Ethereum address.
           </h3>
           <h3 className="textGlow">
-          Unlike original Loot which is generated based on a numeric identifier, Synthetic Loot is generated based on your Ethereum wallet address. Developers who are building on top of Loot can easily incorporate Synthetic Loot into their projects, allowing the entire Ethereum ecosystem to access their projects for free.
+          They are free to view for any address, but can be claimed as an ERC-721 NFT for a price of 0.02 ether.
           </h3>
         </div>
       </div>

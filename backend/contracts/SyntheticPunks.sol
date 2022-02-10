@@ -149,7 +149,7 @@ contract SyntheticPunks is ERC721 {
 
   function randomUint(uint256 seed, uint256 offset) public view returns (uint256) {
     require(offset < 32, "Offset out of bounds");
-    bytes32 entropy = keccak256(abi.encodePacked(address(this), seed)); // TODO: Could declare this once and pass as param to save gas
+    bytes32 entropy = keccak256(abi.encodePacked(address(this), seed)); // TODO: Consider not including address in entropy
     bytes32 mask = bytes32(0xff << (offset * 8));
     uint256 out = uint256((entropy & mask) >> (offset * 8));
     return out;
