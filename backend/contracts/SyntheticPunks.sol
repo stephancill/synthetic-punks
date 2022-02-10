@@ -2,6 +2,7 @@
 pragma solidity ^0.8.0;
 
 import "@rari-capital/solmate/src/tokens/ERC721.sol";
+// import "hardhat/console.sol";
 
 abstract contract ReverseRecords {
   function getNames(address[] calldata addresses) external view virtual returns (string[] memory r);
@@ -149,6 +150,7 @@ contract SyntheticPunks is ERC721 {
     for (uint256 i = 0; i < spritesheetRanges.length; i++) {
       for (uint256 j = 0; j < layers.length; j++) {
         if (spritesheetRanges[i][0] <= layers[j] && layers[j] < spritesheetRanges[i][3]) { // if layer is in range
+          // console.log(layers[j]);
           uint256 id = layers[j];
           uint256 x = (id % 25) * 24;
           uint256 y = (id / 25) * 24;
@@ -192,9 +194,9 @@ contract SyntheticPunks is ERC721 {
     return toString(abi.encodePacked(account));
   }
 
-  function toString(uint256 value) public pure returns(string memory) {
-    return toString(abi.encodePacked(value));
-  }
+  // function toString(uint256 value) public pure returns(string memory) {
+  //   return toString(abi.encodePacked(value));
+  // }
 
   function toString(bytes32 value) public pure returns(string memory) {
     return toString(abi.encodePacked(value));
@@ -211,6 +213,40 @@ contract SyntheticPunks is ERC721 {
         str[3+i*2] = alphabet[uint(uint8(data[i] & 0x0f))];
     }
     return string(str);
+  }
+
+  function toString(uint256 n) 
+      internal 
+      pure 
+      returns (string memory nstr) 
+  {
+    uint256 MAX_UINT256_STRING_LENGTH = 78;
+    uint8 ASCII_DIGIT_OFFSET = 48;
+    if (n == 0) {
+        return "0";
+    }
+    // Overallocate memory
+    nstr = new string(MAX_UINT256_STRING_LENGTH);
+    uint256 k = MAX_UINT256_STRING_LENGTH;
+    // Populate string from right to left (lsb to msb).
+    while (n != 0) {
+      assembly {
+        let char := add(
+          ASCII_DIGIT_OFFSET,
+          mod(n, 10)
+        )
+        mstore(add(nstr, k), char)
+        k := sub(k, 1)
+        n := div(n, 10)
+      }
+    }
+    assembly {
+      // Shift pointer over to actual start of string.
+      nstr := add(nstr, k)
+      // Store actual string length.
+      mstore(nstr, sub(MAX_UINT256_STRING_LENGTH, k))
+    }
+    return nstr;
   }
 
   /// @notice Encodes some bytes to the base64 representation

@@ -78,12 +78,12 @@ describe("SyntheticPunks", function () {
   })
 
   it("should return valid tokenURI", async function () {
-    // const uri = await syntheticPunks._tokenURI(signers[0].address)
-    const uri = await syntheticPunks._tokenURI("0x8d25687829D6b85d9e0020B8c89e3Ca24dE20a89")
+    const uri = await syntheticPunks._tokenURI(signers[0].address)
     expect(uri).to.not.equal(undefined)
     
-    const metadata = JSON.parse(atob(uri.split(",")[1]));
-    ["name", "description", "image"].forEach(key => expect(Object.keys(metadata)).to.contain(key))
+    const metadata = JSON.parse(atob(uri.split(",")[1]))
+    // console.log(metadata.image);
+    ;["name", "description", "image"].forEach(key => expect(Object.keys(metadata)).to.contain(key))
 
     const svg = atob(metadata.image.split(",")[1])
     expect(isSvg(svg)).to.be.true
