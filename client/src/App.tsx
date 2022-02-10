@@ -1,5 +1,6 @@
 import { ethers, Signer } from "ethers"
 import { BaseProvider, JsonRpcProvider } from '@ethersproject/providers'
+import { Network } from '@ethersproject/networks'
 import { useEffect, useState } from "react"
 import "./App.css"
 import { ConnectButton } from "./components/ConnectButton/ConnectButton"
@@ -15,33 +16,46 @@ function App() {
   const [searchQuery, setSearchQuery] = useState<string>("")
   const [canClaim, setCanClaim] = useState(false)
   const [alreadyClaimed, setAlreadyClaimed] = useState(false)
+  const [walletConnected,setWalletConnected] = useState(false)
+  const [correctNetwork,setCorrectedNetwork] = useState(false)
+  
 
   //TODO : show transaction hash in mint btn when its loading 
   //TODO : show attributes , maybe on hover
-  //TODO : handle changing address
-  //TODO : IF on wrong network 
+  useEffect(() =>{
+    (async()=>{
+      const accounts = await window.ethereum.request({method: "eth_accounts"})
+      if(accounts[0]){
+        setWalletConnected(true)
+        await connectWallet()
+        await checkNetwork()
+        setAddress(accounts[0])
+      }
+    })()
+  },[])
 
   useEffect(() => {
-    if (!signerOrProvider) {
-      setSignerOrProvider(defaultProvider)
+    if (correctNetwork && walletConnected) {
+      console.log(signerOrProvider instanceof Signer,"s")
+      if (signerOrProvider instanceof Signer) {
+        (async () => {
+          const provider = new ethers.providers.Web3Provider(window.ethereum)
+          await provider.send("eth_requestAccounts", []);
+          const tempsigner = provider.getSigner();
+          const contractAddress = deployments.contracts["SyntheticPunks"].address
+          const contractInterface = new ethers.utils.Interface( deployments.contracts["SyntheticPunks"].abi)
+          const syntheticPunk = new ethers.Contract(contractAddress, contractInterface, signerOrProvider)
+          const userAddresss = await tempsigner.getAddress();
+          console.log(userAddresss,"user address")
+          const claimed = await syntheticPunk.claimed(userAddresss)
+          console.log(claimed,"already claimed")
+          setAlreadyClaimed(claimed)
+          setCanClaim(address?.toLowerCase()===userAddresss.toLowerCase())
+        })()
+      }
     }
-    console.log(defaultProvider)
-  }, [signerOrProvider])
-
-  useEffect(() => {
-    console.log(signerOrProvider instanceof Signer,"s")
-    if (signerOrProvider instanceof Signer) {
-      (async () => {
-        const signerAddress = await (signerOrProvider as Signer).getAddress()
-        const contractAddress = deployments.contracts["SyntheticPunks"].address
-        const contractInterface = new ethers.utils.Interface( deployments.contracts["SyntheticPunks"].abi)
-        const syntheticPunk = new ethers.Contract(contractAddress, contractInterface, signerOrProvider)
-        const claimed = await syntheticPunk.claimed(signerAddress)
-        console.log(claimed,"already claimed")
-        setAlreadyClaimed(claimed)
-        setCanClaim(address?.toLowerCase()===signerAddress.toLowerCase())
-      })()
-    }
+    // first check if on correct network
+    
   }, [signerOrProvider, address])
 
   useEffect(() =>{
@@ -49,6 +63,54 @@ function App() {
       setAddress(accounts[0])
     });
   },)
+
+  useEffect(() =>{
+    window.ethereum.on('networkChanged', (networkId : number) => {
+      console.log(signerOrProvider,"change");
+      checkNetwork()
+    });
+  },)
+
+  const connectWallet = async()=>{
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    await provider.send("eth_requestAccounts", []);
+    const tempsigner = provider.getSigner();
+    console.log(tempsigner,"NEW")
+    setSignerOrProvider(tempsigner)
+    if (tempsigner !== undefined) {
+      let userAddresss = await tempsigner.getAddress();
+      setAddress(userAddresss)
+    } else {
+      setSignerOrProvider(defaultProvider)
+    }
+  }
+
+  const checkNetwork = async () => {
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    const chainId = await provider.getNetwork()
+    const id = chainId.chainId
+    if (id && id === parseInt(deployments.chainId)) {
+      // correct chain
+      console.log("cor")
+      setCorrectedNetwork(true)
+    } else {
+      // incorrect chain
+      console.log("inc")
+      setCorrectedNetwork(false)
+
+    }
+  }
+
+  const changeNetwork = async () => {
+    try {
+      await window.ethereum.request({
+        method: "wallet_switchEthereumChain",
+        params: [{ chainId: `0x${Number(1337).toString(16)}` }],
+      });
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   const claimNFT = async () => {
     const contractAddress = deployments.contracts["SyntheticPunks"].address
@@ -63,12 +125,12 @@ function App() {
       console.log(error)
     }
   }
-
   return (
     <div>
       <NeonText text={"SYNTHETIC PUNKS"} ></NeonText>
-      <div style={{marginTop:"100px"}}>
-        <ConnectButton  signerOrProvider={signerOrProvider} setSignerOrProvider={setSignerOrProvider} address={address} setAddress={setAddress} canClaim={canClaim}/>
+      {correctNetwork ? <>
+        <div style={{marginTop:"100px"}}>
+        <ConnectButton  setWalletConnected={setWalletConnected} signerOrProvider={signerOrProvider} setSignerOrProvider={setSignerOrProvider} address={address} setAddress={setAddress} canClaim={canClaim}/>
       </div>
       <div className={"container"} >
         <form onSubmit={async (e) => {
@@ -91,7 +153,7 @@ function App() {
           <input onChange={(e) => setSearchQuery(e.target.value)} type="text" placeholder="Search address or ENS" style={{marginTop:"30px"}}/>
         </form>
       </div>
-      {address && signerOrProvider &&
+      {address && signerOrProvider && walletConnected &&
       <div>
         <div className="container">
         <h5 style={{marginTop:"25px",marginBottom:"15px"}} className="textGlow">{address}</h5>  
@@ -100,7 +162,7 @@ function App() {
         }
         </div>
       </div>}
-      <div className="container" style={{marginTop:"25px",marginBottom:"80px"}}>
+      <div className="container" style={{marginTop:"5px",marginBottom:"80px"}}>
         { !canClaim ? <></> : <>
           { alreadyClaimed ? <>
             <button className="mintBtn" disabled>
@@ -113,6 +175,9 @@ function App() {
           </>}
         </>}
       </div>
+      </> : <div className="container">
+        <button className="networkBtn" onClick={()=>changeNetwork()}>Change To Ethereum Network</button>
+      </div>}
       <div className="textContainer">
         <div>
           <h3 className="textGlow">

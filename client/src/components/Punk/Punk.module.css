@@ -1,0 +1,31 @@
+.attributeBtn {
+  height: 25px;
+  border: none;
+  background: rgba(255, 111, 0, 1);
+  border-radius: 5px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: normal;
+  transition-duration: 0.2s;
+  margin-left: -300px;
+  transform: translateY(-40px);
+
+  box-shadow: 0 0 10px rgba(255, 111, 0, 0.4), 0 0 25px rgba(255, 111, 0, 0.4);
+}
+.attributeBtn:hover {
+  box-shadow: 0 0 10px rgba(255, 111, 0, 0.6), 0 0 25px rgba(255, 111, 0, 0.7),
+    0 0 40px rgba(255, 111, 0, 0.3);
+}
+
+ul {
+  color: rgba(255, 111, 0, 1);
+  text-align: left;
+  text-shadow: 0 0 10px rgba(255, 111, 0, 1), 0 0 25px rgba(255, 111, 0, 1);
+  margin-top: -20px;
+  margin-left: -22px;
+}
+.atrributes {
+  color: white;
+  border: 1px white solid;
+  display: block;
+}

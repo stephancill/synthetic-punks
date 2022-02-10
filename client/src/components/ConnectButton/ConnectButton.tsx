@@ -12,10 +12,11 @@ interface IConnectButtonProps {
   address: string | undefined
   setAddress: (arg0: string | undefined) => void
   canClaim : boolean
+  setWalletConnected :(arg0: boolean) => void  
 
 }
 
-export const ConnectButton = ({signerOrProvider, setSignerOrProvider, address, setAddress,canClaim} : IConnectButtonProps) => {
+export const ConnectButton = ({signerOrProvider, setSignerOrProvider, address, setAddress,canClaim, setWalletConnected} : IConnectButtonProps) => {
   useEffect(() => {
     if (!signerOrProvider) {
       (async () => {
@@ -39,6 +40,7 @@ export const ConnectButton = ({signerOrProvider, setSignerOrProvider, address, s
   }
 
   const activateProvider = async () => {
+    setWalletConnected(true)
     const providerOptions = {
       injected: {
         display: {

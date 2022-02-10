@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { ethers } from "ethers"
 import { Signer } from "ethers"
+import style from "./Punk.module.css"
 import { BaseProvider, JsonRpcProvider } from '@ethersproject/providers'
 import deployments from "./../../deployments.json"
 
@@ -12,6 +13,8 @@ interface IPunkProps {
 
 export const Punk = ({address, signerOrProvider}: IPunkProps) => {
   const [imageData, setImageData] = useState("")
+  const [showAtrributes, setShowAtrributes] = useState(false)
+
 
   useEffect(() => {
     const contractAddress = deployments.contracts["SyntheticPunks"].address // TODO: Use mainnet deployment
@@ -33,12 +36,29 @@ export const Punk = ({address, signerOrProvider}: IPunkProps) => {
     })()
   }, [address, signerOrProvider])
 
+  const toggleShowAtrributes = () => {
+    setShowAtrributes(!showAtrributes)
+  }
+
   return (
     <div style={{display: "inline-block", paddingTop:"0px"}}>
       <span>
-        <img style={{width: "400px", border: "1px black solid", background:"#6A9480", borderRadius:"5px"}} src={imageData}></img>
-        {/* {attributes.map(attr => <div key={attr.id}>{attr.name}</div>)} */}
-      </span>
+        <div>
+          <img style={{width: "400px", border: "1px black solid", background:"#6A9480", borderRadius:"5px"}} src={imageData}></img>
+        </div>
+        <div>
+         <button className={style.attributeBtn} onClick={()=>{toggleShowAtrributes()}}>Attributes</button>
+        </div>
+        {showAtrributes && 
+        <div style={{display:"flex"}}>
+          <div className={style.atrributes }>Coffee</div>
+          <div className={style.atrributes }>Coffee</div>
+          <div className={style.atrributes }>Coffee</div>
+          <div className={style.atrributes }>Coffee</div>
+          <div className={style.atrributes }>Coffee</div>
+        </div>
+        }
+      </span> 
     </div>
   )  
 }
