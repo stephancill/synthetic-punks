@@ -35,8 +35,6 @@ function App() {
         const claimed = await syntheticPunk.claimed(signerAddress)
         console.log(claimed,"already claimed")
         setAlreadyClaimed(claimed)
-          // check claimed
-          // if false they can mint
         setCanClaim(address?.toLowerCase()===signerAddress.toLowerCase())
       })()
     }
@@ -60,9 +58,9 @@ function App() {
     <div>
       <NeonText text={"SYNTHETIC PUNKS"} ></NeonText>
       <div style={{marginTop:"100px"}}>
-        <ConnectButton  signerOrProvider={signerOrProvider} setSignerOrProvider={setSignerOrProvider} address={address} setAddress={setAddress}/>
+        <ConnectButton  signerOrProvider={signerOrProvider} setSignerOrProvider={setSignerOrProvider} address={address} setAddress={setAddress} canClaim={canClaim}/>
       </div>
-      <div className={"container"} style={{marginTop:"40px"}}>
+      <div className={"container"} >
         <form onSubmit={async (e) => {
           e.preventDefault()
           if (searchQuery.indexOf(".") > -1) {
@@ -80,7 +78,10 @@ function App() {
           }
           
         }}>
-          <input onChange={(e) => setSearchQuery(e.target.value)} type="text" placeholder="Search address or ENS" />
+          { canClaim ? <>
+          </> : <>
+            <input onChange={(e) => setSearchQuery(e.target.value)} type="text" placeholder="Search address or ENS" style={{marginTop:"30px"}}/>
+         </>}
         </form>
       </div>
       {address && signerOrProvider &&
@@ -100,7 +101,6 @@ function App() {
               Claim 0.02ETH
             </button>
           </>}
-        
         </>}
       </div>
       <div className="textContainer">
@@ -114,11 +114,9 @@ function App() {
         </div>
       </div>
       <div className="textContainer" style={{marginTop:"80px", marginLeft:"-0px"}}>
-      
-          <h4 className="footText">
-            Made by <a href="https://twitter.com/stephancill">@stephancill</a> and <a href="https://twitter.com/npm_luko">@npm_luko</a>
-          </h4>
-        
+        <h4 className="footText">
+          Made by <a href="https://twitter.com/stephancill">@stephancill</a> and <a href="https://twitter.com/npm_luko">@npm_luko</a>
+        </h4> 
       </div>
     </div>
   )

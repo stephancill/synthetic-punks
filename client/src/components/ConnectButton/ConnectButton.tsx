@@ -11,9 +11,11 @@ interface IConnectButtonProps {
   setSignerOrProvider: (arg0: Signer | BaseProvider | undefined) => void
   address: string | undefined
   setAddress: (arg0: string | undefined) => void
+  canClaim : boolean
+
 }
 
-export const ConnectButton = ({signerOrProvider, setSignerOrProvider, address, setAddress} : IConnectButtonProps) => {
+export const ConnectButton = ({signerOrProvider, setSignerOrProvider, address, setAddress,canClaim} : IConnectButtonProps) => {
   useEffect(() => {
     if (!signerOrProvider) {
       (async () => {
@@ -75,7 +77,14 @@ export const ConnectButton = ({signerOrProvider, setSignerOrProvider, address, s
     {! address ?  
       <button className={style.connectBtn} onClick={activateProvider}>Connect</button>
     :
-    <button className={style.connectBtn} onClick={() => setSignerOrProvider(undefined)}>Disconnect {truncateAddress(address)}</button>
+    <>
+    
+    {!canClaim ? <>
+      <button className={style.connectBtn} onClick={activateProvider}>Connect</button>
+    </>:<>
+      <button className={style.connectBtn} onClick={() => setSignerOrProvider(undefined)}>Disconnect {truncateAddress(address)}</button>
+    </>}
+    </>
     }  
     </div>  
   )
