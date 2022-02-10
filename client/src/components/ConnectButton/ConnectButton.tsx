@@ -82,7 +82,7 @@ export const ConnectButton = ({signerOrProvider, setSignerOrProvider, address, s
     {!canClaim ? <>
       <button className={style.connectBtn} onClick={activateProvider}>Connect</button>
     </>:<>
-      <button className={style.connectBtn} onClick={() => setSignerOrProvider(undefined)}>Disconnect {truncateAddress(address)}</button>
+      <button className={style.connectBtn} onClick={() => {setSignerOrProvider(undefined); setAddress(undefined)}}>Disconnect {truncateAddress(address)}</button>
     </>}
     </>
     }  

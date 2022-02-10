@@ -7,6 +7,7 @@ import deployments from "./../../deployments.json"
 interface IPunkProps {
   address: string
   signerOrProvider: Signer | BaseProvider
+  
 }
 
 export const Punk = ({address, signerOrProvider}: IPunkProps) => {
@@ -19,15 +20,21 @@ export const Punk = ({address, signerOrProvider}: IPunkProps) => {
     const contract = new ethers.Contract(contractAddress, contractInterface, signerOrProvider);
     (async () => {
       console.log("loading")
-      const b64Metadata = await contract._tokenURI(address)
-      const _imageData = (JSON.parse(atob(b64Metadata.split(",")[1])) as any).image
-      console.log("done")
-      setImageData(_imageData)
+      console.log(address)
+      try {
+        const b64Metadata = await contract._tokenURI(address)
+        const _imageData = (JSON.parse(atob(b64Metadata.split(",")[1])) as any).image
+        console.log("done")
+        setImageData(_imageData)
+      } catch (error) {
+        console.log(error)
+      }
+      
     })()
   }, [address, signerOrProvider])
 
   return (
-    <div style={{display: "inline-block", paddingTop:"30px"}}>
+    <div style={{display: "inline-block", paddingTop:"0px"}}>
       <span>
         <img style={{width: "400px", border: "1px black solid", background:"#6A9480", borderRadius:"5px"}} src={imageData}></img>
         {/* {attributes.map(attr => <div key={attr.id}>{attr.name}</div>)} */}
