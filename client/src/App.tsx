@@ -16,6 +16,10 @@ function App() {
   const [canClaim, setCanClaim] = useState(false)
   const [alreadyClaimed, setAlreadyClaimed] = useState(false)
 
+  //TODO : show transaction hash in mint btn when its loading 
+  //TODO : show attributes , maybe on hover
+  //TODO : handle changing address
+  //TODO : IF on wrong network 
 
   useEffect(() => {
     if (!signerOrProvider) {
@@ -39,6 +43,12 @@ function App() {
       })()
     }
   }, [signerOrProvider, address])
+
+  useEffect(() =>{
+    window.ethereum.on('accountsChanged',  (accounts: Array<string>) => {
+      setAddress(accounts[0])
+    });
+  },)
 
   const claimNFT = async () => {
     const contractAddress = deployments.contracts["SyntheticPunks"].address
@@ -78,16 +88,16 @@ function App() {
           }
           
         }}>
-          { canClaim ? <>
-          </> : <>
-            <input onChange={(e) => setSearchQuery(e.target.value)} type="text" placeholder="Search address or ENS" style={{marginTop:"30px"}}/>
-         </>}
+          <input onChange={(e) => setSearchQuery(e.target.value)} type="text" placeholder="Search address or ENS" style={{marginTop:"30px"}}/>
         </form>
       </div>
       {address && signerOrProvider &&
       <div>
         <div className="container">
-         <Punk address={address} signerOrProvider={signerOrProvider}/>
+        <h5 style={{marginTop:"25px",marginBottom:"15px"}} className="textGlow">{address}</h5>  
+        {address && 
+          <Punk address={address}  signerOrProvider={signerOrProvider}/>
+        }
         </div>
       </div>}
       <div className="container" style={{marginTop:"25px",marginBottom:"80px"}}>
