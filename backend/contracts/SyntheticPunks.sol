@@ -83,7 +83,7 @@ contract SyntheticPunks is ERC721 {
   // Entropy 1,2-9
   function getAttributeCategories(uint256 id) public view returns (uint256[] memory) {
     uint256 checks = randomUint(id, 1) % (spritesheetRanges.length - 1); // Number of bytes to check
-    uint256[] memory attributes = new uint256[](checks);
+    uint256[] memory attributes = new uint256[](checks); // TODO: Check at least 1 attribute
     uint256 length = 0;
     for (uint256 i; i < checks; i++) {
       uint256 newAttribute = randomUint(id, 2+i) % (spritesheetRanges.length - 2) + 1; // Skip base category

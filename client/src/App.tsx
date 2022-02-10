@@ -8,7 +8,7 @@ import { Punk } from "./components/Punk/Punk"
 import { NeonText } from "./components/NeonText/NeonText"
 import deployments from "./deployments.json"
 
-const defaultProvider = new JsonRpcProvider("https://mainnet.infura.io/v3/a03218fc876c4ba9a720ba48cc3b8de9")
+const defaultProvider = new JsonRpcProvider(!process.env.NODE_ENV || process.env.NODE_ENV === 'development' ? "http://127.0.0.1:8545/" : "https://mainnet.infura.io/v3/a03218fc876c4ba9a720ba48cc3b8de9")
 
 function App() {
   const [signerOrProvider, setSignerOrProvider] = useState<Signer | BaseProvider | undefined>(undefined)
@@ -36,7 +36,6 @@ function App() {
 
   useEffect(() => {
     if (correctNetwork && walletConnected) {
-      console.log(signerOrProvider instanceof Signer,"s")
       if (signerOrProvider instanceof Signer) {
         (async () => {
           const provider = new ethers.providers.Web3Provider(window.ethereum)
@@ -46,9 +45,7 @@ function App() {
           const contractInterface = new ethers.utils.Interface( deployments.contracts["SyntheticPunks"].abi)
           const syntheticPunk = new ethers.Contract(contractAddress, contractInterface, signerOrProvider)
           const userAddresss = await tempsigner.getAddress();
-          console.log(userAddresss,"user address")
           const claimed = await syntheticPunk.claimed(userAddresss)
-          console.log(claimed,"already claimed")
           setAlreadyClaimed(claimed)
           setCanClaim(address?.toLowerCase()===userAddresss.toLowerCase())
         })()
@@ -66,7 +63,6 @@ function App() {
 
   useEffect(() =>{
     window.ethereum.on('networkChanged', (networkId : number) => {
-      console.log(signerOrProvider,"change");
       checkNetwork()
     });
   },)
@@ -75,7 +71,6 @@ function App() {
     const provider = new ethers.providers.Web3Provider(window.ethereum)
     await provider.send("eth_requestAccounts", []);
     const tempsigner = provider.getSigner();
-    console.log(tempsigner,"NEW")
     setSignerOrProvider(tempsigner)
     if (tempsigner !== undefined) {
       let userAddresss = await tempsigner.getAddress();
@@ -91,13 +86,10 @@ function App() {
     const id = chainId.chainId
     if (id && id === parseInt(deployments.chainId)) {
       // correct chain
-      console.log("cor")
       setCorrectedNetwork(true)
     } else {
       // incorrect chain
-      console.log("inc")
       setCorrectedNetwork(false)
-
     }
   }
 
@@ -137,21 +129,17 @@ function App() {
           e.preventDefault()
           if (searchQuery.indexOf(".") > -1) {
             (async () => {
-              console.log("resolving", searchQuery)
               const name = searchQuery
-              console.log(signerOrProvider)
               const addr = await signerOrProvider?.resolveName(name)
-              console.log(addr)
               addr && setAddress(addr)
             })()
           } else {
-            console.log("address", searchQuery)
             setAddress(searchQuery)
           }
-          
         }}>
           <input onChange={(e) => setSearchQuery(e.target.value)} type="text" placeholder="Search address or ENS" style={{marginTop:"30px"}}/>
         </form>
+        <button onClick={() => setAddress(ethers.Wallet.createRandom().address)}>Random</button>
       </div>
       {address && signerOrProvider && walletConnected &&
       <div>
@@ -169,8 +157,8 @@ function App() {
               Claimed
             </button>
           </> : <>
-            <button className="mintBtn" onClick={()=>claimNFT()}>
-              Claim 0.02ETH
+            <button className="mintBtn" style={{marginTop: "40px"}} onClick={()=>claimNFT()}>
+              Claim 0.02 ♦
             </button>
           </>}
         </>}

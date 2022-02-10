@@ -13,7 +13,6 @@ interface IConnectButtonProps {
   setAddress: (arg0: string | undefined) => void
   canClaim : boolean
   setWalletConnected :(arg0: boolean) => void  
-
 }
 
 export const ConnectButton = ({signerOrProvider, setSignerOrProvider, address, setAddress,canClaim, setWalletConnected} : IConnectButtonProps) => {
