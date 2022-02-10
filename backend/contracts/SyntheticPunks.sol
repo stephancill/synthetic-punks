@@ -2,7 +2,7 @@
 pragma solidity ^0.8.0;
 
 import "@rari-capital/solmate/src/tokens/ERC721.sol";
-// import "hardhat/console.sol";
+import "hardhat/console.sol";
 
 abstract contract ReverseRecords {
   function getNames(address[] calldata addresses) external view virtual returns (string[] memory r);
@@ -82,9 +82,10 @@ contract SyntheticPunks is ERC721 {
 
   // Entropy 1,2-9
   function getAttributeCategories(uint256 id) public view returns (uint256[] memory) {
-    uint256 checks = randomUint(id, 1) % (spritesheetRanges.length - 1); // Number of bytes to check
+    uint256 checks = 2 + randomUint(id, 1) % (spritesheetRanges.length - 3); // Number of bytes to check
     uint256[] memory attributes = new uint256[](checks); // TODO: Check at least 1 attribute
     uint256 length = 0;
+    console.log(checks);
     for (uint256 i; i < checks; i++) {
       uint256 newAttribute = randomUint(id, 2+i) % (spritesheetRanges.length - 2) + 1; // Skip base category
       
@@ -94,16 +95,24 @@ contract SyntheticPunks is ERC721 {
         continue;
       }
 
+      uint lengthBefore = length;
+
       if (getGender(id) == Gender.Female) {
         if (!(spritesheetRanges[newAttribute][3] - spritesheetRanges[newAttribute][1] == 0)) {
           attributes[length] = newAttribute;
           length++;
+          console.log("added", newAttribute);
         }
       } else {
         if (!(spritesheetRanges[newAttribute][2] - spritesheetRanges[newAttribute][0] == 0)) {
           attributes[length] = newAttribute;
           length++;
+          console.log("added", newAttribute);
         }
+      }
+
+      if (lengthBefore == length) {
+        console.log("skipped", newAttribute);
       }
     }
     uint256[] memory attributesResized = new uint256[](length+1);

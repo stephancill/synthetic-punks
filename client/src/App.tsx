@@ -20,8 +20,11 @@ function App() {
   const [correctNetwork,setCorrectedNetwork] = useState(false)
   
 
-  //TODO : show transaction hash in mint btn when its loading 
-  //TODO : show attributes , maybe on hover
+  // TODO: Show transaction hash in claim button when it's loading 
+  // TODO: Show when punk is claimed: Link to opensea
+  // TODO: Router paths (/punk/<address>)
+  // TODO: Reconsider glowing in SVG, maybe a dark green outline would look better
+
   useEffect(() =>{
     (async()=>{
       const accounts = await window.ethereum.request({method: "eth_accounts"})
@@ -164,7 +167,7 @@ function App() {
         </>}
       </div>
       </> : <div className="container">
-        <button className="networkBtn" onClick={()=>changeNetwork()}>Change To Ethereum Network</button>
+        <button className="networkBtn" onClick={()=>changeNetwork()}>Wrong network. Click here to switch to Ethereum</button>
       </div>}
       <div className="textContainer">
         <div>

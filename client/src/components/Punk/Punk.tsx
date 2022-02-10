@@ -29,6 +29,8 @@ export const Punk = ({address, signerOrProvider}: IPunkProps) => {
         const b64Metadata = await syntheticPunks._tokenURI(address)
         const _imageData = (JSON.parse(atob(b64Metadata.split(",")[1])) as any).image
         const attributeIds = await syntheticPunks._getAttributes(address)
+        const tokenId = await syntheticPunks.getTokenID(address)
+        console.log(attributeIds.map(id => id.toNumber()))
         const attributeNames = attributeIds.map(id => getAttributeName(id.toNumber())).filter(name => name !== undefined) as any as Array<string>
         setPunk({imageData: _imageData, attributes: attributeNames})
       } catch (error) {

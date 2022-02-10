@@ -1,6 +1,6 @@
 from collections import namedtuple
 import enum
-from math import floor
+from math import ceil, floor
 from PIL import Image
 import json
 
@@ -17,7 +17,7 @@ index_category_map = {
   "beard": range(324, 336),
   "headAccessory": range(336, 729), 
 }
-category_order = ["base", "eyes", "cheeks", "ears", "mouth", "neck", "beard", "headAccessory", "mouthAccessory"]
+category_order = ["base", "cheeks", "mouth", "neck", "beard", "headAccessory", "mouthAccessory", "eyes", "ears"]
 category_map = [None] * 729
 for category, _range in index_category_map.items():
   for i in _range:
@@ -50,9 +50,9 @@ with open("spritesheet.csv") as csv:
     csv_size = parts[3]
     csv_type = category_map[original_id]
     attribute = Attribute(original_id, csv_attr, csv_gender, csv_size, csv_type)
-    if i in range(1, 12) or (not "B&W" in csv_attr and csv_attr in attribute_names):
+    if i in range(0, 12) or (not "B&W" in csv_attr and csv_attr in attribute_names):
       if csv_gender == "f":
-        if csv_size == "s":
+        if csv_size in ["s", "u"]:
           attributes_by_category[csv_type].append(attribute)
       else:
         attributes_by_category[csv_type].append(attribute)
@@ -61,8 +61,8 @@ with open("spritesheet.csv") as csv:
 lengths_per_gender_by_category = {key: [] for key in index_category_map.keys()}
 for category, attributes in attributes_by_category.items():
   
-  male = [x for x in attributes if x.gender == "m"]
-  unisex = [x for x in attributes if x.gender == "u"]
+  male = [x for x in attributes if x.gender in ["u", "m"]]
+  unisex = [] #[x for x in attributes if x.gender == "u"]
   female = [x for x in attributes if x.gender == "f"]
 
   attributes_by_category[category] = [
@@ -92,7 +92,7 @@ print(ranges_per_category)
     
 
 im = Image.open("spritesheet-original.png")
-out_im = Image.new("RGBA", (24*25, floor(len(sorted_attributes) / 25)*24))
+out_im = Image.new("RGBA", (24*25, ceil(len(sorted_attributes) / 25)*24))
 for (i, attribute) in enumerate(sorted_attributes):
   id = attribute.id
 
