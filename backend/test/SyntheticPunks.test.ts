@@ -43,6 +43,31 @@ describe("SyntheticPunks", function () {
     expect(transferEvent.args![1]).to.equal(user.address)
   })
 
+  it("should let a user claim to a different account", async function() {
+    const user = signers[2]
+
+    const otherWallet = ethers.Wallet.createRandom()
+    const message = await syntheticPunks.claimMessage()
+    const messageHash = await syntheticPunks.getMessageHash(message)
+    const signature = await otherWallet.signMessage(ethers.utils.arrayify(messageHash))
+
+    const claimPrice = await syntheticPunks.claimPrice()
+    const tx = await syntheticPunks.connect(user).claimOther(otherWallet.address, signature ,{value: claimPrice})
+    const txResult = await tx.wait()
+    expect(txResult.events?.length).to.equal(1)
+
+    const transferEvent = txResult.events![0]
+    expect(transferEvent.event).to.equal("Transfer")
+    expect(transferEvent.args![0]).to.equal(ethers.constants.AddressZero)
+    expect(transferEvent.args![1]).to.equal(user.address, "Transferred to incorrect address")
+
+    const userBalance = await syntheticPunks.balanceOf(user.address)
+    expect(userBalance).to.equal(1)
+
+    const otherWalletBalance = await syntheticPunks.balanceOf(otherWallet.address)
+    expect(otherWalletBalance).to.equal(0)
+  })
+
   it("should reject claims with insufficient value", async function() {
     const user = signers[2]
     const claimPrice = await syntheticPunks.claimPrice()
@@ -78,12 +103,12 @@ describe("SyntheticPunks", function () {
   })
 
   it("should return valid tokenURI", async function () {
-    // const uri = await syntheticPunks._tokenURI(signers[0].address)
-    const uri = await syntheticPunks._tokenURI("0x8d25687829D6b85d9e0020B8c89e3Ca24dE20a89")
+    const uri = await syntheticPunks._tokenURI(signers[0].address)
     expect(uri).to.not.equal(undefined)
     
-    const metadata = JSON.parse(atob(uri.split(",")[1]));
-    ["name", "description", "image"].forEach(key => expect(Object.keys(metadata)).to.contain(key))
+    const metadata = JSON.parse(atob(uri.split(",")[1]))
+    // console.log(metadata.image);
+    ;["name", "description", "image"].forEach(key => expect(Object.keys(metadata)).to.contain(key))
 
     const svg = atob(metadata.image.split(",")[1])
     expect(isSvg(svg)).to.be.true

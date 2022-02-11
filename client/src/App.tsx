@@ -14,7 +14,7 @@ import twitter from "./img/twitter.svg"
 
 
 
-const defaultProvider = new JsonRpcProvider("https://mainnet.infura.io/v3/a03218fc876c4ba9a720ba48cc3b8de9")
+const defaultProvider = new JsonRpcProvider(!process.env.NODE_ENV || process.env.NODE_ENV === 'development' ? "http://127.0.0.1:8545/" : "https://mainnet.infura.io/v3/a03218fc876c4ba9a720ba48cc3b8de9")
 
 function App() {
   const [signerOrProvider, setSignerOrProvider] = useState<Signer | BaseProvider | undefined>(undefined)
@@ -26,8 +26,11 @@ function App() {
   const [correctNetwork,setCorrectedNetwork] = useState(false)
   
 
-  //TODO : show transaction hash in mint btn when its loading 
-  //TODO : show attributes , maybe on hover
+  // TODO: Show transaction hash in claim button when it's loading 
+  // TODO: Show when punk is claimed: Link to opensea
+  // TODO: Router paths (/punk/<address>)
+  // TODO: Reconsider glowing in SVG, maybe a dark green outline would look better
+
   useEffect(() =>{
     (async()=>{
       const accounts = await window.ethereum.request({method: "eth_accounts"})
@@ -42,7 +45,6 @@ function App() {
 
   useEffect(() => {
     if (correctNetwork && walletConnected) {
-      console.log(signerOrProvider instanceof Signer,"s")
       if (signerOrProvider instanceof Signer) {
         (async () => {
           const provider = new ethers.providers.Web3Provider(window.ethereum)
@@ -52,9 +54,7 @@ function App() {
           const contractInterface = new ethers.utils.Interface( deployments.contracts["SyntheticPunks"].abi)
           const syntheticPunk = new ethers.Contract(contractAddress, contractInterface, signerOrProvider)
           const userAddresss = await tempsigner.getAddress();
-          console.log(userAddresss,"user address")
           const claimed = await syntheticPunk.claimed(userAddresss)
-          console.log(claimed,"already claimed")
           setAlreadyClaimed(claimed)
           setCanClaim(address?.toLowerCase()===userAddresss.toLowerCase())
         })()
@@ -72,7 +72,6 @@ function App() {
 
   useEffect(() =>{
     window.ethereum.on('networkChanged', (networkId : number) => {
-      console.log(signerOrProvider,"change");
       checkNetwork()
     });
   },)
@@ -81,7 +80,6 @@ function App() {
     const provider = new ethers.providers.Web3Provider(window.ethereum)
     await provider.send("eth_requestAccounts", []);
     const tempsigner = provider.getSigner();
-    console.log(tempsigner,"NEW")
     setSignerOrProvider(tempsigner)
     if (tempsigner !== undefined) {
       let userAddresss = await tempsigner.getAddress();
@@ -97,13 +95,10 @@ function App() {
     const id = chainId.chainId
     if (id && id === parseInt(deployments.chainId)) {
       // correct chain
-      console.log("cor")
       setCorrectedNetwork(true)
     } else {
       // incorrect chain
-      console.log("inc")
       setCorrectedNetwork(false)
-
     }
   }
 
@@ -143,18 +138,13 @@ function App() {
           e.preventDefault()
           if (searchQuery.indexOf(".") > -1) {
             (async () => {
-              console.log("resolving", searchQuery)
               const name = searchQuery
-              console.log(signerOrProvider)
               const addr = await signerOrProvider?.resolveName(name)
-              console.log(addr)
               addr && setAddress(addr)
             })()
           } else {
-            console.log("address", searchQuery)
             setAddress(searchQuery)
           }
-          
         }}>
           <input onChange={(e) => setSearchQuery(e.target.value)} type="text" placeholder="Search address or ENS" style={{marginTop:"30px"}}/>
           <button className="searchBtn">
@@ -164,6 +154,7 @@ function App() {
             <img src={dice} style={{height:"25px"}}></img>
           </button>
         </form>
+        <button onClick={() => setAddress(ethers.Wallet.createRandom().address)}>Random</button>
       </div>
       {address && signerOrProvider && walletConnected &&
       <div className="container">
@@ -190,7 +181,7 @@ function App() {
       </div>
       }
       </> : <div className="container">
-        <button className="networkBtn" onClick={()=>changeNetwork()}>Change To Ethereum Network</button>
+        <button className="networkBtn" onClick={()=>changeNetwork()}>Wrong network. Click here to switch to Ethereum</button>
       </div>}
       <div className="textContainer">
         <div>

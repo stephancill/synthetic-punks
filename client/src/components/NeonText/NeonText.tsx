@@ -8,8 +8,6 @@ interface NeonTextProps {
 }
 
 export const NeonText = ({text} : NeonTextProps) => {
-  console.log(style)
-
   return <div>
     <div className={style.neonHeadCont} style={{marginTop:"60px"}}>
       <img src={neonHead} className={style.neonHeadImg}></img>
