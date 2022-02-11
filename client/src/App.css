@@ -64,8 +64,8 @@ h5 {
 
 input {
   transition-duration: 0.2s;
-  width: 334px;
-  height: 40px;
+  width: 317px;
+  height: 58px;
   border: none;
   background: #2b3b32;
   border-radius: 5px;
@@ -84,8 +84,8 @@ input {
   transform: translateY(8px);
 }
 .randomBtn {
-  height: 42px;
-  width: 42px;
+  height: 60px;
+  width: 60px;
   border: none;
   background: #2b3b32;
   border-radius: 5px;

@@ -4,9 +4,10 @@ import style from "./Punk.module.css"
 import { BaseProvider, JsonRpcProvider } from '@ethersproject/providers'
 import { useSyntheticPunks } from "../../hooks/useSyntheticPunks"
 import { getAttributeName } from "../../../../lib"
+import { IPunkAddress } from "../../interfaces/IPunkAddress"
 
 interface IPunkProps {
-  address: string
+  punkAddress: IPunkAddress
   signerOrProvider: Signer | BaseProvider
 }
 
@@ -15,7 +16,7 @@ interface IPunk {
   imageData: string
 }
 
-export const Punk = ({address, signerOrProvider}: IPunkProps) => {
+export const Punk = ({punkAddress, signerOrProvider}: IPunkProps) => {
   const [punk, setPunk] = useState<IPunk | undefined>(undefined)
   // const [imageData, setImageData] = useState("")
   // const [attributes, setAttributes] = useState<Array<string>>([])
@@ -26,10 +27,9 @@ export const Punk = ({address, signerOrProvider}: IPunkProps) => {
     (async () => {
       setIsLoading(true)
       try {
-        const b64Metadata = await syntheticPunks._tokenURI(address)
+        const b64Metadata = await syntheticPunks._tokenURI(punkAddress.address)
         const _imageData = (JSON.parse(atob(b64Metadata.split(",")[1])) as any).image
-        const attributeIds = await syntheticPunks._getAttributes(address)
-        const tokenId = await syntheticPunks.getTokenID(address)
+        const attributeIds = await syntheticPunks._getAttributes(punkAddress.address)
         console.log(attributeIds.map(id => id.toNumber()))
         const attributeNames = attributeIds.map(id => getAttributeName(id.toNumber())).filter(name => name !== undefined) as any as Array<string>
         setPunk({imageData: _imageData, attributes: attributeNames})
@@ -38,7 +38,7 @@ export const Punk = ({address, signerOrProvider}: IPunkProps) => {
       }
       setIsLoading(false)
     })()
-  }, [address, signerOrProvider])
+  }, [punkAddress, signerOrProvider])
 
   return (
     <div style={{display: "inline-block", paddingTop:"0px", width: "500px"}}>

@@ -1,4 +1,4 @@
-import { ethers, Signer } from "ethers"
+import { ethers, Signer, Wallet } from "ethers"
 import { BaseProvider, JsonRpcProvider } from '@ethersproject/providers'
 import { Network } from '@ethersproject/networks'
 import { useEffect, useState } from "react"
@@ -11,14 +11,15 @@ import deployments from "./deployments.json"
 import search from "./img/search.svg"
 import dice from "./img/dice.svg"
 import twitter from "./img/twitter.svg"
-
-
+import { IPunkAddress } from "./interfaces/IPunkAddress"
+import { AddressType } from "./interfaces/AddressType"
 
 const defaultProvider = new JsonRpcProvider(!process.env.NODE_ENV || process.env.NODE_ENV === 'development' ? "http://127.0.0.1:8545/" : "https://mainnet.infura.io/v3/a03218fc876c4ba9a720ba48cc3b8de9")
 
 function App() {
   const [signerOrProvider, setSignerOrProvider] = useState<Signer | BaseProvider | undefined>(undefined)
-  const [address, setAddress] = useState<string | undefined>(undefined)
+  const [punkAddress, setPunkAddress] = useState<IPunkAddress | undefined>(undefined)
+  const [randomWallet, setRandomWallet] = useState<Wallet | undefined>()
   const [searchQuery, setSearchQuery] = useState<string>("")
   const [canClaim, setCanClaim] = useState(false)
   const [alreadyClaimed, setAlreadyClaimed] = useState(false)
@@ -38,7 +39,9 @@ function App() {
         setWalletConnected(true)
         await connectWallet()
         await checkNetwork()
-        setAddress(accounts[0])
+        if (accounts[0]){
+          setPunkAddress({address: accounts[0], type: AddressType.Search})
+        }
       }
     })()
   },[])
@@ -56,17 +59,20 @@ function App() {
           const userAddresss = await tempsigner.getAddress();
           const claimed = await syntheticPunk.claimed(userAddresss)
           setAlreadyClaimed(claimed)
-          setCanClaim(address?.toLowerCase()===userAddresss.toLowerCase())
+          setCanClaim(punkAddress ? punkAddress.address.toLowerCase()===userAddresss.toLowerCase() : false)
         })()
       }
     }
     // first check if on correct network
     
-  }, [signerOrProvider, address])
+  }, [signerOrProvider, punkAddress])
 
   useEffect(() =>{
     window.ethereum.on('accountsChanged',  (accounts: Array<string>) => {
-      setAddress(accounts[0])
+      if (accounts[0]) {
+        setPunkAddress({address: accounts[0], type: AddressType.Search})
+      }
+      
     });
   },)
 
@@ -83,7 +89,7 @@ function App() {
     setSignerOrProvider(tempsigner)
     if (tempsigner !== undefined) {
       let userAddresss = await tempsigner.getAddress();
-      setAddress(userAddresss)
+      setPunkAddress({address: userAddresss, type: AddressType.Signer})
     } else {
       setSignerOrProvider(defaultProvider)
     }
@@ -131,50 +137,55 @@ function App() {
       <NeonText text={"SYNTHETIC PUNKS"} ></NeonText>
       {correctNetwork ? <>
         <div style={{marginTop:"100px", marginBottom: "30px"}}>
-        <ConnectButton  setWalletConnected={setWalletConnected} signerOrProvider={signerOrProvider} setSignerOrProvider={setSignerOrProvider} address={address} setAddress={setAddress} canClaim={canClaim}/>
+        <ConnectButton  setWalletConnected={setWalletConnected} signerOrProvider={signerOrProvider} setSignerOrProvider={setSignerOrProvider} punkAddress={punkAddress} setPunkAddress={setPunkAddress} canClaim={canClaim}/>
       </div>
       <div className={"container"} >
         <form onSubmit={async (e) => {
           e.preventDefault()
+          if (!searchQuery) {
+            return
+          }
           if (searchQuery.indexOf(".") > -1) {
             (async () => {
               const name = searchQuery
               const addr = await signerOrProvider?.resolveName(name)
-              addr && setAddress(addr)
+              addr && setPunkAddress({address: addr, type: AddressType.Search})
             })()
           } else {
-            setAddress(searchQuery)
+            setPunkAddress({address: searchQuery, type: AddressType.Search})
           }
         }}>
-          <input onChange={(e) => setSearchQuery(e.target.value)} type="text" placeholder="Search address or ENS" style={{marginTop:"30px"}}/>
-          <button className="searchBtn">
-            <img src={search} style={{height:"30px"}}></img>
+          <input onChange={(e) => setSearchQuery(e.target.value)} type="text" placeholder="Search address or ENS" style={{marginTop:"30px", fontWeight: "normal", color: "white"}}/>
+          <button className="searchBtn" type="submit">
+            <img src={search} style={{height:"26px", width: "32px"}}></img>
           </button>
-          <button className="randomBtn">
-            <img src={dice} style={{height:"25px"}}></img>
+          <button className="randomBtn" type="button" onClick={() => {
+            const wallet = ethers.Wallet.createRandom()
+            setRandomWallet(wallet)
+            setPunkAddress({address: wallet.address, type: AddressType.Random})
+          }}>
+            <img src={dice} style={{height:"26px", width: "32px"}}></img>
           </button>
         </form>
-        <button onClick={() => setAddress(ethers.Wallet.createRandom().address)}>Random</button>
       </div>
-      {address && signerOrProvider && walletConnected &&
+      {punkAddress?.address && signerOrProvider && walletConnected &&
       <div className="container">
         <div className="backCard">
-          <div className="NFTAddressText">{truncateAddress(address)}</div> 
+          <div className="NFTAddressText">{truncateAddress(punkAddress.address)} (
+            {{[AddressType.Signer]: "Signer", [AddressType.Random]: "Random", [AddressType.Search]: "Search"}[punkAddress.type]}
+          )</div> 
+
           <button className="twitterBtn">
             <img src={twitter}></img>
           </button> 
-          {address && 
-            <Punk address={address}  signerOrProvider={signerOrProvider}/>
+          {punkAddress.address && 
+            <Punk punkAddress={punkAddress} signerOrProvider={signerOrProvider}/>
           }
             { !canClaim ? <></> : <>
               { alreadyClaimed ? <>
-                <button className="mintBtn" disabled>
-                  Claimed
-                </button>
+                <button className="mintBtn" disabled>Claimed</button>
               </> : <>
-                <button className="mintBtn" onClick={()=>claimNFT()}>
-                  Claim 0.02ETH
-                </button>
+                <button className="mintBtn" onClick={()=>claimNFT()}>Claim 0.02 ♦</button>
               </>}
             </>}
         </div>

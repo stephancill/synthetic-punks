@@ -5,17 +5,19 @@ import { useEffect } from "react"
 import { ethers, Signer } from "ethers"
 import  style  from  "./ConnectButton.module.css"
 import { BaseProvider } from '@ethersproject/providers'
+import { IPunkAddress } from "../../interfaces/IPunkAddress"
+import { AddressType } from "../../interfaces/AddressType"
 
 interface IConnectButtonProps {
   signerOrProvider: Signer | BaseProvider | undefined
   setSignerOrProvider: (arg0: Signer | BaseProvider | undefined) => void
-  address: string | undefined
-  setAddress: (arg0: string | undefined) => void
+  punkAddress: IPunkAddress | undefined
+  setPunkAddress: (arg0: IPunkAddress | undefined) => void
   canClaim : boolean
   setWalletConnected :(arg0: boolean) => void  
 }
 
-export const ConnectButton = ({signerOrProvider, setSignerOrProvider, address, setAddress,canClaim, setWalletConnected} : IConnectButtonProps) => {
+export const ConnectButton = ({signerOrProvider, setSignerOrProvider, punkAddress, setPunkAddress, canClaim, setWalletConnected} : IConnectButtonProps) => {
   useEffect(() => {
     if (!signerOrProvider) {
       (async () => {
@@ -66,7 +68,7 @@ export const ConnectButton = ({signerOrProvider, setSignerOrProvider, address, s
       const provider = new ethers.providers.Web3Provider(connection)
       const signer = provider.getSigner(0)
       const _address = await signer.getAddress()
-      setAddress(_address)
+      setPunkAddress({address: _address, type: AddressType.Signer})
       setSignerOrProvider(signer)
     } catch (error: any) {
       console.log(error)
@@ -75,7 +77,7 @@ export const ConnectButton = ({signerOrProvider, setSignerOrProvider, address, s
 
   return (
     <div className={style.container}>
-    {! address ?  
+    {!punkAddress?.address ?  
       <button className={style.connectBtn} onClick={activateProvider}>Connect</button>
     :
     <>
@@ -83,7 +85,7 @@ export const ConnectButton = ({signerOrProvider, setSignerOrProvider, address, s
     {!canClaim ? <>
       <button className={style.connectBtn} onClick={activateProvider}>Connect</button>
     </>:<>
-      <button className={style.connectBtn} onClick={() => {setSignerOrProvider(undefined); setAddress(undefined)}}>Disconnect {truncateAddress(address)}</button>
+      <button className={style.connectBtn} onClick={() => {setSignerOrProvider(undefined); setPunkAddress(undefined)}}>Disconnect {truncateAddress(punkAddress.address)}</button>
     </>}
     </>
     }  
