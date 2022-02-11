@@ -20,6 +20,7 @@ export const Punk = ({address, signerOrProvider}: IPunkProps) => {
     (async () => {
       console.log("loading")
     try {
+      console.log(address,"testing")
       const b64Metadata = await syntheticPunks._tokenURI(address)
       const _imageData = (JSON.parse(atob(b64Metadata.split(",")[1])) as any).image
       console.log("done")
@@ -27,6 +28,7 @@ export const Punk = ({address, signerOrProvider}: IPunkProps) => {
       const attributeNames = attributeIds.map(id => getAttributeName(id.toNumber())).filter(name => name !== undefined) as any as Array<string>
       console.log(attributeNames)
       setAttributes(attributeNames)
+
       setImageData(_imageData)
     } catch (error) {
       console.log(error)
@@ -38,11 +40,14 @@ export const Punk = ({address, signerOrProvider}: IPunkProps) => {
     <div style={{display: "inline-block", paddingTop:"0px"}}>
       <span>
         <div>
-          <img style={{width: "400px", border: "1px black solid", background:"#6A9480", borderRadius:"5px"}} src={imageData}></img>
+          <img style={{width: "350px", background:"#6A9480", borderRadius:"5px"}} src={imageData}></img>
         </div>
         {attributes.length > 0 && 
-        <div style={{display:"flex"}} id="hello">
+        <div style={{display:"flex",marginTop:"10px",maxWidth:"400px"}} id="hello">
 
+          {attributes.map((attribute, i) => {
+            return <div key={i} className={style.atrributes }>{attribute}</div>
+          })}
           {attributes.map((attribute, i) => {
             return <div key={i} className={style.atrributes }>{attribute}</div>
           })}

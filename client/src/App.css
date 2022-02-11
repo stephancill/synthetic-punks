@@ -60,26 +60,39 @@ h5 {
 
 input {
   transition-duration: 0.2s;
-  width: 396px;
+  width: 334px;
   height: 40px;
-  border: white 1px solid;
-  background: white;
+  border: none;
+  background: #2b3b32;
   border-radius: 5px;
   color: #00b87b;
   font-size: 18px;
   font-weight: bold;
   outline: none;
-  text-align: center;
-  box-shadow: 0 0 20px rgb(0, 255, 166, 0.2), 0 0 20px rgb(0, 255, 166, 0.2),
-    0 0 30px rgb(0, 255, 166, 0.2), 0 0 60px rgb(0, 255, 166, 0.3),
-    0 0 80px rgb(0, 255, 166, 0.3);
+  text-align: left;
+  padding-left: 10px;
 }
-input:hover {
-  box-shadow: 0 0 2px rgba(255, 255, 255, 0.482),
-    0 0 3px rgba(255, 255, 255, 0.44), 0 0 5px rgba(255, 255, 255, 0.44),
-    0 0 20px rgb(0, 255, 166, 0.4), 0 0 20px rgb(0, 255, 166, 0.4),
-    0 0 30px rgb(0, 255, 166, 0.4), 0 0 60px rgb(0, 255, 166, 0.4),
-    0 0 80px rgb(0, 255, 166, 0.3);
+.searchBtn {
+  height: 40px;
+  background: none;
+  border: none;
+  margin-left: -44px;
+  transform: translateY(8px);
+}
+.randomBtn {
+  height: 42px;
+  width: 42px;
+  border: none;
+  background: #2b3b32;
+  border-radius: 5px;
+  transform: translateY(4px);
+  margin-left: 20px;
+}
+.twitterBtn {
+  height: 42px;
+  width: 42px;
+  border: none;
+  background: none;
 }
 .mintBtn {
   transition-duration: 0.2s;
@@ -151,4 +164,23 @@ a:hover {
     0 0 20px rgb(0, 255, 166, 0.9), 0 0 30px rgb(0, 255, 166, 0.9),
     0 0 40px rgb(0, 255, 166, 0.9), 0 0 50px rgb(0, 255, 166, 0.9),
     0 0 60px rgb(0, 255, 166, 0.9);
+}
+
+.backCard {
+  text-align: center;
+  display: inline-block;
+  background: #2b3c32;
+  border-radius: 5px;
+  width: 400px;
+  margin-top: 20px;
+}
+
+.NFTAddressText {
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 20px;
+  margin-bottom: 15px;
+  text-align: left;
+  margin-left: 24px;
+  color: white;
 }

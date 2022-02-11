@@ -2,11 +2,17 @@ import { ethers, Signer } from "ethers"
 import { BaseProvider, JsonRpcProvider } from '@ethersproject/providers'
 import { Network } from '@ethersproject/networks'
 import { useEffect, useState } from "react"
+import { truncateAddress } from "./utilities"
 import "./App.css"
 import { ConnectButton } from "./components/ConnectButton/ConnectButton"
 import { Punk } from "./components/Punk/Punk"
 import { NeonText } from "./components/NeonText/NeonText"
 import deployments from "./deployments.json"
+import search from "./img/search.svg"
+import dice from "./img/dice.svg"
+import twitter from "./img/twitter.svg"
+
+
 
 const defaultProvider = new JsonRpcProvider("https://mainnet.infura.io/v3/a03218fc876c4ba9a720ba48cc3b8de9")
 
@@ -129,7 +135,7 @@ function App() {
     <div>
       <NeonText text={"SYNTHETIC PUNKS"} ></NeonText>
       {correctNetwork ? <>
-        <div style={{marginTop:"100px"}}>
+        <div style={{marginTop:"100px", marginBottom: "30px"}}>
         <ConnectButton  setWalletConnected={setWalletConnected} signerOrProvider={signerOrProvider} setSignerOrProvider={setSignerOrProvider} address={address} setAddress={setAddress} canClaim={canClaim}/>
       </div>
       <div className={"container"} >
@@ -151,30 +157,38 @@ function App() {
           
         }}>
           <input onChange={(e) => setSearchQuery(e.target.value)} type="text" placeholder="Search address or ENS" style={{marginTop:"30px"}}/>
+          <button className="searchBtn">
+            <img src={search} style={{height:"30px"}}></img>
+          </button>
+          <button className="randomBtn">
+            <img src={dice} style={{height:"25px"}}></img>
+          </button>
         </form>
       </div>
       {address && signerOrProvider && walletConnected &&
-      <div>
-        <div className="container">
-        <h5 style={{marginTop:"25px",marginBottom:"15px"}} className="textGlow">{address}</h5>  
-        {address && 
-          <Punk address={address}  signerOrProvider={signerOrProvider}/>
-        }
+      <div className="container">
+        <div className="backCard">
+          <div className="NFTAddressText">{truncateAddress(address)}</div> 
+          <button className="twitterBtn">
+            <img src={twitter}></img>
+          </button> 
+          {address && 
+            <Punk address={address}  signerOrProvider={signerOrProvider}/>
+          }
+            { !canClaim ? <></> : <>
+              { alreadyClaimed ? <>
+                <button className="mintBtn" disabled>
+                  Claimed
+                </button>
+              </> : <>
+                <button className="mintBtn" onClick={()=>claimNFT()}>
+                  Claim 0.02ETH
+                </button>
+              </>}
+            </>}
         </div>
-      </div>}
-      <div className="container" style={{marginTop:"5px",marginBottom:"80px"}}>
-        { !canClaim ? <></> : <>
-          { alreadyClaimed ? <>
-            <button className="mintBtn" disabled>
-              Claimed
-            </button>
-          </> : <>
-            <button className="mintBtn" onClick={()=>claimNFT()}>
-              Claim 0.02ETH
-            </button>
-          </>}
-        </>}
       </div>
+      }
       </> : <div className="container">
         <button className="networkBtn" onClick={()=>changeNetwork()}>Change To Ethereum Network</button>
       </div>}

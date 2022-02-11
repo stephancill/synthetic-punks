@@ -1,23 +1,18 @@
 .connectBtn {
-  width: 300px;
-  height: 40px;
-  border: none;
+  width: 220px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border: white 2px solid;
   background: none;
-  border-radius: 5px;
+  border-radius: 8px;
   color: #fff;
   font-size: 24px;
   font-weight: bold;
-
-  text-shadow: 0 0 7px #fff, 0 0 10px #fff, 0 0 21px #fff,
-    0 0 42px rgb(0, 255, 166, 0.4), 0 0 82px rgb(0, 255, 166, 0.4),
-    0 0 92px rgb(0, 255, 166, 0.4), 0 0 102px rgb(0, 255, 166, 0.4),
-    0 0 151px rgb(0, 255, 166, 0.4);
+  transition-duration: 0.2s;
 }
 .connectBtn:hover {
-  text-shadow: 0 0 7px #fff, 0 0 10px #fff, 0 0 21px #fff,
-    0 0 20px rgb(0, 255, 166, 0.9), 0 0 30px rgb(0, 255, 166, 0.9),
-    0 0 40px rgb(0, 255, 166, 0.9), 0 0 50px rgb(0, 255, 166, 0.9),
-    0 0 60px rgb(0, 255, 166, 0.9);
+  background: white;
+  color: black;
 }
 
 .container {

@@ -5,15 +5,15 @@ import "@nomiclabs/hardhat-ethers"
 import "hardhat-deploy"
 import dotenv from "dotenv"
 import { HardhatNetworkUserConfig } from "hardhat/types"
-import { SyntheticPunks } from "./types"
 import { getAttributeName } from "../lib"
+import { BigNumber } from "ethers"
 dotenv.config()
 
 task("attributes", "Prints the attributes for an address", async ({address}, {deployments, ethers}) => {
   const SyntheticPunksContract = await deployments.get("SyntheticPunks")
-  const syntheticPunks = (new ethers.Contract(SyntheticPunksContract.address, SyntheticPunksContract.abi, ethers.provider) as SyntheticPunks)
+  const syntheticPunks = (new ethers.Contract(SyntheticPunksContract.address, SyntheticPunksContract.abi, ethers.provider))
   const attributeIds = await syntheticPunks._getAttributes(address)
-  const attributeNames = attributeIds.map(id => getAttributeName(id.toNumber()))
+  const attributeNames = attributeIds.map((id: BigNumber) => getAttributeName((id as BigNumber).toNumber()))
   console.log(attributeNames.join("\n"))
 }).addParam("address", "Address to look up attributes for")
 
@@ -37,7 +37,7 @@ const config: HardhatUserConfig = {
     hardhat: hardhatNetwork,
     rinkeby: {
       url: `https://rinkeby.infura.io/v3/${process.env.INFURA_PROJECT_ID}`,
-      accounts: [process.env.DEFAULT_DEPLOYER_KEY!]
+      accounts: process.env.DEFAULT_DEPLOYER_KEY ? [process.env.DEFAULT_DEPLOYER_KEY!] : []
     }
   },
   typechain: {

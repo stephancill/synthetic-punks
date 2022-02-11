@@ -27,5 +27,12 @@ ul {
 .atrributes {
   color: white;
   border: 1px white solid;
+  border-radius: 4px;
   display: block;
+  margin-right: 8px;
+  padding-right: 2px;
+  padding-left: 2px;
+  margin-left: 1px;
+  box-shadow: 0 0 2px rgba(255, 255, 255, 0.714), 0 0 5px rgb(0, 255, 166, 0.4),
+    0 0 10px rgb(0, 255, 166, 0.4);
 }
