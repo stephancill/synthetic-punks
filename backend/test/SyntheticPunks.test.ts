@@ -41,6 +41,9 @@ describe("SyntheticPunks", function () {
     expect(transferEvent.event).to.equal("Transfer")
     expect(transferEvent.args![0]).to.equal(ethers.constants.AddressZero)
     expect(transferEvent.args![1]).to.equal(user.address)
+
+    const claimed = await syntheticPunks.claimed(user.address)
+    expect(claimed).to.be.true
   })
 
   it("should let a user claim to a different account", async function() {
@@ -66,6 +69,12 @@ describe("SyntheticPunks", function () {
 
     const otherWalletBalance = await syntheticPunks.balanceOf(otherWallet.address)
     expect(otherWalletBalance).to.equal(0)
+
+    const otherUserClaimed = await syntheticPunks.claimed(otherWallet.address)
+    expect(otherUserClaimed).to.be.true
+
+    const claimed = await syntheticPunks.claimed(user.address)
+    expect(claimed).to.be.false
   })
 
   it("should reject claims with insufficient value", async function() {
