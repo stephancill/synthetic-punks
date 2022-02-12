@@ -7,10 +7,14 @@ import "./App.css"
 import { ConnectButton } from "./components/ConnectButton/ConnectButton"
 import { Punk } from "./components/Punk/Punk"
 import { NeonText } from "./components/NeonText/NeonText"
+import { Copy } from "./components/Copy/Copy"
 import deployments from "./deployments.json"
 import search from "./img/search.svg"
+import searchSmall from "./img/searchSmall.svg"
 import dice from "./img/dice.svg"
+import diceSmall from "./img/diceSmall.svg"
 import twitter from "./img/twitter.svg"
+import opensea from "./img/opensea.svg"
 import { IPunkAddress } from "./interfaces/IPunkAddress"
 import { AddressType } from "./interfaces/AddressType"
 
@@ -25,7 +29,9 @@ function App() {
   const [alreadyClaimed, setAlreadyClaimed] = useState(false)
   const [walletConnected,setWalletConnected] = useState(false)
   const [correctNetwork,setCorrectedNetwork] = useState(false)
-  
+  const [tokenID,setTokenID] = useState<string>("")
+  const [NFTContractAddress,setNFTContractAddress] = useState<string>("")
+
 
   // TODO: Show transaction hash in claim button when it's loading 
   // TODO: Show when punk is claimed: Link to opensea
@@ -72,7 +78,6 @@ function App() {
       if (accounts[0]) {
         setPunkAddress({address: accounts[0], type: AddressType.Search})
       }
-      
     });
   },)
 
@@ -81,6 +86,20 @@ function App() {
       checkNetwork()
     });
   },)
+
+  useEffect(()=>{
+    if (punkAddress?.address) {
+      (async()=>{
+        const contractAddress = deployments.contracts["SyntheticPunks"].address
+        const contractInterface = new ethers.utils.Interface( deployments.contracts["SyntheticPunks"].abi)
+        const syntheticPunk = new ethers.Contract(contractAddress, contractInterface, signerOrProvider)
+        const fetchedTokenId = await syntheticPunk.getTokenID(punkAddress?.address)
+        setTokenID(fetchedTokenId.toString())
+        setNFTContractAddress(contractAddress)
+        console.log(fetchedTokenId.toString())
+      })()
+    }
+  },[punkAddress])
 
   const connectWallet = async()=>{
     const provider = new ethers.providers.Web3Provider(window.ethereum)
@@ -171,21 +190,37 @@ function App() {
       {punkAddress?.address && signerOrProvider && walletConnected &&
       <div className="container">
         <div className="backCard">
-          <div className="NFTAddressText">{truncateAddress(punkAddress.address)} (
-            {{[AddressType.Signer]: "Signer", [AddressType.Random]: "Random", [AddressType.Search]: "Search"}[punkAddress.type]}
-          )</div> 
+          <div style={{display:"flex"}}>
+            <div className="NFTAddressText">{truncateAddress(punkAddress.address)} </div>
 
-          <button className="twitterBtn">
-            <img src={twitter}></img>
-          </button> 
+            {{[AddressType.Signer]:<button className="typeBtn" disabled>
+              You
+            </button>, 
+            [AddressType.Random]: <button className="typeBtn" disabled>
+            <img src={diceSmall} style={{width:"18px"}}></img>
+            </button>
+            , [AddressType.Search]: <button className="typeBtn" disabled>
+            <img src={searchSmall} style={{width:"14px",marginTop:"1px"}}></img>
+            </button>
+            }[punkAddress.type]}
+
+            <button className="twitterBtn">
+              <img src={twitter}></img>
+            </button> 
+          </div>
           {punkAddress.address && 
             <Punk punkAddress={punkAddress} signerOrProvider={signerOrProvider}/>
           }
             { !canClaim ? <></> : <>
-              { alreadyClaimed ? <>
-                <button className="mintBtn" disabled>Claimed</button>
-              </> : <>
-                <button className="mintBtn" onClick={()=>claimNFT()}>Claim 0.02 ♦</button>
+              { alreadyClaimed ? <a href={"https://opensea.io/"+NFTContractAddress+"/"+tokenID }target="_blank">
+                <button className="mintBtn">View on marketplace 
+                <img src={opensea} style={{marginBottom:"-5px",marginLeft:"10px"}}></img>
+                </button>
+              </a> : <>
+                <button className="mintBtn" onClick={()=>claimNFT()} style={{width:"294px",marginLeft:"8px"}}>Claim 0.02 ♦</button>
+                <button className="helpBtn toolTip" >?
+                <span className="toolTipText">You may claim this punk and have it sent to your connected wallet </span>
+                </button>
               </>}
             </>}
         </div>
@@ -194,21 +229,7 @@ function App() {
       </> : <div className="container">
         <button className="networkBtn" onClick={()=>changeNetwork()}>Wrong network. Click here to switch to Ethereum</button>
       </div>}
-      <div className="textContainer">
-        <div>
-          <h3 className="textGlow">
-          <b>Synthetic CryptoPunks</b> is inspired by the historical collection of 10,000 CryptoPunks by Larva Labs. It generates a unique, fully on-chain CryptoPunk for each Ethereum address.
-          </h3>
-          <h3 className="textGlow">
-          They are free to view for any address, but can be claimed as an ERC-721 NFT for a price of 0.02 ether.
-          </h3>
-        </div>
-      </div>
-      <div className="textContainer" style={{marginTop:"80px", marginLeft:"-0px"}}>
-        <h4 className="footText">
-          Made by <a href="https://twitter.com/stephancill">@stephancill</a> and <a href="https://twitter.com/npm_luko">@npm_luko</a>
-        </h4> 
-      </div>
+      <Copy></Copy>
     </div>
   )
 }

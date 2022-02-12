@@ -5,6 +5,7 @@ import { BaseProvider, JsonRpcProvider } from '@ethersproject/providers'
 import { useSyntheticPunks } from "../../hooks/useSyntheticPunks"
 import { getAttributeName } from "../../../../lib"
 import { IPunkAddress } from "../../interfaces/IPunkAddress"
+import { tokenToString } from "typescript"
 
 interface IPunkProps {
   punkAddress: IPunkAddress
@@ -41,15 +42,15 @@ export const Punk = ({punkAddress, signerOrProvider}: IPunkProps) => {
   }, [punkAddress, signerOrProvider])
 
   return (
-    <div style={{display: "inline-block", paddingTop:"0px", width: "500px"}}>
-      {isLoading && <div>Loading...</div>}
+    <div style={{display: "inline-block", paddingTop:"0px", width: "400px"}}>
+      {isLoading && <div style={{marginBottom:"20px"}}>Loading...</div>}
       
       {punk && !isLoading && <>
       <div>
-        <img style={{width: "400px", border: "1px black solid", background:"#6A9480", borderRadius:"5px"}} src={punk.imageData}></img>
+        <img style={{width: "350px", background:"#6A9480", borderRadius:"5px"}} src={punk.imageData}></img>
       </div>
       {punk.attributes.length > 0 && 
-      <div style={{display:"flex", flexWrap: "wrap", width: "100%", justifyContent: "center"}}>
+      <div style={{display:"flex", flexWrap: "wrap", width: "350px", justifyContent: "left", marginLeft:"21px",marginTop:"5px",marginBottom:"25px"}}>
         {punk.attributes.map((attribute, i) => {
           return <div key={i} className={style.atrributes }>{attribute}</div>
         })}

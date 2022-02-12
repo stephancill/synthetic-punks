@@ -17,13 +17,6 @@
     0 0 40px rgba(255, 111, 0, 0.3);
 }
 
-ul {
-  color: rgba(255, 111, 0, 1);
-  text-align: left;
-  text-shadow: 0 0 10px rgba(255, 111, 0, 1), 0 0 25px rgba(255, 111, 0, 1);
-  margin-top: -20px;
-  margin-left: -22px;
-}
 .atrributes {
   color: white;
   border: 1px white solid;
