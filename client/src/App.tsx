@@ -212,7 +212,7 @@ function App() {
             <Punk punkAddress={punkAddress} signerOrProvider={signerOrProvider}/>
           }
             { !canClaim ? <></> : <>
-              { alreadyClaimed ? <a href={"https://opensea.io/"+NFTContractAddress+"/"+tokenID }target="_blank">
+              { alreadyClaimed ? <a href={"https://opensea.io/assets/"+NFTContractAddress+"/"+tokenID }target="_blank">
                 <button className="mintBtn">View on marketplace 
                 <img src={opensea} style={{marginBottom:"-5px",marginLeft:"10px"}}></img>
                 </button>
