@@ -34,9 +34,8 @@ function App() {
 
 
   // TODO: Show transaction hash in claim button when it's loading 
-  // TODO: Show when punk is claimed: Link to opensea
   // TODO: Router paths (/punk/<address>)
-  // TODO: Reconsider glowing in SVG, maybe a dark green outline would look better
+  // TODO: Change icons and metadata
 
   useEffect(() =>{
     (async()=>{
