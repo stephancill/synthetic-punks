@@ -31,11 +31,14 @@ function App() {
   const [correctNetwork,setCorrectedNetwork] = useState(false)
   const [tokenID,setTokenID] = useState<string>("")
   const [NFTContractAddress,setNFTContractAddress] = useState<string>("")
+  const [claimHash,setClaimHash] = useState<string>("")
 
 
   // TODO: Show transaction hash in claim button when it's loading 
   // TODO: Router paths (/punk/<address>)
-  // TODO: Change icons and metadata
+
+  // store await claim in var
+  // then use var transaction.hash 
 
   useEffect(() =>{
     (async()=>{
@@ -144,8 +147,12 @@ function App() {
     const claimPrice = await syntheticPunk.claimPrice()
     try {
     const tx = await syntheticPunk.connect(signerOrProvider as Signer).claim({value: claimPrice})
-    console.log(tx) 
+    console.log(tx.hash)
+    setClaimHash(tx.hash)
+    await tx.wait()
+    setClaimHash("")
     setAlreadyClaimed(true)
+    console.log("done")
     } catch (error) {
       console.log(error)
     }
@@ -216,7 +223,13 @@ function App() {
                 <img src={opensea} style={{marginBottom:"-5px",marginLeft:"10px"}}></img>
                 </button>
               </a> : <>
+                { !claimHash ? 
                 <button className="mintBtn" onClick={()=>claimNFT()} style={{width:"294px",marginLeft:"8px"}}>Claim 0.02 ♦</button>
+                :
+                <a href={"etherscan.io/tx/"+{claimHash}} target="_blank">
+                <button className="mintBtn" onClick={()=>claimNFT()} style={{width:"294px",marginLeft:"8px"}}>View Pending Transaction</button>
+                </a>
+                }
                 <button className="helpBtn toolTip" >?
                 <span className="toolTipText">You may claim this punk and have it sent to your connected wallet </span>
                 </button>
