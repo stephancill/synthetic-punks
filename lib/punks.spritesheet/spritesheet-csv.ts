@@ -1,16 +1,5 @@
-import {csv as descriptor} from "./spritesheet-filtered.json"
-export {ranges, render_order as renderOrder} from "./spritesheet-filtered.json"
-
-function CSVToArray( strData: string, strDelimiter: string ){
-  strDelimiter = (strDelimiter || ",");
-  const arrData: string[][] = []
-  const lines = strData.split("\n")
-  for (let i = 1; i < lines.length; i++) {
-      const row = lines[i].split(strDelimiter);
-      arrData.push(row)
-  }
-  return( arrData );
-} 
+export {attributes, ranges, render_order as renderOrder} from "./spritesheet-filtered.json"
+import { attributes } from "./spritesheet-filtered.json"
 
 export interface ISprite {
     id: number 
@@ -24,12 +13,12 @@ export interface IRange {
     endId: number
 }
 
-const spritesheetRaw = CSVToArray(descriptor, ",")
-export const spritesheet: Array<ISprite> = spritesheetRaw.map(row => {
+export const spritesheet: Array<ISprite> = (attributes as any[]).map(row => {
     const [id, name, gender, size] = row
-    return {
-        id: parseInt(id), name, gender, size
+    const sprite = {
+        id: id, name, gender, size
     }
+    return sprite
 })
 
 export const getAttributeName = (id: number) => {

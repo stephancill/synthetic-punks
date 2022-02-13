@@ -4,7 +4,8 @@ from math import ceil, floor
 from PIL import Image
 import json
 
-Attribute = namedtuple("Attribute", ["id", "name", "gender", "size", "type"])
+field_names = ["id", "name", "gender", "size", "type"]
+Attribute = namedtuple("Attribute", field_names)
 
 index_category_map = {
   "base": range(0, 229),
@@ -90,9 +91,9 @@ for category in category_order:
 
 print(ranges_per_category)
     
-
+row_length = 24
 im = Image.open("spritesheet-original.png")
-out_im = Image.new("RGBA", (24*25, ceil(len(sorted_attributes) / 25)*24))
+out_im = Image.new("RGBA", (24*row_length, ceil(len(sorted_attributes) / row_length)*24))
 for (i, attribute) in enumerate(sorted_attributes):
   id = attribute.id
 
@@ -102,8 +103,8 @@ for (i, attribute) in enumerate(sorted_attributes):
 
   region = im.crop(box)
 
-  new_x = i % 25
-  new_y = floor(i/25)
+  new_x = i % row_length
+  new_y = floor(i/row_length)
   new_box = (new_x*24, new_y*24)
   out_im.paste(region, new_box)
 
@@ -112,11 +113,8 @@ out_im.show()
 
 csv_body = None
 with open("spritesheet-filtered.json", "w") as f:
-  csv_body = "\n".join([",".join([str(i), *x[1:5]]) for i, x in enumerate(sorted_attributes)])
-  csv_body_original_ids = "\n".join([",".join([str(x[0]), *x[1:5]]) for x in sorted_attributes])
-  with open("spritesheet-filtered.csv", "w") as csv_f:
-    csv_f.write("id, name, gender, size, category\n"+csv_body)
-  json_content = {"csv": csv_body, "ranges": ranges_per_category, "render_order": category_order}
+  attributes_json = [Attribute(i, *x[1:]) for i, x in enumerate(sorted_attributes)]
+  json_content = {"attributes": attributes_json, "ranges": ranges_per_category, "render_order": category_order}
   json.dump(json_content, f)
 
 print(len(sorted_attributes), len(attribute_names))
