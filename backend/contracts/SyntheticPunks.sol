@@ -130,7 +130,7 @@ contract SyntheticPunks is ERC721 {
 
     address userAddress = getAddress(id);
     string memory ensName = reverseName(userAddress);  
-    string memory addressOrENS = bytes(ensName).length == 0 ? toString(userAddress) : ensName;
+    string memory addressOrENS = bytes(ensName).length == 0 ? truncateAddress(userAddress) : ensName;
     
     string memory json = base64(bytes(abi.encodePacked('{"name": "', 'Synthetic CryptoPunk for ', addressOrENS, '", "description": "This is a unique Punk claimed by ', addressOrENS,'.", "image": "data:image/svg+xml;base64,', base64(bytes(punkSVG)), '"}')));
 
@@ -250,6 +250,24 @@ contract SyntheticPunks is ERC721 {
     bytes32 mask = bytes32(0xff << (offset * 8));
     uint256 out = uint256((entropy & mask) >> (offset * 8));
     return out;
+  }
+
+  function truncateAddress(address _address) internal pure returns (string memory) {
+    string memory addressString = toString(_address);
+    bytes memory addressBytes = bytes(addressString);
+    bytes memory str = new bytes(13);
+    uint count = 0;
+    for (uint i = 0; i < 6; i++) {
+      str[count++] = addressBytes[i];
+    }
+    for (uint256 i = 0; i < 3; i++) {
+      str[count++] = ".";
+    }
+    for (uint i = addressBytes.length-4; i < addressBytes.length; i++) {
+      str[count++] = addressBytes[i];
+    }
+
+    return string(str);
   }
 
   function toString(address account) internal pure returns(string memory) {

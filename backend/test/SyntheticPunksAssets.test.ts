@@ -23,15 +23,15 @@ describe("SyntheticPunks", function () {
     expect(CID.length).to.be.equal(46+"ipfs://".length)
   })
 
-  it("should store spritesheet image data", async function () {
-    let imageData = await syntheticPunksAssets.spritesheetImageData()
-    expect(imageData.split(",")[0]).to.equal("data:image/png;charset:utf-8;base64")
-    expect(imageData.split(",")[1].length).to.be.greaterThan(0)
-  })
-
   it("should store spritesheet attribute ranges", async function () {
     let spritesheetRanges = await syntheticPunksAssets.spritesheetRanges()
     expect(spritesheetRanges.length).to.equal(9)
     expect(spritesheetRanges[0].length).to.equal(4)
+  })
+
+  it("should store spritesheet image data", async function () {
+    let imageData = await syntheticPunksAssets.spritesheetImageData()
+    expect(imageData.split(",")[0]).to.equal("data:image/png;charset:utf-8;base64")
+    expect(imageData.split(",")[1].length).to.be.greaterThan(0)
   })
 })

@@ -113,10 +113,15 @@ describe("SyntheticPunks", function () {
   it("should return valid tokenURI", async function () {
     const uri = await syntheticPunks._tokenURI(signers[0].address)
     expect(uri).to.not.equal(undefined)
-    
+    // console.log(atob(uri.split(",")[1]))
     const metadata = JSON.parse(atob(uri.split(",")[1]))
     // console.log(metadata.image);
     ;["name", "description", "image"].forEach(key => expect(Object.keys(metadata)).to.contain(key))
+
+    const addressLength = signers[0].address.length
+    const userAddress = signers[0].address.toLowerCase()
+    const truncatedAddress = `${userAddress.slice(0,6)}...${userAddress.slice(addressLength-4,addressLength)}`
+    expect(metadata.name).to.contain(truncatedAddress)
 
     const svg = atob(metadata.image.split(",")[1])
     expect(isSvg(svg)).to.be.true
