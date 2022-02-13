@@ -90,15 +90,21 @@ function App() {
   },)
 
   useEffect(()=>{
-    if (punkAddress?.address) {
+    // check if correct network
+    if (punkAddress?.address && correctNetwork) {
+      console.log(punkAddress?.address);
       (async()=>{
-        const contractAddress = deployments.contracts["SyntheticPunks"].address
-        const contractInterface = new ethers.utils.Interface( deployments.contracts["SyntheticPunks"].abi)
-        const syntheticPunk = new ethers.Contract(contractAddress, contractInterface, signerOrProvider)
-        const fetchedTokenId = await syntheticPunk.getTokenID(punkAddress?.address)
-        setTokenID(fetchedTokenId.toString())
-        setNFTContractAddress(contractAddress)
-        console.log(fetchedTokenId.toString())
+        try {
+          const contractAddress = deployments.contracts["SyntheticPunks"].address
+          const contractInterface = new ethers.utils.Interface( deployments.contracts["SyntheticPunks"].abi)
+          const syntheticPunk = new ethers.Contract(contractAddress, contractInterface, signerOrProvider)
+          const fetchedTokenId = await syntheticPunk.getTokenID(punkAddress?.address)
+          setTokenID(fetchedTokenId.toString())
+          setNFTContractAddress(contractAddress)
+          console.log(fetchedTokenId.toString())
+        } catch (error) {
+          console.log(error)
+        }
       })()
     }
   },[punkAddress])

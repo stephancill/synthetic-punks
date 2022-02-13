@@ -173,10 +173,7 @@ a:hover {
   font-weight: bold;
 }
 .networkBtn:hover {
-  text-shadow: 0 0 7px #fff, 0 0 10px #fff, 0 0 21px #fff,
-    0 0 20px rgb(0, 255, 166, 0.9), 0 0 30px rgb(0, 255, 166, 0.9),
-    0 0 40px rgb(0, 255, 166, 0.9), 0 0 50px rgb(0, 255, 166, 0.9),
-    0 0 60px rgb(0, 255, 166, 0.9);
+  color: #00b87b;
 }
 
 .backCard {
