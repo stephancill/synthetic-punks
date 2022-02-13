@@ -1,9 +1,9 @@
 {
-  "name": "localhost",
-  "chainId": "31337",
+  "name": "rinkeby",
+  "chainId": "4",
   "contracts": {
     "SyntheticPunks": {
-      "address": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      "address": "0x7cF2db1CAa6f2b00e855a692AA6C7F2ad3FFe0A3",
       "abi": [
         {
           "inputs": [
@@ -29,7 +29,7 @@
             },
             {
               "internalType": "string",
-              "name": "_attributesContentHash",
+              "name": "_attributesContentURI",
               "type": "string"
             },
             {
@@ -179,7 +179,7 @@
         },
         {
           "inputs": [],
-          "name": "attributesContentHash",
+          "name": "attributesContentURI",
           "outputs": [
             {
               "internalType": "string",
