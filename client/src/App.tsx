@@ -1,5 +1,6 @@
-import { ethers, Signer } from "ethers"
+import { ethers, Signer, Wallet } from "ethers"
 import { BaseProvider, JsonRpcProvider } from '@ethersproject/providers'
+import { Network } from '@ethersproject/networks'
 import { useEffect, useState } from "react"
 import { truncateAddress } from "./utilities"
 import "./App.css"
@@ -22,6 +23,7 @@ const defaultProvider = new JsonRpcProvider(!process.env.NODE_ENV || process.env
 function App() {
   const [signerOrProvider, setSignerOrProvider] = useState<Signer | BaseProvider | undefined>(undefined)
   const [punkAddress, setPunkAddress] = useState<IPunkAddress | undefined>(undefined)
+  const [randomWallet, setRandomWallet] = useState<Wallet | undefined>()
   const [searchQuery, setSearchQuery] = useState<string>("")
   const [canClaim, setCanClaim] = useState(false)
   const [alreadyClaimed, setAlreadyClaimed] = useState(false)
@@ -71,7 +73,7 @@ function App() {
     }
     // first check if on correct network
     
-  }, [signerOrProvider, punkAddress,correctNetwork,walletConnected])
+  }, [signerOrProvider, punkAddress])
 
   useEffect(() =>{
     window.ethereum.on('accountsChanged',  (accounts: Array<string>) => {
@@ -82,7 +84,7 @@ function App() {
   },)
 
   useEffect(() =>{
-    window.ethereum.on('chainChanged', (networkId : number) => {
+    window.ethereum.on('networkChanged', (networkId : number) => {
       checkNetwork()
     });
   },)
@@ -105,7 +107,7 @@ function App() {
         }
       })()
     }
-  },[punkAddress,correctNetwork,signerOrProvider])
+  },[punkAddress])
 
   const connectWallet = async()=>{
     const provider = new ethers.providers.Web3Provider(window.ethereum)
@@ -121,19 +123,15 @@ function App() {
   }
 
   const checkNetwork = async () => {
-    try {
-      const provider = new ethers.providers.Web3Provider(window.ethereum)
-      const chainId = await provider.getNetwork()
-      const id = chainId.chainId
-      if (id && id === parseInt(deployments.chainId)) {
-        // correct chain
-        setCorrectedNetwork(true)
-      } else {
-        // incorrect chain
-        setCorrectedNetwork(false)
-      }
-    } catch (error) {
-      console.log(error)
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    const chainId = await provider.getNetwork()
+    const id = chainId.chainId
+    if (id && id === parseInt(deployments.chainId)) {
+      // correct chain
+      setCorrectedNetwork(true)
+    } else {
+      // incorrect chain
+      setCorrectedNetwork(false)
     }
   }
 
@@ -169,87 +167,86 @@ function App() {
     <div>
       <NeonText text={"SYNTHETIC PUNKS"} ></NeonText>
       {correctNetwork ? <>
-                <div style={{marginTop:"100px", marginBottom: "30px"}}>
-                <ConnectButton  setWalletConnected={setWalletConnected} signerOrProvider={signerOrProvider} setSignerOrProvider={setSignerOrProvider} punkAddress={punkAddress} setPunkAddress={setPunkAddress} canClaim={canClaim}/>
-              </div>
-              <div className={"container"} >
-                <form onSubmit={async (e) => {
-                  e.preventDefault()
-                  if (!searchQuery) {
-                    return
-                  }
-                  if (searchQuery.indexOf(".") > -1) {
-                    (async () => {
-                      const name = searchQuery
-                      const addr = await signerOrProvider?.resolveName(name)
-                      addr && setPunkAddress({address: addr, type: AddressType.Search})
-                    })()
-                  } else {
-                    setPunkAddress({address: searchQuery, type: AddressType.Search})
-                  }
-                }}>
-                  <input onChange={(e) => setSearchQuery(e.target.value)} type="text" placeholder="Search address or ENS" style={{marginTop:"30px", fontWeight: "normal", color: "white"}}/>
-                  <button className="searchBtn" type="submit">
-                    <img src={search} style={{height:"26px", width: "32px"}} alt=""></img>
-                  </button>
-                  <button className="randomBtn" type="button" onClick={() => {
-                    const wallet = ethers.Wallet.createRandom()
-                    setPunkAddress({address: wallet.address, type: AddressType.Random})
-                  }}>
-                    <img src={dice} style={{height:"26px", width: "32px"}} alt=""></img>
-                  </button>
-                </form>
-              </div>
-              {punkAddress?.address && signerOrProvider && walletConnected &&
-              <div className="container">
-                <div className="backCard">
-                  <div style={{display:"flex"}}>
-                    <div className="NFTAddressText">{truncateAddress(punkAddress.address)} </div>
-
-                    {{[AddressType.Signer]:<button className="typeBtn" disabled>
-                      You
-                    </button>, 
-                    [AddressType.Random]: <button className="typeBtn" disabled>
-                    <img src={diceSmall} style={{width:"18px"}} alt=""></img>
-                    </button>
-                    , [AddressType.Search]: <button className="typeBtn" disabled>
-                    <img src={searchSmall} style={{width:"14px",marginTop:"1px"}} alt=""></img>
-                    </button>
-                    }[punkAddress.type]}
-
-                    <button className="twitterBtn">
-                      <img src={twitter} alt=""></img>
-                    </button> 
-                  </div>
-                  {punkAddress.address && 
-                    <Punk punkAddress={punkAddress} signerOrProvider={signerOrProvider}/>
-                  }
-                    { !canClaim ? <></> : <>
-                      { alreadyClaimed ? <a href={"https://opensea.io/assets/"+NFTContractAddress+"/"+tokenID }target="_blank"rel="noreferrer">
-                        <button className="mintBtn">View on marketplace 
-                        <img src={opensea} style={{marginBottom:"-5px",marginLeft:"10px"}} alt=""></img>
-                        </button>
-                      </a> : <>
-                        { !claimHash ? 
-                        <button className="mintBtn" onClick={()=>claimNFT()} style={{width:"294px",marginLeft:"8px"}}>Claim 0.02 ♦</button>
-                        :
-                        <a href={"etherscan.io/tx/"+{claimHash}} target="_blank" rel="noreferrer">
-                        <button className="mintBtn" style={{width:"294px",marginLeft:"8px"}}>View Pending Transaction</button>
-                        </a>
-                        }
-                        <button className="helpBtn toolTip" >?
-                        <span className="toolTipText">You may claim this punk and have it sent to your connected wallet </span>
-                        </button>
-                      </>}
-                    </>}
-                </div>
-              </div>
-              }
-      </> : 
+        <div style={{marginTop:"100px", marginBottom: "30px"}}>
+        <ConnectButton  setWalletConnected={setWalletConnected} signerOrProvider={signerOrProvider} setSignerOrProvider={setSignerOrProvider} punkAddress={punkAddress} setPunkAddress={setPunkAddress} canClaim={canClaim}/>
+      </div>
+      <div className={"container"} >
+        <form onSubmit={async (e) => {
+          e.preventDefault()
+          if (!searchQuery) {
+            return
+          }
+          if (searchQuery.indexOf(".") > -1) {
+            (async () => {
+              const name = searchQuery
+              const addr = await signerOrProvider?.resolveName(name)
+              addr && setPunkAddress({address: addr, type: AddressType.Search})
+            })()
+          } else {
+            setPunkAddress({address: searchQuery, type: AddressType.Search})
+          }
+        }}>
+          <input onChange={(e) => setSearchQuery(e.target.value)} type="text" placeholder="Search address or ENS" style={{marginTop:"30px", fontWeight: "normal", color: "white"}}/>
+          <button className="searchBtn" type="submit">
+            <img src={search} style={{height:"26px", width: "32px"}}></img>
+          </button>
+          <button className="randomBtn" type="button" onClick={() => {
+            const wallet = ethers.Wallet.createRandom()
+            setRandomWallet(wallet)
+            setPunkAddress({address: wallet.address, type: AddressType.Random})
+          }}>
+            <img src={dice} style={{height:"26px", width: "32px"}}></img>
+          </button>
+        </form>
+      </div>
+      {punkAddress?.address && signerOrProvider && walletConnected &&
       <div className="container">
-        <button className="networkBtn" onClick={()=>changeNetwork()}>Wrong network. Click here to switch to Ethereum</button>
+        <div className="backCard">
+          <div style={{display:"flex"}}>
+            <div className="NFTAddressText">{truncateAddress(punkAddress.address)} </div>
+
+            {{[AddressType.Signer]:<button className="typeBtn" disabled>
+              You
+            </button>, 
+            [AddressType.Random]: <button className="typeBtn" disabled>
+            <img src={diceSmall} style={{width:"18px"}}></img>
+            </button>
+            , [AddressType.Search]: <button className="typeBtn" disabled>
+            <img src={searchSmall} style={{width:"14px",marginTop:"1px"}}></img>
+            </button>
+            }[punkAddress.type]}
+
+            <button className="twitterBtn">
+              <img src={twitter}></img>
+            </button> 
+          </div>
+          {punkAddress.address && 
+            <Punk punkAddress={punkAddress} signerOrProvider={signerOrProvider}/>
+          }
+            { !canClaim ? <></> : <>
+              { alreadyClaimed ? <a href={"https://opensea.io/assets/"+NFTContractAddress+"/"+tokenID }target="_blank">
+                <button className="mintBtn">View on marketplace 
+                <img src={opensea} style={{marginBottom:"-5px",marginLeft:"10px"}}></img>
+                </button>
+              </a> : <>
+                { !claimHash ? 
+                <button className="mintBtn" onClick={()=>claimNFT()} style={{width:"294px",marginLeft:"8px"}}>Claim 0.02 ♦</button>
+                :
+                <a href={"etherscan.io/tx/"+{claimHash}} target="_blank">
+                <button className="mintBtn" style={{width:"294px",marginLeft:"8px"}}>View Pending Transaction</button>
+                </a>
+                }
+                <button className="helpBtn toolTip" >?
+                <span className="toolTipText">You may claim this punk and have it sent to your connected wallet </span>
+                </button>
+              </>}
+            </>}
+        </div>
       </div>
       }
+      </> : <div className="container">
+        <button className="networkBtn" onClick={()=>changeNetwork()}>Wrong network. Click here to switch to Ethereum</button>
+      </div>}
       <Copy></Copy>
     </div>
   )
