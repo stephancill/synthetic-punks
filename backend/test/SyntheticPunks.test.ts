@@ -2,7 +2,7 @@ import { ethers, network } from "hardhat"
 import { SyntheticPunks, SyntheticPunks__factory } from "../types"
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers"
 import { expect } from "chai"
-import { spritesheetImageData, allRanges } from "../utils/SpritesheetImageData"
+import { spritesheetImageData, allRanges, attributesContentURI } from "../utils/SpritesheetImageData"
 import isSvg from "is-svg"
 import { getENSReverseAddressOrZero } from "../utils/ENSReverseAddresses"
 
@@ -16,7 +16,8 @@ describe("SyntheticPunks", function () {
     withdrawSigner = signers[1]
     const ensReverseAddress = getENSReverseAddressOrZero(network.config.chainId!)
     const syntheticPunksFactory = new SyntheticPunks__factory(signers[0])
-    syntheticPunks = await syntheticPunksFactory.deploy("Synthetic CryptoPunks", "sCRYPTOPUNKS", spritesheetImageData, allRanges, withdrawSigner.address, ensReverseAddress)
+    const _attributesContentURI = await attributesContentURI
+    syntheticPunks = await syntheticPunksFactory.deploy("Synthetic CryptoPunks", "sCRYPTOPUNKS", spritesheetImageData, allRanges, _attributesContentURI, withdrawSigner.address, ensReverseAddress)
     await syntheticPunks.deployed()
   })
 
@@ -28,6 +29,11 @@ describe("SyntheticPunks", function () {
   it("should set the price to 0.02 eth", async function () {
     const claimPrice = await syntheticPunks.claimPrice()
     expect(claimPrice).to.equal(ethers.utils.parseUnits("0.02", "ether"))
+  })
+
+  it("should contain the attributes content hash", async function () {
+    const CID = await syntheticPunks.attributesContentURI()
+    expect(CID.length).to.be.equal(46+"ipfs://".length)
   })
 
   it("should let a user claim", async function () {

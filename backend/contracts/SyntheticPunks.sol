@@ -1,8 +1,9 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.0;
 
+
+
 import "@rari-capital/solmate/src/tokens/ERC721.sol";
-import "hardhat/console.sol";
 
 abstract contract ReverseRecords {
   function getNames(address[] calldata addresses) external view virtual returns (string[] memory r);
@@ -11,10 +12,10 @@ abstract contract ReverseRecords {
 contract SyntheticPunks is ERC721 {
 
   // TODO: Check if constants are cheaper
-  // TODO: Attributes csv IPFS content hash
   string public spritesheetImageData;
   uint256[4][9] public spritesheetRanges;
   uint256 public immutable claimPrice = 0.02 ether;
+  string public attributesContentURI; // For use by third parties to display 
   address public immutable withdrawAddress;
   address immutable ensReverseAddress;
   string public constant claimMessage = "Message to claim Synthetic Punk";
@@ -28,11 +29,13 @@ contract SyntheticPunks is ERC721 {
     string memory _symbol, 
     string memory _spritesheetImageData, 
     uint256[4][9] memory _spritesheetRanges,
+    string memory _attributesContentURI,
     address _withdrawAddress,
     address _ensReverseAddress
   ) ERC721(_name, _symbol) {
     spritesheetImageData = _spritesheetImageData;
     spritesheetRanges = _spritesheetRanges;
+    attributesContentURI = _attributesContentURI;
     withdrawAddress = _withdrawAddress;
     ensReverseAddress = _ensReverseAddress;
   }
@@ -100,7 +103,6 @@ contract SyntheticPunks is ERC721 {
     uint256 checks = 2 + randomUint(id, 1) % (spritesheetRanges.length - 3); // Number of bytes to check
     uint256[] memory attributes = new uint256[](checks); // TODO: Check at least 1 attribute
     uint256 length = 0;
-    console.log(checks);
     for (uint256 i; i < checks; i++) {
       uint256 newAttribute = randomUint(id, 2+i) % (spritesheetRanges.length - 2) + 1; // Skip base category
       
@@ -110,24 +112,16 @@ contract SyntheticPunks is ERC721 {
         continue;
       }
 
-      uint lengthBefore = length;
-
       if (getGender(id) == Gender.Female) {
         if (!(spritesheetRanges[newAttribute][3] - spritesheetRanges[newAttribute][1] == 0)) {
           attributes[length] = newAttribute;
           length++;
-          console.log("added", newAttribute);
         }
       } else {
         if (!(spritesheetRanges[newAttribute][2] - spritesheetRanges[newAttribute][0] == 0)) {
           attributes[length] = newAttribute;
           length++;
-          console.log("added", newAttribute);
         }
-      }
-
-      if (lengthBefore == length) {
-        console.log("skipped", newAttribute);
       }
     }
 
@@ -160,7 +154,6 @@ contract SyntheticPunks is ERC721 {
     uint256[] memory layers = new uint256[](attributeCategories.length);
     for (uint256 i = 0; i < attributeCategories.length; i++) {
       layers[i] = getAttribute(id, attributeCategories[i]);
-      // console.log(layers[i]);
     }
     return layers;
   }
@@ -177,8 +170,8 @@ contract SyntheticPunks is ERC721 {
         if (spritesheetRanges[i][0] <= layers[j] && layers[j] < spritesheetRanges[i][3]) { // if layer is in range
           // console.log(layers[j]);
           uint256 id = layers[j];
-          uint256 x = (id % 25) * 24;
-          uint256 y = (id / 25) * 24;
+          uint256 x = (id % 24) * 24;
+          uint256 y = (id / 24) * 24;
           layersSVG = string(abi.encodePacked(layersSVG, '<svg width="24" height="24" viewBox="', toString(x), ' ', toString(y), ' 24 24"><use href="#spritesheet"></use></svg>'));
           break;
         }

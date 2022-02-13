@@ -28,6 +28,11 @@
               "type": "uint256[4][9]"
             },
             {
+              "internalType": "string",
+              "name": "_attributesContentHash",
+              "type": "string"
+            },
+            {
               "internalType": "address",
               "name": "_withdrawAddress",
               "type": "address"
@@ -170,6 +175,19 @@
           "name": "approve",
           "outputs": [],
           "stateMutability": "nonpayable",
+          "type": "function"
+        },
+        {
+          "inputs": [],
+          "name": "attributesContentHash",
+          "outputs": [
+            {
+              "internalType": "string",
+              "name": "",
+              "type": "string"
+            }
+          ],
+          "stateMutability": "view",
           "type": "function"
         },
         {

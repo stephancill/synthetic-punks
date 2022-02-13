@@ -7,6 +7,7 @@
     "@rari-capital/solmate": "^6.2.0",
     "dotenv": "^14.3.2",
     "hardhat": "^2.8.3",
+    "ipfs-only-hash": "^4.0.0",
     "is-svg": "^4.3.2"
   },
   "devDependencies": {
