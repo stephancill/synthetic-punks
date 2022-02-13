@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react"
 import { Signer } from "ethers"
 import style from "./Punk.module.css"
-import { BaseProvider, JsonRpcProvider } from '@ethersproject/providers'
+import { BaseProvider } from '@ethersproject/providers'
 import { useSyntheticPunks } from "../../hooks/useSyntheticPunks"
 import { getAttributeName } from "../../../../lib"
 import { IPunkAddress } from "../../interfaces/IPunkAddress"
-import { tokenToString } from "typescript"
 
 interface IPunkProps {
   punkAddress: IPunkAddress
@@ -39,7 +38,7 @@ export const Punk = ({punkAddress, signerOrProvider}: IPunkProps) => {
       }
       setIsLoading(false)
     })()
-  }, [punkAddress, signerOrProvider])
+  }, [punkAddress, signerOrProvider,syntheticPunks])
 
   return (
     <div style={{display: "inline-block", paddingTop:"0px", width: "400px"}}>
@@ -47,7 +46,7 @@ export const Punk = ({punkAddress, signerOrProvider}: IPunkProps) => {
       
       {punk && !isLoading && <>
       <div>
-        <img style={{width: "350px", background:"#6A9480", borderRadius:"5px"}} src={punk.imageData}></img>
+        <img style={{width: "350px", background:"#6A9480", borderRadius:"5px"}} src={punk.imageData} alt=""></img>
       </div>
       {punk.attributes.length > 0 && 
       <div style={{display:"flex", flexWrap: "wrap", width: "350px", justifyContent: "left", marginLeft:"21px",marginTop:"5px",marginBottom:"25px"}}>
