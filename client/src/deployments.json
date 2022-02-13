@@ -1,9 +1,9 @@
 {
-  "name": "rinkeby",
-  "chainId": "4",
+  "name": "localhost",
+  "chainId": "31337",
   "contracts": {
     "SyntheticPunks": {
-      "address": "0x7cF2db1CAa6f2b00e855a692AA6C7F2ad3FFe0A3",
+      "address": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
       "abi": [
         {
           "inputs": [
@@ -18,19 +18,9 @@
               "type": "string"
             },
             {
-              "internalType": "string",
-              "name": "_spritesheetImageData",
-              "type": "string"
-            },
-            {
-              "internalType": "uint256[4][9]",
-              "name": "_spritesheetRanges",
-              "type": "uint256[4][9]"
-            },
-            {
-              "internalType": "string",
-              "name": "_attributesContentURI",
-              "type": "string"
+              "internalType": "address",
+              "name": "_assetsAddress",
+              "type": "address"
             },
             {
               "internalType": "address",
@@ -179,12 +169,12 @@
         },
         {
           "inputs": [],
-          "name": "attributesContentURI",
+          "name": "assets",
           "outputs": [
             {
-              "internalType": "string",
+              "internalType": "contract ISyntheticPunksAssets",
               "name": "",
-              "type": "string"
+              "type": "address"
             }
           ],
           "stateMutability": "view",
@@ -677,43 +667,6 @@
           "type": "function"
         },
         {
-          "inputs": [],
-          "name": "spritesheetImageData",
-          "outputs": [
-            {
-              "internalType": "string",
-              "name": "",
-              "type": "string"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "uint256",
-              "name": "",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "",
-              "type": "uint256"
-            }
-          ],
-          "name": "spritesheetRanges",
-          "outputs": [
-            {
-              "internalType": "uint256",
-              "name": "",
-              "type": "uint256"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        },
-        {
           "inputs": [
             {
               "internalType": "bytes4",
@@ -888,6 +841,66 @@
               "internalType": "address",
               "name": "",
               "type": "address"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        }
+      ]
+    },
+    "SyntheticPunksAssets": {
+      "address": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      "abi": [
+        {
+          "inputs": [
+            {
+              "internalType": "uint256[4][9]",
+              "name": "_spritesheetRanges",
+              "type": "uint256[4][9]"
+            },
+            {
+              "internalType": "string",
+              "name": "_attributesContentURI",
+              "type": "string"
+            }
+          ],
+          "stateMutability": "nonpayable",
+          "type": "constructor"
+        },
+        {
+          "inputs": [],
+          "name": "attributesContentURI",
+          "outputs": [
+            {
+              "internalType": "string",
+              "name": "",
+              "type": "string"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [],
+          "name": "spritesheetImageData",
+          "outputs": [
+            {
+              "internalType": "string",
+              "name": "",
+              "type": "string"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [],
+          "name": "spritesheetRanges",
+          "outputs": [
+            {
+              "internalType": "uint256[4][9]",
+              "name": "",
+              "type": "uint256[4][9]"
             }
           ],
           "stateMutability": "view",

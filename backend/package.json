@@ -4,8 +4,10 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
+    "@nomiclabs/hardhat-etherscan": "^3.0.1",
     "@rari-capital/solmate": "^6.2.0",
     "dotenv": "^14.3.2",
+    "file-type": "^17.1.1",
     "hardhat": "^2.8.3",
     "ipfs-only-hash": "^4.0.0",
     "is-svg": "^4.3.2"
@@ -21,6 +23,7 @@
     "chai": "^4.3.6",
     "ethereum-waffle": "^3.0.0",
     "ethers": "^5.0.0",
+    "hardhat-contract-sizer": "^2.4.0",
     "hardhat-deploy": "^0.10.1",
     "ts-node": "^10.4.0",
     "typechain": "^7.0.0",

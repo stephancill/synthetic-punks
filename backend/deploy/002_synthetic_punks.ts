@@ -40,18 +40,20 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   Confirm deployer address: ${deployer}\n
   Confirm withdrawal address: ${withdrawAddress}\n
   Confirm ENS reverse resolution address: ${ensReverseAddress}\n
-  Confirm IPFS hash of attributes JSON: ${_attributesContentURI}\n
   \n'y' to continue, ENTER to cancel\n`)
   if (confirmation.toLowerCase() !== "y") {
     throw new Error("User denied deployment details");
   }
 
+  const SyntheticPunksAssets = await deployments.get("SyntheticPunksAssets");
+
   await deploy("SyntheticPunks", {
     from: deployer,
     log: true,
-    args: [name, symbol, spritesheetImageData, allRanges, _attributesContentURI, withdrawAddress, ensReverseAddress],
+    args: [name, symbol, SyntheticPunksAssets.address, withdrawAddress, ensReverseAddress],
     autoMine: true, // speed up deployment on local network (ganache, hardhat), no effect on live networks
   })
 }
 export default func
 func.tags = ["SyntheticPunks"]
+func.dependencies = ["SyntheticPunksAssets"]

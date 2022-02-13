@@ -1,5 +1,5 @@
 import { ethers, network } from "hardhat"
-import { SyntheticPunks, SyntheticPunks__factory } from "../types"
+import { SyntheticPunks, SyntheticPunks__factory, SyntheticPunksAssets, SyntheticPunksAssets__factory } from "../types"
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers"
 import { expect } from "chai"
 import { spritesheetImageData, allRanges, attributesContentURI } from "../utils/SpritesheetImageData"
@@ -10,14 +10,18 @@ describe("SyntheticPunks", function () {
   let signers: SignerWithAddress[]
   let withdrawSigner: SignerWithAddress
   let syntheticPunks: SyntheticPunks
+  let syntheticPunksAssets: SyntheticPunksAssets
 
   beforeEach(async function () {
     signers = await ethers.getSigners()
     withdrawSigner = signers[1]
     const ensReverseAddress = getENSReverseAddressOrZero(network.config.chainId!)
     const syntheticPunksFactory = new SyntheticPunks__factory(signers[0])
+    const syntheticPunksAssetsFactory = new SyntheticPunksAssets__factory(signers[0])
     const _attributesContentURI = await attributesContentURI
-    syntheticPunks = await syntheticPunksFactory.deploy("Synthetic CryptoPunks", "sCRYPTOPUNKS", spritesheetImageData, allRanges, _attributesContentURI, withdrawSigner.address, ensReverseAddress)
+    syntheticPunksAssets = await syntheticPunksAssetsFactory.deploy(allRanges, _attributesContentURI) 
+    await syntheticPunksAssets.deployed()
+    syntheticPunks = await syntheticPunksFactory.deploy("Synthetic CryptoPunks", "sCRYPTOPUNKS", syntheticPunksAssets.address, withdrawSigner.address, ensReverseAddress)
     await syntheticPunks.deployed()
   })
 
@@ -29,11 +33,6 @@ describe("SyntheticPunks", function () {
   it("should set the price to 0.02 eth", async function () {
     const claimPrice = await syntheticPunks.claimPrice()
     expect(claimPrice).to.equal(ethers.utils.parseUnits("0.02", "ether"))
-  })
-
-  it("should contain the attributes content hash", async function () {
-    const CID = await syntheticPunks.attributesContentURI()
-    expect(CID.length).to.be.equal(46+"ipfs://".length)
   })
 
   it("should let a user claim", async function () {
@@ -109,12 +108,6 @@ describe("SyntheticPunks", function () {
     const balanceAfter = await withdrawSigner.getBalance() 
 
     expect(balanceAfter).to.equal(balanceBefore.add(claimPrice))
-  })
-
-  it("should store spritesheet image data", async function () {
-    let imageData = await syntheticPunks.spritesheetImageData()
-    expect(imageData.split(",")[0]).to.equal("data:image/png;charset:utf-8;base64")
-    expect(imageData.split(",")[1].length).to.be.greaterThan(0)
   })
 
   it("should return valid tokenURI", async function () {

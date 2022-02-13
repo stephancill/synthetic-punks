@@ -1,9 +1,8 @@
-//SPDX-License-Identifier: Unlicense
+//SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.0;
 
-
-
 import "@rari-capital/solmate/src/tokens/ERC721.sol";
+import "./interfaces/ISyntheticPunksAssets.sol";
 
 abstract contract ReverseRecords {
   function getNames(address[] calldata addresses) external view virtual returns (string[] memory r);
@@ -11,11 +10,8 @@ abstract contract ReverseRecords {
 
 contract SyntheticPunks is ERC721 {
 
-  // TODO: Check if constants are cheaper
-  string public spritesheetImageData;
-  uint256[4][9] public spritesheetRanges;
+  ISyntheticPunksAssets public assets;
   uint256 public immutable claimPrice = 0.02 ether;
-  string public attributesContentURI; // For use by third parties to display 
   address public immutable withdrawAddress;
   address immutable ensReverseAddress;
   string public constant claimMessage = "Message to claim Synthetic Punk";
@@ -27,15 +23,11 @@ contract SyntheticPunks is ERC721 {
   constructor(
     string memory _name, 
     string memory _symbol, 
-    string memory _spritesheetImageData, 
-    uint256[4][9] memory _spritesheetRanges,
-    string memory _attributesContentURI,
+    address _assetsAddress,
     address _withdrawAddress,
     address _ensReverseAddress
   ) ERC721(_name, _symbol) {
-    spritesheetImageData = _spritesheetImageData;
-    spritesheetRanges = _spritesheetRanges;
-    attributesContentURI = _attributesContentURI;
+    assets = ISyntheticPunksAssets(_assetsAddress);
     withdrawAddress = _withdrawAddress;
     ensReverseAddress = _ensReverseAddress;
   }
@@ -100,6 +92,7 @@ contract SyntheticPunks is ERC721 {
 
   // Entropy 1,2-9
   function getAttributeCategories(uint256 id) public view returns (uint256[] memory) {
+    uint256[4][9] memory spritesheetRanges = assets.spritesheetRanges();
     uint256 checks = 2 + randomUint(id, 1) % (spritesheetRanges.length - 3); // Number of bytes to check
     uint256[] memory attributes = new uint256[](checks); // TODO: Check at least 1 attribute
     uint256 length = 0;
@@ -136,7 +129,7 @@ contract SyntheticPunks is ERC721 {
 
   // Entropy 10
   function getAttribute(uint256 id, uint256 _attributeId) public view returns (uint256) {
-    uint256[4] memory ranges = spritesheetRanges[_attributeId];
+    uint256[4] memory ranges = assets.spritesheetRanges()[_attributeId];
     Gender gender = getGender(id);
     if (gender == Gender.Female) {
       return ranges[1] + randomUint(id, 10+_attributeId) % (ranges[3] - ranges[1]);
@@ -165,9 +158,9 @@ contract SyntheticPunks is ERC721 {
     string memory layersSVG = '';
 
     // Render in order
-    for (uint256 i = 0; i < spritesheetRanges.length; i++) {
+    for (uint256 i = 0; i < assets.spritesheetRanges().length; i++) {
       for (uint256 j = 0; j < layers.length; j++) {
-        if (spritesheetRanges[i][0] <= layers[j] && layers[j] < spritesheetRanges[i][3]) { // if layer is in range
+        if (assets.spritesheetRanges()[i][0] <= layers[j] && layers[j] < assets.spritesheetRanges()[i][3]) { // if layer is in range
           // console.log(layers[j]);
           uint256 id = layers[j];
           uint256 x = (id % 24) * 24;
@@ -178,7 +171,7 @@ contract SyntheticPunks is ERC721 {
       }
     }
 
-    return string(abi.encodePacked(start1, spritesheetImageData, start3, layersSVG, end)) ;
+    return string(abi.encodePacked(start1, assets.spritesheetImageData(), start3, layersSVG, end)) ;
   }
   
   function reverseName(address _address) internal view returns (string memory name) {
