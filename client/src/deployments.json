@@ -1,9 +1,9 @@
 {
-  "name": "rinkeby",
-  "chainId": "4",
+  "name": "mainnet",
+  "chainId": "1",
   "contracts": {
     "SyntheticPunks": {
-      "address": "0x852aC0A51C27670751499360935a739E11533Fe0",
+      "address": "0xaf9CE4B327A3b690ABEA6F78eCCBfeFFfbEa9FDf",
       "abi": [
         {
           "inputs": [
@@ -792,7 +792,7 @@
       ]
     },
     "SyntheticPunksAssets": {
-      "address": "0x744B8BD1aB1aE8ED8f798eA0cdf9da84625197Ff",
+      "address": "0x852aC0A51C27670751499360935a739E11533Fe0",
       "abi": [
         {
           "inputs": [

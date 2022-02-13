@@ -131,8 +131,9 @@ contract SyntheticPunks is ERC721 {
     address userAddress = getAddress(id);
     string memory ensName = reverseName(userAddress);  
     string memory addressOrENS = bytes(ensName).length == 0 ? truncateAddress(userAddress) : ensName;
+    string memory addressFullorENS = bytes(ensName).length == 0 ? toString(userAddress) : ensName;
     
-    string memory json = base64(bytes(abi.encodePacked('{"name": "', 'Synthetic CryptoPunk for ', addressOrENS, '", "description": "This is a unique Punk claimed by ', addressOrENS,'.", "image": "data:image/svg+xml;base64,', base64(bytes(punkSVG)), '"}')));
+    string memory json = base64(bytes(abi.encodePacked('{"name": "', 'Synthetic CryptoPunk for ', addressOrENS, '", "description": "This is a unique Punk claimed by ', addressFullorENS,'.", "image": "data:image/svg+xml;base64,', base64(bytes(punkSVG)), '"}')));
 
     return string(abi.encodePacked('data:application/json;base64,', json));
   }
@@ -204,7 +205,7 @@ contract SyntheticPunks is ERC721 {
   }
 
   function generatePunkSVG(uint256[] memory layers) public view returns (string memory) {
-    string memory start1 = '<svg viewBox="0 0 24 24" width="1000" xmlns="http://www.w3.org/2000/svg" ><defs><style>#spritesheet { image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges; image-rendering: pixelated; } #punk { filter: drop-shadow(0px 0px 50px rgb(0, 255, 166, 0.7)); } svg { background : #6A9480; }</style><svg width="24" height="24" viewBox="48 0 24 24"><image id="spritesheet" preserveAspectRatio="xMinYMin slice" href="';
+    string memory start1 = '<svg viewBox="0 0 24 24" width="1000" xmlns="http://www.w3.org/2000/svg" ><defs><style>#spritesheet { image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges; image-rendering: pixelated; } svg { background : #1A1A1A; }</style><svg width="24" height="24" viewBox="48 0 24 24"><image id="spritesheet" preserveAspectRatio="xMinYMin slice" href="';
     string memory start3 = '"></image></svg></defs><svg id="punk">';
     string memory end = '</svg></svg>';
     string memory layersSVG = '';

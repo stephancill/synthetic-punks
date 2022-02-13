@@ -150,8 +150,8 @@ function App() {
     console.log(tx.hash)
     setClaimHash(tx.hash)
     await tx.wait()
-    setClaimHash("")
-    setAlreadyClaimed(true)
+    // setClaimHash("")
+    // setAlreadyClaimed(true)
     console.log("done")
     } catch (error) {
       console.log(error)
@@ -227,7 +227,7 @@ function App() {
                 <button className="mintBtn" onClick={()=>claimNFT()} style={{width:"294px",marginLeft:"8px"}}>Claim 0.02 ♦</button>
                 :
                 <a href={"etherscan.io/tx/"+{claimHash}} target="_blank">
-                <button className="mintBtn" onClick={()=>claimNFT()} style={{width:"294px",marginLeft:"8px"}}>View Pending Transaction</button>
+                <button className="mintBtn" style={{width:"294px",marginLeft:"8px"}}>View Pending Transaction</button>
                 </a>
                 }
                 <button className="helpBtn toolTip" >?

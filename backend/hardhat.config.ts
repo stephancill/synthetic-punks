@@ -53,6 +53,11 @@ const config: HardhatUserConfig = {
           apiKey: process.env.ETHERSCAN_API_KEY!
         }
       }
+    },
+    mainnet: {
+      chainId: 1,
+      url: `https://mainnet.infura.io/v3/${process.env.INFURA_PROJECT_ID}`,
+      accounts: process.env.DEFAULT_DEPLOYER_KEY ? [process.env.DEFAULT_DEPLOYER_KEY!] : [],
     }
   },
   typechain: {
