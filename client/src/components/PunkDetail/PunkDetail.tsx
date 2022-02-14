@@ -40,11 +40,15 @@ export const PunkDetail = ({address}: IPunkDetailProps) => {
   const [attributeNames, setAttributeNames] = useState<string[] | undefined>()
   useEffect(() => {
     if (attributeIds) {
-      console.log(attributeIds)
       const attributeNames = attributeIds.map(id => getAttributeName(id.toNumber())!)
       setAttributeNames(attributeNames)
     }
   }, [attributeIds])
+
+  useEffect(() => {
+    readTokenURI()
+    readAttributeIds()
+  }, [address])
 
   const loading = attributesLoading || tokenURILoading
   const error = tokenURIError || attributesError
@@ -62,6 +66,7 @@ export const PunkDetail = ({address}: IPunkDetailProps) => {
         <div>Loading...</div> 
       :  
         <div>
+          {address}
           <Punk imageData={imageData!}></Punk>
           <div style={{display:"flex", flexWrap: "wrap", width: "350px", justifyContent: "left", marginLeft:"21px",marginTop:"5px",marginBottom:"25px"}}>
             {attributeNames?.map((attributeName, i) => {
