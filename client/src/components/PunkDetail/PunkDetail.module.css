@@ -1,0 +1,12 @@
+.atrribute {
+  color: white;
+  border: 1px white solid;
+  border-radius: 4px;
+  display: block;
+  border-radius: 7px;
+  padding-left: 5px;
+  padding-right: 5px;
+  padding-bottom: 3px;
+  padding-top: 3px;
+  margin: 3px;
+}

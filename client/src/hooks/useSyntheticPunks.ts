@@ -1,10 +1,13 @@
-import { ethers } from 'ethers'
+import { ethers, Signer } from 'ethers'
+import { Provider } from '@ethersproject/providers'
 import deployments from "../deployments.json"
 import { SyntheticPunks } from "../../../backend/types"
+import { useContract } from "wagmi"
 
-export const useSyntheticPunks = (provider: ethers.providers.Provider) => {
-  const contractAddress = deployments.contracts["SyntheticPunks"].address
-  const contractInterface = new ethers.utils.Interface( deployments.contracts["SyntheticPunks"].abi)
-  const syntheticPunk = new ethers.Contract(contractAddress, contractInterface, provider) as SyntheticPunks
-  return syntheticPunk
+export const useSyntheticPunks = (signerOrProvider: Signer | Provider) => {
+  return useContract<SyntheticPunks>({
+    addressOrName: deployments.contracts.SyntheticPunks.address,
+    contractInterface: deployments.contracts.SyntheticPunks.abi,
+    signerOrProvider
+  })
 }

@@ -1,0 +1,11 @@
+.tag {
+  margin-top: 28px;
+  height: 18px;
+  width: 35px;
+  background: white;
+  border: none;
+  border-radius: 4px;
+  cursor: default;
+  color: black;
+  font-weight: bold;
+}
