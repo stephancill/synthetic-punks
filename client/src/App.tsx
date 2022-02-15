@@ -1,23 +1,34 @@
-import logo from './logo.svg';
 import './App.css';
+import { Routes, Route, useNavigate, useLocation } from "react-router-dom"
 import { ConnectButton } from './components/ConnectButton/ConnectButton';
-import { useProvider, useSigner } from 'wagmi';
-import { providers } from 'ethers'
+import { useAccount } from 'wagmi';
 import { NeonText } from './components/NeonText/NeonText';
-import { PunkDetail } from './components/PunkDetail/PunkDetail';
-import { AddressType, PunkCard } from './components/PunkCard/PunkCard';
+import { PunkCard } from './components/PunkCard/PunkCard';
+import { useEffect } from 'react';
 
 function App() {
-  const provider = useProvider()
+  const [{data: account}] = useAccount()
+  const navigate = useNavigate()
+  const location = useLocation()
+  
+
+  useEffect(() => {
+    if (account && location.pathname === "/") {
+      navigate(`/address/${account.address}`)
+    }
+  }, [account, location.pathname, navigate])
 
   return (
     <div className="App">
       <header className="App-header">
-      <NeonText text={"SYNTHETIC PUNKS"} ></NeonText>
-        <div>
-          <ConnectButton></ConnectButton>
-          <PunkCard typedAddress={{address: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266", type: AddressType.Search}}></PunkCard>
-        </div>
+        <NeonText text={"SYNTHETIC PUNKS"} ></NeonText>
+        <ConnectButton/>
+        <Routes>
+          <Route path="address">
+            <Route path=":address" element={<PunkCard/>}>
+            </Route>
+          </Route>
+        </Routes>
       </header>
     </div>
   );

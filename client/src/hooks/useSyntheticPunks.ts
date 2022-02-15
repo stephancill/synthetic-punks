@@ -1,4 +1,4 @@
-import { ethers, Signer } from 'ethers'
+import { Signer } from 'ethers'
 import { Provider } from '@ethersproject/providers'
 import deployments from "../deployments.json"
 import { SyntheticPunks } from "../../../backend/types"

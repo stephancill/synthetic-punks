@@ -1,13 +1,15 @@
-import { useAccount, useContract, useContractRead, useContractWrite, useEnsLookup, useProvider, useSigner, useSignMessage } from "wagmi"
+import { useAccount, useContractRead, useContractWrite, useEnsLookup, useEnsResolveName, useProvider, useSigner } from "wagmi"
 import { useEffect, useState } from "react"
+import { useParams, useNavigate } from "react-router"
 import { truncateAddress } from "../../utilities"
 import { PunkDetail } from "../PunkDetail/PunkDetail"
-import { AddressTypeTag } from '../AddressTypeTag/AddressTypeTag'
-import { useSyntheticPunks } from '../../hooks/useSyntheticPunks'
-import { useContractAdapter } from '../../hooks/useContractAdapter'
+import { AddressTypeTag } from "../AddressTypeTag/AddressTypeTag"
+import { useSyntheticPunks } from "../../hooks/useSyntheticPunks"
+import { useContractAdapter } from "../../hooks/useContractAdapter"
 import { ClaimButton } from "../ClaimButton/ClaimButton"
 import { BigNumber, ethers, Wallet } from "ethers"
-import { SyntheticPunks } from "../../../../backend/types"
+
+const {isAddress, getAddress} = ethers.utils
 
 export enum AddressType {
   Search,
@@ -15,111 +17,121 @@ export enum AddressType {
   Random
 }
 
-interface ITypedAddress {
-  address: string
-  type: AddressType
-}
-
-export const PunkCard = ({typedAddress}: {typedAddress: ITypedAddress}) => {
+export const PunkCard = () => {
   const provider = useProvider()
   const [{ data: signer }] = useSigner()
   const [{ data: account }] = useAccount()
   const [randomWallet, setRandomWallet] = useState<Wallet | undefined>()
-  const [searchedAddressOrENS, setSearchQuery] = useState<string | undefined>()
+  const [rawSearchQuery, setRawSearchQuery] = useState<string>("")
+  const [searchQuery, setSearchQuery] = useState<string>("")
+  const {address: rawAddress} = useParams()
+  const navigate = useNavigate()
 
-  const address = randomWallet?.address || (searchedAddressOrENS ? ethers.utils.getAddress(searchedAddressOrENS) : undefined) || account?.address
-  const addressType = (randomWallet?.address && AddressType.Random) || ((searchedAddressOrENS ? ethers.utils.getAddress(searchedAddressOrENS) : undefined) && AddressType.Search) || AddressType.Signer
+  const address = rawAddress ? isAddress(rawAddress) ? getAddress(rawAddress) : undefined : undefined
+  const addressType = randomWallet?.address === address ? AddressType.Random : account === address ? AddressType.Signer : AddressType.Search
 
-  const [{ data: ensName, loading: ensLoading }, lookupAddress] = useEnsLookup({address})
+  const [{ data: ensName }] = useEnsLookup({address})
+
+  const [{ data: resolvedSearchQuery}, resolveSearchQuery] = useEnsResolveName({name: searchQuery})
 
   const syntheticPunks = useSyntheticPunks(signer || provider)
   const syntheticPunksConfig = useContractAdapter(syntheticPunks)
 
   const [{ data: tokenClaimed }, readTokenClaimed] = useContractRead(
     syntheticPunksConfig,
-    'claimed',
+    "claimed",
     {args: [address]}
   ) 
 
   const [{ data: claimPrice }] = useContractRead(
     syntheticPunksConfig,
-    'claimPrice',
+    "claimPrice",
   ) 
 
   const [{ data: claimMessage }] = useContractRead(
     syntheticPunksConfig,
-    'claimMessage',
+    "claimMessage",
   ) 
 
   const [{ data: claimMessageHash }] = useContractRead(
     syntheticPunksConfig,
-    'getMessageHash',
+    "getMessageHash",
     {args: [claimMessage]}
   ) 
 
   const [{ data: claimTx }, claim] = useContractWrite(
     syntheticPunksConfig,
-    'claim',
+    "claim",
     {overrides: {value: claimPrice}}
   )
 
-  const [{ data: signature }, signClaimMessage] = useSignMessage({
-    message: claimMessageHash ? ethers.utils.arrayify(claimMessageHash) : undefined,
-  }) 
-
-  const [{ data: claimOtherTx, error: claimOtherError }, claimOther] = useContractWrite(
+  const [{ data: claimOtherTx }, claimOther] = useContractWrite(
     syntheticPunksConfig,
-    'claimOther',
-    {
-      // args: [randomWallet?.address, signature],
-      overrides: {value: claimPrice}
-    }
+    "claimOther"
   )
 
   const claimable = address === account?.address || address === randomWallet?.address
 
   useEffect(() => {
     readTokenClaimed()
+  // eslint-disable-next-line
   }, [address])
 
   useEffect(() => {
-    console.log(claimOtherError)
-  }, [claimOtherError])
+    const searchAddress = resolvedSearchQuery || searchQuery
+    if (searchAddress && isAddress(searchAddress)) {
+      const checksummed = getAddress(searchAddress)
+      if (checksummed !== address) {
+        setSearchQuery("")
+        navigate({pathname: `/address/${checksummed}`})
+      }
+    }
+  }, [searchQuery, resolvedSearchQuery, address, navigate])
 
   const onClaim = () => {
-    (async () => {
-      await claim()
-    })() 
+    claim()
   }
 
   const onClaimRandom = () => {
-    if (!claimMessage || !randomWallet) {
+    if (!claimMessage || !randomWallet || !claimMessageHash) {
       return
     }
-    (async () => {
-      const {data: signature} = await signClaimMessage()
-      console.log([randomWallet.address, signature])
-      await claimOther({args: [randomWallet.address, signature], overrides: {value: claimPrice}}) // TODO: Fix this
-    })()
+    const signature = randomWallet.signMessage(ethers.utils.arrayify(claimMessageHash))
+    claimOther({args: [randomWallet.address, signature], overrides: {value: claimPrice}})
   }
 
   const onGenerateRandom = () => {
     const wallet = ethers.Wallet.createRandom()
     setRandomWallet(wallet)
+    navigate({pathname: `/address/${wallet.address}`})
   }
 
   const onSearch = () => {
     setRandomWallet(undefined)
+    setSearchQuery(rawSearchQuery)
+    setRawSearchQuery("")
+    if (rawSearchQuery.indexOf(".") > 0) {
+      resolveSearchQuery()
+    }
   }
 
   return <div>
     <div>
       <span>{ensName || (address ? truncateAddress(address) : "Loading...")}</span>
       <AddressTypeTag addressType={addressType}/>
+      <form onSubmit={(e) => {
+        e.preventDefault()
+        if (isAddress(rawSearchQuery) || rawSearchQuery.indexOf(".") > 0) {
+          setSearchQuery(rawSearchQuery)
+        }
+      }}>
+        <input type="text" placeholder="Search Address or ENS" value={rawSearchQuery} onChange={(e) => setRawSearchQuery(e.target.value)} />
+        <button onClick={() => onSearch()}>Search</button>
+      </form>
+      
       <button onClick={() => onGenerateRandom()}>Random</button>
-      <button onClick={() => onSearch()}>Search</button>
     </div>
-    {address && <>
+    {address && <div>
       <PunkDetail address={address}></PunkDetail>
       <ClaimButton 
         address={address} 
@@ -133,7 +145,7 @@ export const PunkCard = ({typedAddress}: {typedAddress: ITypedAddress}) => {
         onClaim={onClaim}
         onClaimOther={onClaimRandom}
         />
-    </>}
+    </div>}
     
   </div>
 }

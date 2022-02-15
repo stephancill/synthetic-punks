@@ -3,11 +3,12 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { Provider, chain, defaultChains, developmentChains } from 'wagmi'
+import { Provider, defaultChains, developmentChains } from 'wagmi'
 import { InjectedConnector } from 'wagmi/connectors/injected'
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 import deployments from "./deployments.json"
 import { JsonRpcProvider } from '@ethersproject/providers';
+import { BrowserRouter } from 'react-router-dom';
 
 export declare type Chain = {
   id: number;
@@ -23,7 +24,8 @@ export declare type Chain = {
 // API key for Ethereum node
 const infuraId = process.env.REACT_APP_INFURA_PROJECT_ID
 
-const defaultProvider = new JsonRpcProvider(!process.env.NODE_ENV || process.env.NODE_ENV === 'development' ? "http://127.0.0.1:8545/" : `https://mainnet.infura.io/v3/${infuraId}`)
+const deployedChainId = parseInt(deployments.chainId)
+const defaultProvider = new JsonRpcProvider(deployedChainId === 31337 ? "http://127.0.0.1:8545/" : `https://mainnet.infura.io/v3/${infuraId}`)
 
 // Chains for connectors to support
 const chains = [...developmentChains, ...defaultChains].filter(chain => chain.id === parseInt(deployments.chainId))
@@ -47,9 +49,11 @@ const connectors = ({ chainId }: {chainId?: number}) => {
 
 ReactDOM.render(
   <React.StrictMode>
-    <Provider autoConnect provider={defaultProvider} connectors={connectors}>
-      <App />
-    </Provider>
+    <BrowserRouter>
+      <Provider autoConnect provider={defaultProvider} connectors={connectors}>
+        <App />
+      </Provider>
+    </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')
 );

@@ -3,11 +3,11 @@ import { useAccount, useConnect, useSigner } from 'wagmi'
 import { truncateAddress } from "../../utilities";
 
 export const ConnectButton = () => {
-  const [{ data: connectData, error: connectError }, connect] = useConnect()
+  const [{ data: connectData }, connect] = useConnect()
   const [{ data: accountData }, disconnect] = useAccount({
     fetchEns: true,
   })
-  const [{ data: signer, error, loading }, getSigner] = useSigner()
+  const [{ data: signer, error }] = useSigner()
   const [isConnecting, setIsConnecting] = useState(false)
 
   const ensName = accountData?.ens?.name

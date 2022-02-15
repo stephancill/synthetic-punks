@@ -57,6 +57,7 @@ describe("SyntheticPunks", function () {
     const otherWallet = ethers.Wallet.createRandom()
     const message = await syntheticPunks.claimMessage()
     const messageHash = await syntheticPunks.getMessageHash(message)
+    console.log(messageHash)
     const signature = await otherWallet.signMessage(ethers.utils.arrayify(messageHash))
 
     const claimPrice = await syntheticPunks.claimPrice()

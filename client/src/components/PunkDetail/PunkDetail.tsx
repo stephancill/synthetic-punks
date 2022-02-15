@@ -1,6 +1,6 @@
 import { Punk } from "../Punk/Punk"
 import { useEffect, useState } from "react"
-import { useAccount, useContract, useContractRead, useContractWrite, useProvider, useSigner } from "wagmi"
+import { useContractRead, useProvider, useSigner } from "wagmi"
 import { useSyntheticPunks } from "./../../hooks/useSyntheticPunks"
 import { useContractAdapter } from "../../hooks/useContractAdapter"
 import { getAttributeName } from "../../../../lib"
@@ -48,6 +48,7 @@ export const PunkDetail = ({address}: IPunkDetailProps) => {
   useEffect(() => {
     readTokenURI()
     readAttributeIds()
+    // eslint-disable-next-line
   }, [address])
 
   const loading = attributesLoading || tokenURILoading
