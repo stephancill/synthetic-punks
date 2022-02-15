@@ -1,4 +1,4 @@
-import { BigNumber, BigNumberish, ethers } from "ethers"
+import { BigNumber, ethers } from "ethers"
 import deployments from "../../deployments.json"
 
 interface IClaimedButtonProps {
@@ -23,12 +23,15 @@ export const ClaimButton = ({signerCanClaim, claimed, isRandom, tokenId, txHash,
   
   // if claimed, view on opensea
   if (claimed && tokenId) {
-    return <a href={`https://opensea.io/assets/${deployments.contracts.SyntheticPunks.address}/${tokenId.toString()}` }target="_blank"><button>View on marketplace</button></a> 
+    return <a href={`https://opensea.io/assets/${deployments.contracts.SyntheticPunks.address}/${tokenId.toString()}`}
+    target="_blank" rel="noreferrer"><button>View on marketplace</button></a> 
   }
 
   // if there is a transaction hash, open etherscan
   if (txHash) {
-    return <a href={`https://etherscan.io/tx/${txHash}`} target="_blank"><button>View pending transaction</button></a> 
+    return <a href={`https://etherscan.io/tx/${txHash}`} target="_blank" rel="noreferrer">
+      <button>View pending transaction</button>
+    </a> 
   }
 
   // if not claimed and claimable, claim

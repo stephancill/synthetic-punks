@@ -1,4 +1,4 @@
-import { useAccount, useContractRead, useContractWrite, useEnsLookup, useEnsResolveName, useProvider, useSigner, useWaitForTransaction } from "wagmi"
+import { useAccount, useContractRead, useContractWrite, useEnsLookup, useProvider, useSigner, useWaitForTransaction } from "wagmi"
 import { useEffect, useState } from "react"
 import { useParams, useNavigate } from "react-router"
 import { truncateAddress } from "../../utilities"
@@ -8,6 +8,7 @@ import { useSyntheticPunks } from "../../hooks/useSyntheticPunks"
 import { useContractAdapter } from "../../hooks/useContractAdapter"
 import { ClaimButton } from "../ClaimButton/ClaimButton"
 import { BigNumber, ethers, Wallet } from "ethers"
+import { Search } from "../Search/Search"
 
 const {isAddress, getAddress} = ethers.utils
 
@@ -22,17 +23,13 @@ export const PunkCard = () => {
   const [{ data: signer }] = useSigner()
   const [{ data: account }] = useAccount()
   const [randomWallet, setRandomWallet] = useState<Wallet | undefined>()
-  const [rawSearchQuery, setRawSearchQuery] = useState<string>("")
-  const [searchQuery, setSearchQuery] = useState<string>("")
   const {address: rawAddress} = useParams()
   const navigate = useNavigate()
 
   const address = rawAddress ? isAddress(rawAddress) ? getAddress(rawAddress) : undefined : undefined
   const addressType = randomWallet?.address === address ? AddressType.Random : account?.address === address ? AddressType.Signer : AddressType.Search
 
-  const [{ data: ensName }] = useEnsLookup({address})
-
-  const [{ data: resolvedSearchQuery}, resolveSearchQuery] = useEnsResolveName({name: searchQuery})
+  const [{ data: ensName, loading: loadingEns }] = useEnsLookup({address})
 
   const syntheticPunks = useSyntheticPunks(signer || provider)
   const syntheticPunksConfig = useContractAdapter(syntheticPunks)
@@ -96,22 +93,12 @@ export const PunkCard = () => {
   useEffect(() => {
     console.log("claimMessage changed", claimMessage)
     readClaimMessageHash()
+  // eslint-disable-next-line
   }, [claimMessage])
 
   useEffect(() => {
     console.log("tokenClaimed changed", tokenClaimed)
   }, [tokenClaimed])
-
-  useEffect(() => {
-    const searchAddress = resolvedSearchQuery || searchQuery
-    if (searchAddress && isAddress(searchAddress)) {
-      const checksummed = getAddress(searchAddress)
-      if (checksummed !== address) {
-        setSearchQuery("")
-        navigate({pathname: `/address/${checksummed}`})
-      }
-    }
-  }, [searchQuery, resolvedSearchQuery, address, navigate])
 
   const onClaim = () => {
     claim()
@@ -133,31 +120,22 @@ export const PunkCard = () => {
     navigate({pathname: `/address/${wallet.address}`})
   }
 
-  const onSearch = () => {
-    setRandomWallet(undefined)
-    setSearchQuery(rawSearchQuery)
-    setRawSearchQuery("")
-    if (rawSearchQuery.indexOf(".") > 0) {
-      resolveSearchQuery()
+  const onSearch = (checksummedAddress: string) => {
+    if (checksummedAddress !== address) {
+      setRandomWallet(undefined)
+      navigate({pathname: `/address/${checksummedAddress}`})
     }
   }
 
+  const addressOrEns = loadingEns ? address ? truncateAddress(address) : undefined : ensName ? ensName : address ? truncateAddress(address) : undefined
+
   return <div>
     <div>
-      <span>{ensName || (address ? truncateAddress(address) : "Loading...")}</span>
-      <AddressTypeTag addressType={addressType}/>
-      <form onSubmit={(e) => {
-        e.preventDefault()
-        if (isAddress(rawSearchQuery) || rawSearchQuery.indexOf(".") > 0) {
-          setSearchQuery(rawSearchQuery)
-        }
-      }}>
-        <input type="text" placeholder="Search Address or ENS" value={rawSearchQuery} onChange={(e) => setRawSearchQuery(e.target.value)} />
-        <button onClick={() => onSearch()}>Search</button>
-      </form>
+      <Search onSearch={onSearch}/>
       {signer && <button onClick={() => onGenerateRandom()}>Random</button>}
-      
     </div>
+    <span>{addressOrEns}</span>
+    <AddressTypeTag addressType={addressType}/>
     {address && <div>
       <PunkDetail address={address}></PunkDetail>
       {signer && <ClaimButton 
