@@ -26,7 +26,11 @@ task("image-data", "Prints image data to be used in contract", async () => {
   console.log(spritesheetImageData.length)
 })
 
-let hardhatNetwork: HardhatNetworkUserConfig = {}
+let hardhatNetwork: HardhatNetworkUserConfig = {
+  mining: {
+    interval: 12000
+  }
+}
 
 if (process.env.FORK) {
   if (process.env.FORK === "mainnet") {

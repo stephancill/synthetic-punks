@@ -1,34 +1,38 @@
-import { BigNumber, ethers } from "ethers"
+import { BigNumber, BigNumberish, ethers } from "ethers"
+import deployments from "../../deployments.json"
 
 interface IClaimedButtonProps {
   address: string
-  claimable: boolean
+  signerCanClaim: boolean
   isRandom: boolean
   claimPrice?: BigNumber
+  tokenId?: BigNumber
   claimed?: boolean
   txHash?: string
   onClaim: () => void
   onClaimOther: () => void
 }
 
-export const ClaimButton = ({address, claimable, isRandom, claimed, txHash, claimPrice, onClaim, onClaimOther}: IClaimedButtonProps) => {
+export const ClaimButton = ({signerCanClaim, claimed, isRandom, tokenId, txHash, claimPrice, onClaim, onClaimOther}: IClaimedButtonProps) => {
+  // TODO: icons
+  
   // if not claimed and not claimable, nothing
-  if (!claimed && !claimable) {
+  if (!claimed && !signerCanClaim) {
     return <></>
   }
   
   // if claimed, view on opensea
-  if (claimed) {
-    return <button>View on marketplace</button>
+  if (claimed && tokenId) {
+    return <a href={`https://opensea.io/assets/${deployments.contracts.SyntheticPunks.address}/${tokenId.toString()}` }target="_blank"><button>View on marketplace</button></a> 
   }
 
   // if there is a transaction hash, open etherscan
   if (txHash) {
-    return <button>View pending transaction</button>
+    return <a href={`https://etherscan.io/tx/${txHash}`} target="_blank"><button>View pending transaction</button></a> 
   }
 
   // if not claimed and claimable, claim
-  if (!claimed && claimable) {
+  if (signerCanClaim && !claimed) {
     if (!claimPrice) {
       return <button disabled={true}>Loading...</button>
     } else {

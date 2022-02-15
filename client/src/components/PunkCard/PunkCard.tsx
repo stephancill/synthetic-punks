@@ -1,4 +1,4 @@
-import { useAccount, useContractRead, useContractWrite, useEnsLookup, useEnsResolveName, useProvider, useSigner } from "wagmi"
+import { useAccount, useContractRead, useContractWrite, useEnsLookup, useEnsResolveName, useProvider, useSigner, useWaitForTransaction } from "wagmi"
 import { useEffect, useState } from "react"
 import { useParams, useNavigate } from "react-router"
 import { truncateAddress } from "../../utilities"
@@ -28,7 +28,7 @@ export const PunkCard = () => {
   const navigate = useNavigate()
 
   const address = rawAddress ? isAddress(rawAddress) ? getAddress(rawAddress) : undefined : undefined
-  const addressType = randomWallet?.address === address ? AddressType.Random : account === address ? AddressType.Signer : AddressType.Search
+  const addressType = randomWallet?.address === address ? AddressType.Random : account?.address === address ? AddressType.Signer : AddressType.Search
 
   const [{ data: ensName }] = useEnsLookup({address})
 
@@ -43,6 +43,12 @@ export const PunkCard = () => {
     {args: [address]}
   ) 
 
+  const [{ data: tokenId }] = useContractRead(
+    syntheticPunksConfig,
+    "getTokenID",
+    {args: [address]}
+  ) 
+
   const [{ data: claimPrice }] = useContractRead(
     syntheticPunksConfig,
     "claimPrice",
@@ -53,7 +59,7 @@ export const PunkCard = () => {
     "claimMessage",
   ) 
 
-  const [{ data: claimMessageHash }] = useContractRead(
+  const [{ data: claimMessageHash }, readClaimMessageHash] = useContractRead(
     syntheticPunksConfig,
     "getMessageHash",
     {args: [claimMessage]}
@@ -70,12 +76,31 @@ export const PunkCard = () => {
     "claimOther"
   )
 
-  const claimable = address === account?.address || address === randomWallet?.address
+  const [{ loading: claimOtherLoading }] = useWaitForTransaction({
+    hash: claimOtherTx?.hash,
+    confirmations: 2
+  })
+
+  const [{ loading: claimLoading }] = useWaitForTransaction({
+    hash: claimTx?.hash,
+    confirmations: 2
+  })
+
+  const signerCanClaim = address === account?.address || address === randomWallet?.address
 
   useEffect(() => {
     readTokenClaimed()
   // eslint-disable-next-line
-  }, [address])
+  }, [address, claimOtherLoading, claimLoading])
+
+  useEffect(() => {
+    console.log("claimMessage changed", claimMessage)
+    readClaimMessageHash()
+  }, [claimMessage])
+
+  useEffect(() => {
+    console.log("tokenClaimed changed", tokenClaimed)
+  }, [tokenClaimed])
 
   useEffect(() => {
     const searchAddress = resolvedSearchQuery || searchQuery
@@ -96,8 +121,10 @@ export const PunkCard = () => {
     if (!claimMessage || !randomWallet || !claimMessageHash) {
       return
     }
-    const signature = randomWallet.signMessage(ethers.utils.arrayify(claimMessageHash))
-    claimOther({args: [randomWallet.address, signature], overrides: {value: claimPrice}})
+    
+    randomWallet.signMessage(ethers.utils.arrayify(claimMessageHash)).then(signature => {
+      claimOther({args: [randomWallet.address, signature], overrides: {value: claimPrice}})
+    })    
   }
 
   const onGenerateRandom = () => {
@@ -128,23 +155,24 @@ export const PunkCard = () => {
         <input type="text" placeholder="Search Address or ENS" value={rawSearchQuery} onChange={(e) => setRawSearchQuery(e.target.value)} />
         <button onClick={() => onSearch()}>Search</button>
       </form>
+      {signer && <button onClick={() => onGenerateRandom()}>Random</button>}
       
-      <button onClick={() => onGenerateRandom()}>Random</button>
     </div>
     {address && <div>
       <PunkDetail address={address}></PunkDetail>
-      <ClaimButton 
+      {signer && <ClaimButton 
         address={address} 
         claimPrice={claimPrice ? claimPrice as any as BigNumber : undefined}
         isRandom={randomWallet !== undefined}
-        claimable={claimable} 
-        claimed={tokenClaimed ? tokenClaimed as any as boolean : undefined} 
-        txHash={
-          (claimTx?.confirmations === 0 ? claimTx?.hash : undefined) || 
-          (claimOtherTx?.confirmations === 0 ? claimOtherTx?.hash : undefined)}
+        signerCanClaim={signerCanClaim} 
+        claimed={tokenClaimed as any as boolean}
+        tokenId={tokenId as any as BigNumber} 
+        txHash={ 
+          (claimLoading && claimTx ? claimTx.hash : undefined) ||
+          (claimOtherLoading && claimOtherTx ? claimOtherTx.hash : undefined)}
         onClaim={onClaim}
         onClaimOther={onClaimRandom}
-        />
+        />}
     </div>}
     
   </div>
