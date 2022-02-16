@@ -7,6 +7,7 @@ import { PunkCard } from './components/PunkCard/PunkCard';
 import { useEffect } from 'react';
 import { Search } from './components/Search/Search';
 import deployments from "./deployments.json"
+import { Copy } from "./components/Copy/Copy"
 
 const deploymentChain = parseInt(deployments.chainId)
 
@@ -22,7 +23,6 @@ function App() {
   // TODO: Site metadata for twitter (https://stackoverflow.com/a/26160761/11363384)
   // TODO: Clicking the neon header should take the user to /
   // TODO: Footer
-  // TODO: Tooltips
   // TODO: Button for user to see their punk
 
   useEffect(() => {
@@ -54,6 +54,7 @@ function App() {
             />
         </Routes>
     }
+      <Copy></Copy>
     </div>
   );
 }

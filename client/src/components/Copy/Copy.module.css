@@ -1,0 +1,82 @@
+.container {
+  text-align: center;
+  margin-top: 70px;
+}
+.textContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.displayContainer {
+  width: 580px;
+  border-left: 1px solid white;
+  padding-left: 20px;
+}
+.text {
+  color: white;
+}
+.footText {
+  color: #fff;
+}
+.h2 {
+  font-size: 22px;
+  text-align: left;
+  font-weight: bold;
+  transition-duration: 0.2s;
+}
+.h2:hover {
+  color: #00b87b;
+}
+ul {
+  color: white;
+  text-align: left;
+  margin-top: -16px;
+  margin-left: -24px;
+}
+.line {
+  width: 2px;
+  height: 100%;
+  background: white;
+}
+a {
+  color: #00b87b;
+  transition-duration: 0.2s;
+}
+a:hover {
+  color: white;
+  text-shadow: 0 0 20px rgb(0, 255, 166, 0.3), 0 0 20px rgb(0, 255, 166, 0.3),
+    0 0 30px rgb(0, 255, 166, 0.3), 0 0 60px rgb(0, 255, 166, 0.3),
+    0 0 80px rgb(0, 255, 166, 0.4);
+}
+
+.one,
+.conOne {
+  display: none;
+}
+.one:checked ~ .conOne {
+  display: block;
+}
+
+.two,
+.conTwo {
+  display: none;
+}
+.two:checked ~ .conTwo {
+  display: block;
+}
+
+.three,
+.conThree {
+  display: none;
+}
+.three:checked ~ .conThree {
+  display: block;
+}
+
+.four,
+.conFour {
+  display: none;
+}
+.four:checked ~ .conFour {
+  display: block;
+}
