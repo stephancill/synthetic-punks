@@ -8,7 +8,7 @@ import { InjectedConnector } from 'wagmi/connectors/injected'
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 import deployments from "./deployments.json"
 import { JsonRpcProvider } from '@ethersproject/providers';
-import { BrowserRouter } from 'react-router-dom';
+import { HashRouter } from 'react-router-dom';
 
 export declare type Chain = {
   id: number;
@@ -49,11 +49,11 @@ const connectors = ({ chainId }: {chainId?: number}) => {
 
 ReactDOM.render(
   <React.StrictMode>
-    <BrowserRouter>
+    <HashRouter>
       <Provider autoConnect provider={defaultProvider} connectors={connectors}>
         <App />
       </Provider>
-    </BrowserRouter>
+    </HashRouter>
   </React.StrictMode>,
   document.getElementById('root')
 );
