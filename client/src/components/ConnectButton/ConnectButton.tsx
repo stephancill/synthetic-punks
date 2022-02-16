@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useAccount, useConnect, useSigner } from 'wagmi'
 import { truncateAddress } from "../../utilities";
+import style from "./ConnectButton.module.css"
 
 export const ConnectButton = () => {
   const [{ data: connectData }, connect] = useConnect()
@@ -17,17 +18,17 @@ export const ConnectButton = () => {
   }, [signer])
 
   return (
-    <div>
+    <div style={{marginTop:"70px", marginBottom:"70px"}}>
       {accountData 
       ? 
-        <button onClick={() => disconnect()}>Disconnect {ensName || truncateAddress(accountData.address)}</button> 
+        <button className={style.connectBtn}onClick={() => disconnect()}>Disconnect {ensName || truncateAddress(accountData.address)}</button> 
       : 
-        <button onClick={() => setIsConnecting(!isConnecting)}>Connect</button> 
+        <button className={style.connectBtn} onClick={() => setIsConnecting(!isConnecting)}>Connect</button> 
       }
       {isConnecting && 
-      <div>
+      <div className={style.connectModalCard}>
         {connectData.connectors.map((connector) => (
-          <button
+          <button className={style.walletOption}
             disabled={!connector.ready}
             key={connector.id}
             onClick={() => connect(connector)}
@@ -36,6 +37,7 @@ export const ConnectButton = () => {
             {!connector.ready && ' (unsupported)'}
           </button>
         ))}
+        <button className={style.backBtn} onClick={() => setIsConnecting(!isConnecting)} >Back </button>
         {error && <div>{error?.message ?? 'Failed to connect'}</div>}
       </div>
       }
