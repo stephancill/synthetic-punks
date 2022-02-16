@@ -53,8 +53,8 @@ function App() {
               }
             />
         </Routes>
-    }
-      <Copy></Copy>
+      }
+      <Copy/>
     </div>
   );
 }
