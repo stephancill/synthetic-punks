@@ -29,14 +29,12 @@ export const Search = ({onSearch}: ISearchProps) => {
     }
   }
 
-  return <span className={style.searchContainer}>
-    <form id="search-form" onSubmit={(e) => {
+  return <form className={style.searchContainer}  onSubmit={(e) => {
       e.preventDefault()
       handleSearch()
     }}>
+      <input type="text" placeholder="Search Address or ENS" value={rawSearchQuery} onChange={(e) => setRawSearchQuery(e.target.value)} />
+      <button type="submit"><img src={searchSmall}/></button>
     </form>
-    <input type="text" placeholder="Search Address or ENS" value={rawSearchQuery} onChange={(e) => setRawSearchQuery(e.target.value)} />
-    <button form="search-form" type="submit"><img src={searchSmall}/></button>
     
-  </span>
 }

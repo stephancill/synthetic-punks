@@ -1,8 +1,9 @@
 .searchContainer {
   background-color: var(--lighter);
-  height: 60px;
+  height: 50px;
   display: flex;
   border-radius: 5px;
+  flex-grow: 1;
 }
 
 .searchContainer input {
@@ -26,4 +27,7 @@
 .searchContainer button  {
   border: none;
   background-color: inherit;
+}
+.searchContainer button img {
+  height: 30px;
 }

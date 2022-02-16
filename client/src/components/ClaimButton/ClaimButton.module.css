@@ -24,8 +24,9 @@
   font-weight: bold;
   font-size: 17px;
   margin-left: 20px;
-
-  margin-top: 20px;
+  flex-shrink: 0;
+  margin-top: auto;
+  margin-bottom: auto;
   transform: translateY(-2px);
 }
 

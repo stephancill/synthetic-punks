@@ -4,6 +4,7 @@ import { useContractRead, useProvider, useSigner } from "wagmi"
 import { useSyntheticPunks } from "./../../hooks/useSyntheticPunks"
 import { useContractAdapter } from "../../hooks/useContractAdapter"
 import { getAttributeName } from "../../../../lib"
+import { SpinnerCircular } from 'spinners-react'
 
 import style from "./PunkDetail.module.css"
 
@@ -61,10 +62,12 @@ export const PunkDetail = ({address}: IPunkDetailProps) => {
   }
   
   return (
-    <div>
+    <div style={{minHeight: "470px", display: "flex", justifyContent: "center"}}>
       {loading 
       ? 
-        <div>Loading...</div> 
+        <div style={{marginTop: "auto", marginBottom: "auto"}}>
+          <SpinnerCircular enabled={true} />
+        </div>
       :  
         <div>
           <Punk imageData={imageData!}></Punk>

@@ -128,7 +128,7 @@ export const PunkCard = () => {
   }
 
   const onTwitterShare = () => {
-    const tweet = encodeURIComponent(`Check out my unique on-chain Synthetic CryptoPunk! @stephancill @npm_luko`)
+    const tweet = encodeURIComponent(`Check out my Synthetic CryptoPunk! @stephancill @npm_luko`)
     const ctaURL = encodeURIComponent(`https://syntheticpunks.com/#${location.pathname}`)
     const related = encodeURIComponent(`stephancill,npm_luko,larvalabs,lootproject`)
     const intentBaseURL = `https://twitter.com/intent/tweet`
@@ -139,7 +139,7 @@ export const PunkCard = () => {
   const addressOrEns = loadingEns ? address ? truncateAddress(address) : undefined : ensName ? ensName : address ? truncateAddress(address) : undefined
 
   return <div style={{width: "400px"}}>
-    <div style={{display: "flex", marginBottom: "20px", height: "60px"}}>
+    <div style={{display: "flex", marginBottom: "30px", height: "50px"}}>
       <Search onSearch={onSearch}/>
       {signer && <button className={style.randomButton} onClick={() => onGenerateRandom()}><img src={dice}/></button>}
     </div>
@@ -148,7 +148,7 @@ export const PunkCard = () => {
         <PunkCardHeader addressOrEns={addressOrEns} addressType={addressType} onTwitterShare={onTwitterShare}/>
         {address && <div>
           <PunkDetail address={address}></PunkDetail>
-          {signer && <div style={{paddingBottom: "6px"}}>
+          {signer && signerCanClaim && <div style={{paddingBottom: "6px", marginTop: "20px"}}>
             <ClaimButton 
             address={address} 
             claimPrice={claimPrice ? claimPrice as any as BigNumber : undefined}
