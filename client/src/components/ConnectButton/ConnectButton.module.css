@@ -19,16 +19,20 @@
 }
 
 .connectModalCard {
-  width: 196px !important;
+  width: 240px !important;
   border-radius: 8px;
   background: var(--dark);
-  border: white 2px solid;
   margin-top: -48px;
   text-align: center;
-  padding: 10px;
+  padding: 15px;
   padding-bottom: 0px;
   z-index: 1;
-  position: relative;
+  margin-left: -135px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  box-shadow: 0px 0px 2000px 800px rgba(0, 0, 0, 0.7);
 }
 .walletOption {
   background-color: #007951;

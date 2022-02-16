@@ -5,13 +5,13 @@ interface NeonTextProps {
   text: string
 }
 
-export const NeonText = ({text} : NeonTextProps) => {
+export const NeonText = () => {
   return <div style={{textAlign: "center"}}>
     <div className={style.neonHeadCont} style={{marginTop:"60px"}}>
       <img alt="Synthetic Punk" src={neonHead} className={style.neonHeadImg}></img>
     </div>
     <h1 className={style.neonGlow} style={{marginTop:"30px"}}>
-      {text}
+      Crypto Punks
     </h1>
     <h2 className={style.neonText1} style={{marginTop:"-30px"}}>
     CryptoPunks for everyone
