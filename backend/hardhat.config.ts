@@ -28,7 +28,7 @@ task("image-data", "Prints image data to be used in contract", async () => {
 
 let hardhatNetwork: HardhatNetworkUserConfig = {
   mining: {
-    interval: 12000
+    interval: 6000
   }
 }
 
