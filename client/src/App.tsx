@@ -8,6 +8,9 @@ import { useEffect } from 'react';
 import { Search } from './components/Search/Search';
 import deployments from "./deployments.json"
 import { Copy } from "./components/Copy/Copy"
+import opensea from "./img/opensea.svg"
+import github from "./img/github.svg"
+import etherscan from "./img/etherscan.svg"
 
 const deploymentChain = parseInt(deployments.chainId)
 
@@ -24,6 +27,7 @@ function App() {
   // TODO: Clicking the neon header should take the user to /
   // TODO: Footer
   // TODO: Button for user to see their punk
+  // TODO: Show marketplace button when user not connected and punk is claimed
 
   useEffect(() => {
     if (account && location.pathname === "/") {
@@ -34,6 +38,11 @@ function App() {
   return (
     <div className="App">
       <NeonText></NeonText>
+      <div className="linksContainer" style={{display: "flex"}}>
+        <a href="https://opensea.io/collection/synthetic-cryptopunks" target="_blank" rel="noopener noreferrer"><img src={opensea}/></a>
+        <a href="https://github.com/stephancill/synthetic-punks" target="_blank" rel="noopener noreferrer"><img src={github}/></a>
+        <a href="https://etherscan.io/address/0xaf9ce4b327a3b690abea6f78eccbfefffbea9fdf" target="_blank" rel="noopener noreferrer"><img src={etherscan}/></a>
+      </div>
       <ConnectButton/>
       {network && switchNetwork && network.chain?.id !== deploymentChain 
       ?
