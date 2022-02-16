@@ -23,6 +23,7 @@ function App() {
   // TODO: Clicking the neon header should take the user to /
   // TODO: Footer
   // TODO: Tooltips
+  // TODO: Button for user to see their punk
 
   useEffect(() => {
     if (account && location.pathname === "/") {

@@ -99,9 +99,6 @@ export const PunkCard = () => {
   // eslint-disable-next-line
   }, [claimMessage])
 
-  useEffect(() => {
-  }, [tokenClaimed])
-
   const onClaim = () => {
     claim()
   }
@@ -168,8 +165,6 @@ export const PunkCard = () => {
           </div> }
         </div>}
       </div>
-      
     </div>
-    
   </div>
 }

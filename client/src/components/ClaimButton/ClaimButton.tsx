@@ -45,14 +45,10 @@ export const ClaimButton = ({signerCanClaim, claimed, isRandom, tokenId, txHash,
         return <button className={style.claimButton} onClick={() => onClaim()}>Claim {ethers.utils.formatEther(claimPrice)}♦</button>
       } else {
         return <div style={{display:"flex"}}>
-
-            <button style={{width:"275px"}} className={style.claimButton} onClick={() => onClaimOther()}>Claim {ethers.utils.formatEther(claimPrice)}♦</button>
-
-
+          <button style={{width:"275px"}} className={style.claimButton} onClick={() => onClaimOther()}>Claim {ethers.utils.formatEther(claimPrice)}♦</button>
           <button className={`${style.helpBtn} ${style.toolTip}`}>?
-                <span className={style.toolTipText}>You may claim this punk and have it sent to your connected wallet </span>
+            <span className={style.toolTipText}>You may claim this punk and have it sent to your connected wallet </span>
           </button>
-
         </div> 
       }
     }
