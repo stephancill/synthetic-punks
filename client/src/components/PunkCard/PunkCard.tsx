@@ -116,6 +116,7 @@ export const PunkCard = () => {
   const onGenerateRandom = () => {
     const wallet = ethers.Wallet.createRandom()
     setRandomWallet(wallet)
+    // TODO: This is not working
     navigate({pathname: `/address/${wallet.address}`})
   }
 

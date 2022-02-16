@@ -1,4 +1,6 @@
 .neonText1 {
+  text-align: center;
+  padding-top: 42px;
   color: #fff;
   text-shadow: 0 0 7px #fff, 0 0 10px #fff, 0 0 21px #fff, 0 0 42px #0fa,
     0 0 82px #0fa, 0 0 92px #0fa, 0 0 102px #0fa, 0 0 151px #0fa;
@@ -19,10 +21,13 @@
   }
 }
 .neonGlow {
+  text-transform: uppercase;
+  font-size: 4.2rem;
+  font-weight: normal;
   text-shadow: 0 0 7px #fff, 0 0 10px #fff, 0 0 21px #fff,
-      0 0 42px rgb(0, 255, 166, 0.9), 0 0 82px rgb(0, 255, 166, 0.9),
-      0 0 92px rgb(0, 255, 166, 0.9), 0 0 102px rgb(0, 255, 166, 0.9),
-      0 0 151px rgb(0, 255, 166, 0.9);
+    0 0 42px rgb(0, 255, 166, 0.9), 0 0 82px rgb(0, 255, 166, 0.9),
+    0 0 92px rgb(0, 255, 166, 0.9), 0 0 102px rgb(0, 255, 166, 0.9),
+    0 0 151px rgb(0, 255, 166, 0.9);
   /* animation: pulsate 0.11s infinite alternate; */
 }
 .neonHeadCont {
