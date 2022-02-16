@@ -33,14 +33,18 @@ function App() {
 
   return (
     <div className="App">
-      <NeonText text={"SYNTHETIC PUNKS"} ></NeonText>
+      <NeonText></NeonText>
       <ConnectButton/>
       {network && switchNetwork && network.chain?.id !== deploymentChain 
       ?
         <button onClick={() => switchNetwork(deploymentChain)}>Switch to {deployments.name}</button>
       :
         <Routes>
-          <Route path="/" element={<Search onSearch={(address) => navigate(`/address/${address}`)}/>}/>
+          <Route path="/" element={
+            <div style={{display: "flex", width: "90%", maxWidth: "400px"}}>
+              <Search onSearch={(address) => navigate(`/address/${address}`)}/>
+            </div>
+          }/>
           <Route path="address">
             <Route path=":address" element={<PunkCard/>}/>
           </Route>
