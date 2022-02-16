@@ -35,3 +35,17 @@ h3 {
   font-weight: 300;
   text-align: left;
 }
+
+a {
+  color: #00b87b;
+}
+
+p {
+  margin: 0;
+  /* line-height: 25px; */
+}
+
+li {
+  margin-left: -10px;
+  margin-bottom: 10px;
+}

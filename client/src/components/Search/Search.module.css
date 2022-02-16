@@ -15,9 +15,8 @@
   background-color: inherit;
   font-size: 24px;
   color: white;
-  width: 80%;
   border-radius: inherit;
-  z-index: 1;
+  width: 80%;
 }
 
 .searchContainer input::placeholder {
@@ -25,10 +24,11 @@
 }
 
 .searchContainer button  {
-  padding-left: 17px;
   border: none;
   background-color: inherit;
   border-radius: 5px;
+  margin-left: auto;
+  margin-right: 10px;
 }
 .searchContainer button img {
   height: 30px;
