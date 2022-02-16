@@ -19,8 +19,7 @@ function App() {
   // TODO: Styling
   // TODO: Copy
   // TODO: Include contract addresses in copy
-  // TODO: Twitter share button
-  // TODO: Site metadata for twitter
+  // TODO: Site metadata for twitter (https://stackoverflow.com/a/26160761/11363384)
   // TODO: Clicking the neon header should take the user to /
 
   useEffect(() => {

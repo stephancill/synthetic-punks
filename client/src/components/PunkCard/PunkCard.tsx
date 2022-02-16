@@ -9,6 +9,7 @@ import { useContractAdapter } from "../../hooks/useContractAdapter"
 import { ClaimButton } from "../ClaimButton/ClaimButton"
 import { BigNumber, ethers, Wallet } from "ethers"
 import { Search } from "../Search/Search"
+import { useLocation } from "react-router-dom"
 
 const {isAddress, getAddress} = ethers.utils
 
@@ -25,6 +26,7 @@ export const PunkCard = () => {
   const [randomWallet, setRandomWallet] = useState<Wallet | undefined>()
   const {address: rawAddress} = useParams()
   const navigate = useNavigate()
+  const location = useLocation()
 
   const address = rawAddress ? isAddress(rawAddress) ? getAddress(rawAddress) : undefined : undefined
   const addressType = randomWallet?.address === address ? AddressType.Random : account?.address === address ? AddressType.Signer : AddressType.Search
@@ -127,6 +129,15 @@ export const PunkCard = () => {
     }
   }
 
+  const onTwitterShare = () => {
+    const tweet = encodeURIComponent(`Check out my unique on-chain Synthetic CryptoPunk! @stephancill @npm_luko`)
+    const ctaURL = encodeURIComponent(`https://syntheticpunks.com/#${location.pathname}`)
+    const related = encodeURIComponent(`stephancill,npm_luko,larvalabs,lootproject`)
+    const intentBaseURL = `https://twitter.com/intent/tweet`
+    const intentURL = `${intentBaseURL}?text=${tweet}&url=${ctaURL}&related=${related}`
+    window.open(intentURL, "_blank")
+  }
+
   const addressOrEns = loadingEns ? address ? truncateAddress(address) : undefined : ensName ? ensName : address ? truncateAddress(address) : undefined
 
   return <div>
@@ -136,6 +147,7 @@ export const PunkCard = () => {
     </div>
     <span>{addressOrEns}</span>
     <AddressTypeTag addressType={addressType}/>
+    <button onClick={onTwitterShare}>Share on twitter</button>
     {address && <div>
       <PunkDetail address={address}></PunkDetail>
       {signer && <ClaimButton 
