@@ -13,3 +13,44 @@
 .claimButton:hover {
   background-color: #00d08b;
 }
+
+.helpBtn {
+  border-radius: 15px;
+  height: 24px;
+  width: 24px;
+  color: black;
+  background: white;
+  border: none;
+  font-weight: bold;
+  font-size: 17px;
+  margin-left: 20px;
+
+  margin-top: 20px;
+  transform: translateY(-2px);
+}
+
+.toolTip {
+  position: relative;
+  display: inline-block;
+}
+.toolTip .toolTipText {
+  visibility: hidden;
+  width: 120px;
+  background-color: white;
+  color: black;
+  text-align: center;
+  font-size: 14px;
+  padding: 5px 5px;
+  border-radius: 6px;
+  width: 240px;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -120px;
+  transform: translateY(-5px);
+  position: absolute;
+  z-index: 1;
+  font-weight: 400;
+}
+.toolTip:hover .toolTipText {
+  visibility: visible;
+}

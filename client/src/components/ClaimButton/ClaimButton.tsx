@@ -34,6 +34,7 @@ export const ClaimButton = ({signerCanClaim, claimed, isRandom, tokenId, txHash,
       <button className={style.claimButton}>View pending transaction</button>
     </a> 
   }
+  const helpBtn = [style.helpBtn, style.toolTip]
 
   // if not claimed and claimable, claim
   if (signerCanClaim && !claimed) {
@@ -43,14 +44,15 @@ export const ClaimButton = ({signerCanClaim, claimed, isRandom, tokenId, txHash,
       if (!isRandom) {
         return <button className={style.claimButton} onClick={() => onClaim()}>Claim {ethers.utils.formatEther(claimPrice)}♦</button>
       } else {
-        return <div>
-          <div>
-            <button className={style.claimButton} onClick={() => onClaimOther()}>Claim {ethers.utils.formatEther(claimPrice)}♦</button>
-          </div>
-          <div>
-          You can claim this because you have generated the wallet associated with this punk
+        return <div style={{display:"flex"}}>
 
-          </div>
+            <button style={{width:"275px"}} className={style.claimButton} onClick={() => onClaimOther()}>Claim {ethers.utils.formatEther(claimPrice)}♦</button>
+
+
+          <button className={`${style.helpBtn} ${style.toolTip}`}>?
+                <span className={style.toolTipText}>You may claim this punk and have it sent to your connected wallet </span>
+          </button>
+
         </div> 
       }
     }
