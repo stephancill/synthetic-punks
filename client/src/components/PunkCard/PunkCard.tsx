@@ -138,7 +138,7 @@ export const PunkCard = () => {
 
   const addressOrEns = loadingEns ? address ? truncateAddress(address) : undefined : ensName ? ensName : address ? truncateAddress(address) : undefined
 
-  return <div style={{width: "400px"}}>
+  return <div style={{width: "90%", maxWidth: "400px"}}>
     <div style={{display: "flex", marginBottom: "30px", height: "50px"}}>
       <Search onSearch={onSearch}/>
       {signer && <button className={style.randomButton} onClick={() => onGenerateRandom()}><img src={dice}/></button>}

@@ -6,7 +6,7 @@ interface NeonTextProps {
 }
 
 export const NeonText = ({text} : NeonTextProps) => {
-  return <div>
+  return <div style={{textAlign: "center"}}>
     <div className={style.neonHeadCont} style={{marginTop:"60px"}}>
       <img alt="Synthetic Punk" src={neonHead} className={style.neonHeadImg}></img>
     </div>
