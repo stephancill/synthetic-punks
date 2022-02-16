@@ -38,11 +38,15 @@ h3 {
 
 a {
   color: #00b87b;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
 }
 
 p {
   margin: 0;
-  /* line-height: 25px; */
 }
 
 li {

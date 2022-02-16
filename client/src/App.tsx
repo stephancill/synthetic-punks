@@ -21,11 +21,8 @@ function App() {
   const [{data: network}, switchNetwork] = useNetwork()
 
   // TODO: Styling
-  // TODO: Copy on / route
-  // TODO: Include contract addresses in copy
   // TODO: Site metadata for twitter (https://stackoverflow.com/a/26160761/11363384)
   // TODO: Clicking the neon header should take the user to /
-  // TODO: Footer
   // TODO: Button for user to see their punk
   // TODO: Show marketplace button when user not connected and punk is claimed
 
@@ -68,6 +65,9 @@ function App() {
         </Routes>
       }
       <Copy/>
+      <footer style={{marginBottom: "20px"}}>
+        Created by <a href="https://twitter.com/stephancill" target="_blank" rel="noopener noreferrer">@stephancill</a> and <a href="https://twitter.com/npm_luko" target="_blank" rel="noopener noreferrer">@npm_luko</a>
+      </footer>
     </div>
   );
 }
