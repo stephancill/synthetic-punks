@@ -10,6 +10,8 @@ import { ClaimButton } from "../ClaimButton/ClaimButton"
 import { BigNumber, ethers, Wallet } from "ethers"
 import { Search } from "../Search/Search"
 import { useLocation } from "react-router-dom"
+import style from "./PunkCard.module.css"
+import { PunkCardHeader } from "../PunkCardHeader/PunkCardHeader"
 
 const {isAddress, getAddress} = ethers.utils
 
@@ -93,13 +95,11 @@ export const PunkCard = () => {
   }, [address, claimOtherLoading, claimLoading])
 
   useEffect(() => {
-    console.log("claimMessage changed", claimMessage)
     readClaimMessageHash()
   // eslint-disable-next-line
   }, [claimMessage])
 
   useEffect(() => {
-    console.log("tokenClaimed changed", tokenClaimed)
   }, [tokenClaimed])
 
   const onClaim = () => {
@@ -119,6 +119,7 @@ export const PunkCard = () => {
   const onGenerateRandom = () => {
     const wallet = ethers.Wallet.createRandom()
     setRandomWallet(wallet)
+    // TODO: This is not working
     navigate({pathname: `/address/${wallet.address}`})
   }
 
@@ -140,30 +141,35 @@ export const PunkCard = () => {
 
   const addressOrEns = loadingEns ? address ? truncateAddress(address) : undefined : ensName ? ensName : address ? truncateAddress(address) : undefined
 
-  return <div>
+  return <div >
     <div>
       <Search onSearch={onSearch}/>
       {signer && <button onClick={() => onGenerateRandom()}>Random</button>}
     </div>
-    <span>{addressOrEns}</span>
-    <AddressTypeTag addressType={addressType}/>
-    <button onClick={onTwitterShare}>Share on twitter</button>
-    {address && <div>
-      <PunkDetail address={address}></PunkDetail>
-      {signer && <ClaimButton 
-        address={address} 
-        claimPrice={claimPrice ? claimPrice as any as BigNumber : undefined}
-        isRandom={randomWallet !== undefined}
-        signerCanClaim={signerCanClaim} 
-        claimed={tokenClaimed as any as boolean}
-        tokenId={tokenId as any as BigNumber} 
-        txHash={ 
-          (claimLoading && claimTx ? claimTx.hash : undefined) ||
-          (claimOtherLoading && claimOtherTx ? claimOtherTx.hash : undefined)}
-        onClaim={onClaim}
-        onClaimOther={onClaimRandom}
-        />}
-    </div>}
+    <div className={style.punkCard}>
+      <div className={style.punkCardContent}>
+        <PunkCardHeader addressOrEns={addressOrEns} addressType={addressType} onTwitterShare={onTwitterShare}/>
+        {address && <div>
+          <PunkDetail address={address}></PunkDetail>
+          {signer && <div style={{paddingBottom: "20px"}}>
+            <ClaimButton 
+            address={address} 
+            claimPrice={claimPrice ? claimPrice as any as BigNumber : undefined}
+            isRandom={randomWallet !== undefined}
+            signerCanClaim={signerCanClaim} 
+            claimed={tokenClaimed as any as boolean}
+            tokenId={tokenId as any as BigNumber} 
+            txHash={ 
+              (claimLoading && claimTx ? claimTx.hash : undefined) ||
+              (claimOtherLoading && claimOtherTx ? claimOtherTx.hash : undefined)}
+            onClaim={onClaim}
+            onClaimOther={onClaimRandom}
+            />
+          </div> }
+        </div>}
+      </div>
+      
+    </div>
     
   </div>
 }

@@ -68,7 +68,8 @@ export const PunkDetail = ({address}: IPunkDetailProps) => {
       :  
         <div>
           <Punk imageData={imageData!}></Punk>
-          <div style={{display:"flex", flexWrap: "wrap", width: "350px", justifyContent: "left", marginLeft:"21px",marginTop:"5px",marginBottom:"25px"}}>
+          <h1>Attributes</h1>
+          <div className={style.attributesContainer}>
             {attributeNames?.map((attributeName, i) => {
               return <div key={i} className={style.atrribute }>{attributeName}</div>
             })}
