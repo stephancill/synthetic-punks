@@ -10,7 +10,7 @@ interface IPunkCardHeaderProps {
 }
 
 export const PunkCardHeader = ({addressOrEns, addressType, onTwitterShare}: IPunkCardHeaderProps) => {
-  return <div className="" style={{display: "flex", paddingTop: "20px"}}>
+  return <div style={{display: "flex"}}>
   <h1 style={{display: "inline-block"}}>{addressOrEns}</h1>
   <AddressTypeTag addressType={addressType}/>
   <button className={style.twitterButton} onClick={onTwitterShare}><img src={twitter}></img></button>
