@@ -36,6 +36,10 @@ export const Copy = () => {
       </p>
     }, 
     {
+      heading: "Why can I claim random Punks?",
+      body: <p>When you click the random button, it generates a brand new ethereum wallet on the fly. Because you can prove you own the wallet associated with the punk, you can claim it and have it sent to your actual ethereum wallet.</p>
+    },
+    {
       heading: "Why CryptoPunks?",
       body: <p>We believe that it should be possible for everyone to participate in the digital collectibles space. 
         CryptoPunks are the most recognizable and exclusive NFTs and the pixel art style of 
