@@ -20,11 +20,13 @@ function App() {
   const location = useLocation()
   const [{data: network}, switchNetwork] = useNetwork()
 
-  // TODO: Styling
+  // TODO: Style switch network button
   // TODO: Site metadata for twitter (https://stackoverflow.com/a/26160761/11363384)
   // TODO: Clicking the neon header should take the user to /
   // TODO: Button for user to see their punk
   // TODO: Show marketplace button when user not connected and punk is claimed
+  // TODO: Show if someone owns a punk with a different address
+  // TODO: Fix padding when no button available
 
   useEffect(() => {
     if (account && location.pathname === "/") {
