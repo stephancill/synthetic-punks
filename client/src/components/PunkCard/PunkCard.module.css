@@ -1,6 +1,5 @@
 .punkCard {
   background-color: var(--lighter);
-  max-width: 400px;
   border-radius: 5px;
   padding-top: 20px;
   padding-bottom: 20px;
@@ -10,4 +9,16 @@
 .punkCardContent {
   margin-left: 40px;
   margin-right: 40px;
+}
+
+/* style={{marginLeft: "14px", backgroundColor: "var(--lighter)", padding: "0"}} */
+.randomButton {
+  margin-left: 14px;
+  background-color: var(--lighter);
+  padding-top: 0;
+  padding-bottom: 0;
+  width: 60px;
+  border: none;
+  border-radius: 5px;
+  flex-shrink: 0;
 }

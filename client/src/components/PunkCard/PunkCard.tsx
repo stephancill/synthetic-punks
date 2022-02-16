@@ -3,15 +3,15 @@ import { useEffect, useState } from "react"
 import { useParams, useNavigate } from "react-router"
 import { truncateAddress } from "../../utilities"
 import { PunkDetail } from "../PunkDetail/PunkDetail"
-import { AddressTypeTag } from "../AddressTypeTag/AddressTypeTag"
 import { useSyntheticPunks } from "../../hooks/useSyntheticPunks"
 import { useContractAdapter } from "../../hooks/useContractAdapter"
 import { ClaimButton } from "../ClaimButton/ClaimButton"
 import { BigNumber, ethers, Wallet } from "ethers"
 import { Search } from "../Search/Search"
 import { useLocation } from "react-router-dom"
-import style from "./PunkCard.module.css"
 import { PunkCardHeader } from "../PunkCardHeader/PunkCardHeader"
+import dice from "../../img/dice.svg"
+import style from "./PunkCard.module.css"
 
 const {isAddress, getAddress} = ethers.utils
 
@@ -138,17 +138,17 @@ export const PunkCard = () => {
 
   const addressOrEns = loadingEns ? address ? truncateAddress(address) : undefined : ensName ? ensName : address ? truncateAddress(address) : undefined
 
-  return <div >
-    <div>
+  return <div style={{width: "400px"}}>
+    <div style={{display: "flex", marginBottom: "20px", height: "60px"}}>
       <Search onSearch={onSearch}/>
-      {signer && <button onClick={() => onGenerateRandom()}>Random</button>}
+      {signer && <button className={style.randomButton} onClick={() => onGenerateRandom()}><img src={dice}/></button>}
     </div>
     <div className={style.punkCard}>
       <div className={style.punkCardContent}>
         <PunkCardHeader addressOrEns={addressOrEns} addressType={addressType} onTwitterShare={onTwitterShare}/>
         {address && <div>
           <PunkDetail address={address}></PunkDetail>
-          {signer && <div style={{paddingBottom: "4px"}}>
+          {signer && <div style={{paddingBottom: "6px"}}>
             <ClaimButton 
             address={address} 
             claimPrice={claimPrice ? claimPrice as any as BigNumber : undefined}

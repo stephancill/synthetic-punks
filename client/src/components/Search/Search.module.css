@@ -1,0 +1,29 @@
+.searchContainer {
+  background-color: var(--lighter);
+  height: 60px;
+  display: flex;
+  border-radius: 5px;
+}
+
+.searchContainer input {
+  height: 100%;
+  border: none;
+  padding-bottom: 0;
+  padding-top: 0;
+  padding-left: 17px;
+  background-color: inherit;
+  font-size: 24px;
+  color: white;
+  width: 80%;
+  border-radius: inherit;
+  z-index: 1;
+}
+
+.searchContainer input::placeholder {
+  color: #838383;
+}
+
+.searchContainer button  {
+  border: none;
+  background-color: inherit;
+}

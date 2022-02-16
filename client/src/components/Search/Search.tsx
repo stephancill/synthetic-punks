@@ -1,6 +1,8 @@
 import { getAddress, isAddress } from "ethers/lib/utils"
 import { useEffect, useState } from "react"
 import { useEnsResolveName } from "wagmi"
+import searchSmall from "../../img/search.svg"
+import style from "./Search.module.css"
 
 interface ISearchProps {
   onSearch: (address: string) => void
@@ -27,15 +29,14 @@ export const Search = ({onSearch}: ISearchProps) => {
     }
   }
 
-  return <span>
-    <form onSubmit={(e) => {
+  return <span className={style.searchContainer}>
+    <form id="search-form" onSubmit={(e) => {
       e.preventDefault()
       handleSearch()
     }}>
-      <input type="text" placeholder="Search Address or ENS" value={rawSearchQuery} onChange={(e) => setRawSearchQuery(e.target.value)} />
-      <button type="submit">Search</button>
     </form>
-    
+    <input type="text" placeholder="Search Address or ENS" value={rawSearchQuery} onChange={(e) => setRawSearchQuery(e.target.value)} />
+    <button form="search-form" type="submit"><img src={searchSmall}/></button>
     
   </span>
 }
