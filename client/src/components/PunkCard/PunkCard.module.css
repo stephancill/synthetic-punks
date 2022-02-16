@@ -1,0 +1,11 @@
+.punkCard {
+  background-color: var(--lighter);
+  max-width: 400px;
+  border-radius: 5px;
+  margin-bottom: 40px;
+}
+
+.punkCardContent {
+  margin-left: 40px;
+  margin-right: 40px;
+}

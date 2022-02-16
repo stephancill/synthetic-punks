@@ -17,10 +17,13 @@ function App() {
   const [{data: network}, switchNetwork] = useNetwork()
 
   // TODO: Styling
-  // TODO: Copy
+  // TODO: Copy on / route
   // TODO: Include contract addresses in copy
   // TODO: Site metadata for twitter (https://stackoverflow.com/a/26160761/11363384)
   // TODO: Clicking the neon header should take the user to /
+  // TODO: Footer
+  // TODO: Tooltips
+  // TODO: Button for user to see their punk
 
   useEffect(() => {
     if (account && location.pathname === "/") {
@@ -30,29 +33,27 @@ function App() {
 
   return (
     <div className="App">
-      <header className="App-header">
-        <NeonText text={"SYNTHETIC PUNKS"} ></NeonText>
-        <ConnectButton/>
-        {network && switchNetwork && network.chain?.id !== deploymentChain 
-        ?
-          <button onClick={() => switchNetwork(deploymentChain)}>Switch to {deployments.name}</button>
-        :
-          <Routes>
-            <Route path="/" element={<Search onSearch={(address) => navigate(`/address/${address}`)}/>}/>
-            <Route path="address">
-              <Route path=":address" element={<PunkCard/>}/>
-            </Route>
-            <Route
-                path="*"
-                element={
-                  <main style={{ padding: "1rem" }}>
-                    <p>There's nothing here!</p>
-                  </main>
-                }
-              />
-          </Routes>
-      }
-      </header>
+      <NeonText text={"SYNTHETIC PUNKS"} ></NeonText>
+      <ConnectButton/>
+      {network && switchNetwork && network.chain?.id !== deploymentChain 
+      ?
+        <button onClick={() => switchNetwork(deploymentChain)}>Switch to {deployments.name}</button>
+      :
+        <Routes>
+          <Route path="/" element={<Search onSearch={(address) => navigate(`/address/${address}`)}/>}/>
+          <Route path="address">
+            <Route path=":address" element={<PunkCard/>}/>
+          </Route>
+          <Route
+              path="*"
+              element={
+                <main style={{ padding: "1rem" }}>
+                  <p>There's nothing here!</p>
+                </main>
+              }
+            />
+        </Routes>
+    }
     </div>
   );
 }

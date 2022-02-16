@@ -2,11 +2,23 @@
   color: white;
   border: 1px white solid;
   border-radius: 4px;
-  display: block;
+  display: inline-block;
   border-radius: 7px;
-  padding-left: 5px;
-  padding-right: 5px;
-  padding-bottom: 3px;
-  padding-top: 3px;
-  margin: 3px;
+  padding-left: 7px;
+  padding-right: 7px;
+  padding-bottom: 7px;
+  padding-top: 7px;
+  margin-right: 6px;
+  margin-bottom: 6px;
+}
+/* style={{display:"flex", flexWrap: "wrap", width: "350px", justifyContent: "left", marginLeft:"21px",marginTop:"5px",marginBottom:"25px"} */
+.attributesContainer {
+  margin-top: 20px;
+  padding-bottom: 20px;
+}
+
+.attributesGroup {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: left;
 }
