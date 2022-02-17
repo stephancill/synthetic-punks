@@ -18,7 +18,8 @@ const {isAddress, getAddress} = ethers.utils
 export enum AddressType {
   Search,
   Signer,
-  Random
+  Random,
+  Owner
 }
 
 export const PunkCard = () => {
@@ -31,9 +32,6 @@ export const PunkCard = () => {
   const location = useLocation()
 
   const address = rawAddress ? isAddress(rawAddress.toLowerCase()) ? getAddress(rawAddress.toLowerCase()) : undefined : undefined
-  const addressType = randomWallet?.address === address ? AddressType.Random : account?.address === address ? AddressType.Signer : AddressType.Search
-
-  const [{ data: ensName, loading: loadingEns }] = useEnsLookup({address})
 
   const syntheticPunks = useSyntheticPunks(signer || provider)
   const syntheticPunksConfig = useContractAdapter(syntheticPunks)
@@ -68,6 +66,12 @@ export const PunkCard = () => {
     {args: [claimMessage]}
   ) 
 
+  const [{ data: ownerAddress }, readOwnerAddress] = useContractRead(
+    syntheticPunksConfig,
+    "ownerOf",
+    {args: [tokenId]}
+  ) 
+
   const [, claim] = useContractWrite(
     syntheticPunksConfig,
     "claim",
@@ -80,11 +84,13 @@ export const PunkCard = () => {
   )
 
   const signerCanClaim = address === account?.address || address === randomWallet?.address
+  const addressType = (account?.address && (account?.address === ownerAddress as any as string)) ? AddressType.Owner : randomWallet?.address === address ? AddressType.Random : account?.address === address ? AddressType.Signer : AddressType.Search
 
   useEffect(() => {
     readTokenClaimed()
+    readOwnerAddress()
   // eslint-disable-next-line
-  }, [address, currentTx])
+  }, [address, currentTx, provider, tokenId])
 
   useEffect(() => {
     if (!signer) {
@@ -102,6 +108,10 @@ export const PunkCard = () => {
       })()
     }
   }, [currentTx]) 
+
+  useEffect(() => {
+    console.log("ownerAddress", ownerAddress, tokenId?.toString())
+  }, [ownerAddress])
 
   useEffect(() => {
     readClaimMessageHash()
@@ -145,7 +155,6 @@ export const PunkCard = () => {
     window.open(intentURL, "_blank")
   }
 
-  const addressOrEns = loadingEns ? address ? truncateAddress(address) : undefined : ensName ? ensName : address ? truncateAddress(address) : undefined
 
   return <div style={{width: "90%", maxWidth: "400px"}}>
     <div style={{display: "flex", marginBottom: "30px", height: "50px"}}>
@@ -154,7 +163,7 @@ export const PunkCard = () => {
     </div>
     <div className={style.punkCard}>
       <div className={style.punkCardContent}>
-        <PunkCardHeader addressOrEns={addressOrEns} addressType={addressType} onTwitterShare={onTwitterShare}/>
+        <PunkCardHeader address={address} addressType={addressType} ownerAddress={ownerAddress as any as string} onTwitterShare={onTwitterShare}/>
         {address && <div>
           <PunkDetail address={address}></PunkDetail>
           {provider && !(!tokenClaimed && !signerCanClaim) && <div style={{paddingBottom: "6px", marginTop: "20px"}}>

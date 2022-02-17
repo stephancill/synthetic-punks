@@ -23,9 +23,8 @@ function App() {
   // TODO: Style switch network button
   // TODO: Site metadata for twitter (https://stackoverflow.com/a/26160761/11363384)
   // TODO: Button for user to see their punk
-  // TODO: Fix claim button states
-  // TODO: Show if someone owns a punk with a different address
-  // TODO: Fix padding when no button available
+  // TODO: Click address to copy
+  // TODO: Use alchemy instead of infura
 
   useEffect(() => {
     if (account && location.pathname === "/") {
@@ -39,7 +38,7 @@ function App() {
       <div className="linksContainer" style={{display: "flex"}}>
         <a href="https://opensea.io/collection/synthetic-cryptopunks" target="_blank" rel="noopener noreferrer"><img src={opensea}/></a>
         <a href="https://github.com/stephancill/synthetic-punks" target="_blank" rel="noopener noreferrer"><img src={github}/></a>
-        <a href="https://etherscan.io/address/0xaf9ce4b327a3b690abea6f78eccbfefffbea9fdf" target="_blank" rel="noopener noreferrer"><img src={etherscan}/></a>
+        <a href={`https://etherscan.io/address/${deployments.contracts.SyntheticPunks.address}`} target="_blank" rel="noopener noreferrer"><img src={etherscan}/></a>
       </div>
       <div style={{marginTop: "40px", marginBottom: "40px", width: "90%", maxWidth: "400px", display: "flex", justifyContent: "center"}}>
         <ConnectButton/>

@@ -7,7 +7,7 @@ import { Provider, defaultChains, developmentChains } from 'wagmi'
 import { InjectedConnector } from 'wagmi/connectors/injected'
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 import deployments from "./deployments.json"
-import { JsonRpcProvider } from '@ethersproject/providers';
+import { JsonRpcProvider, WebSocketProvider } from '@ethersproject/providers';
 import { HashRouter } from 'react-router-dom';
 
 export declare type Chain = {
@@ -25,7 +25,8 @@ export declare type Chain = {
 const infuraId = process.env.REACT_APP_INFURA_PROJECT_ID
 
 const deployedChainId = parseInt(deployments.chainId)
-const defaultProvider = new JsonRpcProvider(deployedChainId === 31337 ? "http://127.0.0.1:8545/" : `https://mainnet.infura.io/v3/${infuraId}`)
+const defaultProvider = deployedChainId === 31337 ? new JsonRpcProvider( "http://127.0.0.1:8545/") : 
+new WebSocketProvider (`wss://mainnet.infura.io/ws/v3/${infuraId}`, "mainnet")
 
 // Chains for connectors to support
 const chains = [...developmentChains, ...defaultChains].filter(chain => chain.id === parseInt(deployments.chainId))

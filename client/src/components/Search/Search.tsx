@@ -25,6 +25,7 @@ export const Search = ({onSearch}: ISearchProps) => {
   const handleSearch = () => {
     if (isAddress(rawSearchQuery) || rawSearchQuery.indexOf(".") > 0) {
       setSearchQuery(rawSearchQuery)
+      setRawSearchQuery("")
       resolveSearchQuery()
     }
   }
