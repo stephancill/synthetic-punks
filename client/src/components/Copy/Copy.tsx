@@ -50,7 +50,7 @@ export const Copy = () => {
 
   const [expanded, setExpanded] = useState<boolean[]>([...new Array(sections.length)].fill(false))
 
-  return <div style={{width: "90%", maxWidth: "400px"}}>
+  return <div style={{width: "90%", maxWidth: "400px",marginBottom:"80px"}}>
     <div style={{marginBottom: "20px"}}>
       <h1 style={{padding: "5px"}}>FAQ</h1>
     </div>

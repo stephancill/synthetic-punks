@@ -22,7 +22,6 @@ function App() {
 
   // TODO: Check if twitter metadata works
   // TODO: Button for user to see their punk
-  // TODO: Click address to copy
   // TODO: Use alchemy instead of infura
 
   useEffect(() => {
