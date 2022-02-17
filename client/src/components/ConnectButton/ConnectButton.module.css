@@ -4,7 +4,7 @@
   padding-bottom: 10px;
   border: white 2px solid;
   background: none;
-  border-radius: 8px;
+  border-radius: 5px;
   color: #fff;
   font-size: 20px;
   font-weight: bold;
@@ -52,7 +52,7 @@
 .homeBtn {
   background: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 5px;
   width: 60px;
   height: 48px;
   margin-left: 14px;

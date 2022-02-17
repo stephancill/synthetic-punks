@@ -105,3 +105,6 @@ li {
 .toolTip:hover .toolTipText {
   visibility: visible;
 }
+button {
+  transition: 0.2s;
+}
