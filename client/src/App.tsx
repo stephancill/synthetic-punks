@@ -46,7 +46,9 @@ function App() {
       
       {network && switchNetwork && network.chain?.id !== deploymentChain 
       ?
-        <button onClick={() => switchNetwork(deploymentChain)}>Switch to {deployments.name}</button>
+        <div style={{marginBottom:"30px"}}>
+          <button className="switchNetworkBtn" onClick={() => switchNetwork(deploymentChain)}>Switch to {deployments.name}</button>
+        </div>
       :
         <Routes>
           <Route path="/" element={

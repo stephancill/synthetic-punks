@@ -2,7 +2,6 @@
   --shadow: #0e1310;
   --dark: #18201b;
   --lighter: #2a3830;
-  --lighterer: #3b4e44;
   --primary: #00b87b;
 }
 
@@ -62,5 +61,22 @@ li {
 }
 
 .linksContainer a:hover {
-  filter: drop-shadow(0px 0px 4px #00FFAA);
+  filter: drop-shadow(0px 0px 4px #00ffaa);
+}
+
+.switchNetworkBtn {
+  background: none;
+  border: 2px solid #b86500;
+  width: 400px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-radius: 8px;
+  color: #b86500;
+  font-size: 20px;
+  font-weight: bold;
+  transition-duration: 0.2s;
+}
+.switchNetworkBtn:hover {
+  background: #b86500;
+  color: white;
 }
