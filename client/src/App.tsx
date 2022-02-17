@@ -21,7 +21,6 @@ function App() {
   const [{data: network}, switchNetwork] = useNetwork()
 
   // TODO: Check if twitter metadata works
-  // TODO: Button for user to see their punk
   // TODO: Use alchemy instead of infura
 
   useEffect(() => {
