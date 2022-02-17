@@ -30,7 +30,7 @@ export const PunkCard = () => {
   const navigate = useNavigate()
   const location = useLocation()
 
-  const address = rawAddress ? isAddress(rawAddress) ? getAddress(rawAddress) : undefined : undefined
+  const address = rawAddress ? isAddress(rawAddress.toLowerCase()) ? getAddress(rawAddress.toLowerCase()) : undefined : undefined
   const addressType = randomWallet?.address === address ? AddressType.Random : account?.address === address ? AddressType.Signer : AddressType.Search
 
   const [{ data: ensName, loading: loadingEns }] = useEnsLookup({address})

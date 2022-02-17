@@ -41,14 +41,17 @@ function App() {
         <a href="https://github.com/stephancill/synthetic-punks" target="_blank" rel="noopener noreferrer"><img src={github}/></a>
         <a href="https://etherscan.io/address/0xaf9ce4b327a3b690abea6f78eccbfefffbea9fdf" target="_blank" rel="noopener noreferrer"><img src={etherscan}/></a>
       </div>
-      <ConnectButton/>
+      <div style={{marginTop: "40px", marginBottom: "40px", width: "90%", maxWidth: "400px", display: "flex", justifyContent: "center"}}>
+        <ConnectButton/>
+      </div>
+      
       {network && switchNetwork && network.chain?.id !== deploymentChain 
       ?
         <button onClick={() => switchNetwork(deploymentChain)}>Switch to {deployments.name}</button>
       :
         <Routes>
           <Route path="/" element={
-            <div style={{display: "flex", width: "90%", maxWidth: "400px"}}>
+            <div style={{display: "flex", width: "90%", maxWidth: "400px", marginBottom: "40px"}}>
               <Search onSearch={(address) => navigate(`/address/${address}`)}/>
             </div>
           }/>

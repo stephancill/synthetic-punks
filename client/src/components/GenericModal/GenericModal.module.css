@@ -1,0 +1,19 @@
+.fullscreenModal {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  display: flex;
+  justify-content: center;
+}
+
+.modalContainer {
+  width: 90%;
+  max-width: 400px;
+  height: fit-content;
+  margin-top: 100px;
+  z-index: 2;
+  position: relative;
+  padding: 40px;
+}

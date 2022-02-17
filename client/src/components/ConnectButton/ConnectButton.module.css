@@ -1,5 +1,5 @@
 .connectBtn {
-  width: 220px;
+  width: 100%;
   padding-top: 10px;
   padding-bottom: 10px;
   border: white 2px solid;
@@ -19,20 +19,11 @@
 }
 
 .connectModalCard {
-  width: 240px !important;
   border-radius: 8px;
   background: var(--dark);
-  margin-top: -48px;
   text-align: center;
   padding: 15px;
-  padding-bottom: 0px;
   z-index: 1;
-  margin-left: -135px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-
-  box-shadow: 0px 0px 2000px 800px rgba(0, 0, 0, 0.7);
 }
 .walletOption {
   background-color: #007951;
@@ -40,9 +31,7 @@
   height: 40px;
   color: white;
   font-size: 16px;
-  font-weight: bold;
   border: none;
-  cursor: pointer;
   border-radius: 5px;
   margin-bottom: 10px;
   transition-duration: 0.2s;
