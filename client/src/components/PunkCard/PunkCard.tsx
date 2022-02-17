@@ -43,7 +43,7 @@ export const PunkCard = () => {
     {args: [address]}
   ) 
 
-  const [{ data: tokenId }] = useContractRead(
+  const [{ data: tokenId }, readTokenId] = useContractRead(
     syntheticPunksConfig,
     "getTokenID",
     {args: [address]}
@@ -86,10 +86,15 @@ export const PunkCard = () => {
   const addressType = (account?.address && (account?.address === ownerAddress as any as string)) ? AddressType.Owner : randomWallet?.address === address ? AddressType.Random : account?.address === address ? AddressType.Signer : AddressType.Search
 
   useEffect(() => {
+    readTokenId()
+  // eslint-disable-next-line
+  }, 
+  [address, currentTx, provider])
+
+  useEffect(() => {
     readTokenClaimed()
     readOwnerAddress()
-  // eslint-disable-next-line
-  }, [address, currentTx, provider, tokenId])
+  }, [tokenId])
 
   useEffect(() => {
     if (!signer) {
@@ -99,12 +104,12 @@ export const PunkCard = () => {
 
   useEffect(() => {
     if (currentTx) {
-      (async () => {
-        console.log("new tx", currentTx.hash)
-        await currentTx.wait(2)
-        console.log("tx done")
+      console.log("new tx", currentTx.hash)
+      currentTx.wait().then(() => {
         setCurrentTx(undefined)
-      })()
+
+      })
+      console.log("tx done")
     }
   }, [currentTx]) 
 
@@ -130,7 +135,7 @@ export const PunkCard = () => {
   const onGenerateRandom = () => {
     const wallet = ethers.Wallet.createRandom()
     setRandomWallet(wallet)
-    // TODO: This is not working
+    console.log("navigating to ", wallet.address)
     navigate({pathname: `/address/${wallet.address}`})
   }
 

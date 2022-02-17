@@ -19,8 +19,9 @@ export const Search = ({onSearch}: ISearchProps) => {
     if (searchAddress && isAddress(searchAddress)) {
       const checksummed = getAddress(searchAddress)
       onSearch(checksummed)
+      setSearchQuery("")
     }
-  }, [searchQuery, resolvedSearchQuery, onSearch])
+  }, [searchQuery, resolvedSearchQuery])
 
   const handleSearch = () => {
     if (isAddress(rawSearchQuery) || rawSearchQuery.indexOf(".") > 0) {

@@ -40,7 +40,6 @@ const connectors = ({ chainId }: {chainId?: number}) => {
     }),
     new WalletConnectConnector({
       options: {
-        infuraId,
         qrcode: true,
       },
     })
