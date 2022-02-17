@@ -1,7 +1,6 @@
-import { useAccount, useContractRead, useContractWrite, useEnsLookup, useProvider, useSigner, useWaitForTransaction } from "wagmi"
+import { useAccount, useContractRead, useContractWrite, useProvider, useSigner } from "wagmi"
 import { useEffect, useState } from "react"
 import { useParams, useNavigate } from "react-router"
-import { truncateAddress } from "../../utilities"
 import { PunkDetail } from "../PunkDetail/PunkDetail"
 import { useSyntheticPunks } from "../../hooks/useSyntheticPunks"
 import { useContractAdapter } from "../../hooks/useContractAdapter"
@@ -110,10 +109,6 @@ export const PunkCard = () => {
   }, [currentTx]) 
 
   useEffect(() => {
-    console.log("ownerAddress", ownerAddress, tokenId?.toString())
-  }, [ownerAddress])
-
-  useEffect(() => {
     readClaimMessageHash()
   // eslint-disable-next-line
   }, [claimMessage])
@@ -159,7 +154,7 @@ export const PunkCard = () => {
   return <div style={{width: "90%", maxWidth: "400px"}}>
     <div style={{display: "flex", marginBottom: "30px", height: "50px"}}>
       <Search onSearch={onSearch}/>
-      {signer && <button className={style.randomButton} onClick={() => onGenerateRandom()}><img src={dice}/></button>}
+      {signer && <button className={style.randomButton} onClick={() => onGenerateRandom()}><img src={dice} alt="Random"/></button>}
     </div>
     <div className={style.punkCard}>
       <div className={style.punkCardContent}>

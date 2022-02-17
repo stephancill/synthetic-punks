@@ -22,7 +22,7 @@ export const PunkCardHeader = ({address, addressType, ownerAddress, onTwitterSha
     <div style={{display: "flex"}}>
       <h1 style={{display: "inline-block"}}>{ensName ? ensName : address ? truncateAddress(address) : ""}</h1>
       <AddressTypeTag addressType={addressType}/>
-      <button className={style.twitterButton} onClick={onTwitterShare}><img src={twitter}></img></button>
+      <button className={style.twitterButton} onClick={onTwitterShare}><img src={twitter} alt="Twitter"></img></button>
     </div>
     {ownerAddress && isAddress(ownerAddress) && ethers.constants.AddressZero !== ownerAddress &&
       <p>Owned by {ownerEnsName ? ownerEnsName : truncateAddress(ownerAddress)}</p>

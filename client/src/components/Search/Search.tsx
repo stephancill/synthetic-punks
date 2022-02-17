@@ -35,7 +35,7 @@ export const Search = ({onSearch}: ISearchProps) => {
       handleSearch()
     }}>
       <input type="text" placeholder="Search Address or ENS" value={rawSearchQuery} onChange={(e) => setRawSearchQuery(e.target.value)} />
-      <button type="submit"><img src={searchSmall}/></button>
+      <button type="submit"><img src={searchSmall} alt="Search"/></button>
     </form>
     
 }
