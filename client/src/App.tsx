@@ -20,7 +20,7 @@ function App() {
   const location = useLocation()
   const [{data: network}, switchNetwork] = useNetwork()
 
-  // TODO: Check if twitter metadata works
+  var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
   useEffect(() => {
     if (account && location.pathname === "/") {
@@ -36,6 +36,11 @@ function App() {
         <a href="https://github.com/stephancill/synthetic-punks" target="_blank" rel="noopener noreferrer"><img src={github} alt="GitHub"/></a>
         <a href={`https://etherscan.io/address/${deployments.contracts.SyntheticPunks.address}`} target="_blank" rel="noopener noreferrer"><img src={etherscan} alt="Etherscan"/></a>
       </div>
+      
+      {isSafari && <div>
+        Note: Safari is not supported. Please try a different browser!
+      </div>}
+
       <div style={{marginTop: "40px", marginBottom: "40px", width: "90%", maxWidth: "400px", display: "flex", justifyContent: "center"}}>
         <ConnectButton/>
       </div>

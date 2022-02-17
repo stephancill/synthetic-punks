@@ -1,5 +1,5 @@
 import style from "./NeonText.module.css"
-import neonHeader from'./NeonHeader.png';
+import neonHeader from'./../../img/NeonHeader.jpg';
 
 
 export const NeonText = () => {
