@@ -13,19 +13,24 @@ interface IPunkCardHeaderProps {
   ownerAddress?: string
   onTwitterShare: () => void
 }
-
+const copyAddress = (address: string | undefined) => {
+  if (address) {
+    navigator.clipboard.writeText(address);
+  }
+}
 export const PunkCardHeader = ({address, addressType, ownerAddress, onTwitterShare}: IPunkCardHeaderProps) => {
   const [{ data: ensName }] = useEnsLookup({address})
   const [{ data: ownerEnsName }] = useEnsLookup({address: ownerAddress})
 
   return <div>
     <div style={{display: "flex"}}>
-      <h1 style={{display: "inline-block"}}>{ensName ? ensName : address ? truncateAddress(address) : ""}</h1>
-      <AddressTypeTag addressType={addressType}/>
+      
+      <h1  onClick={()=> copyAddress(address)} title={address} style={{display: "inline-block",cursor:"copy"}}>{ensName ? ensName : address ? truncateAddress(address) : ""}</h1>
+      <AddressTypeTag addressType={addressType} />
       <button className={style.twitterButton} onClick={onTwitterShare}><img src={twitter}></img></button>
     </div>
     {ownerAddress && isAddress(ownerAddress) && ethers.constants.AddressZero !== ownerAddress &&
-      <p>Owned by {ownerEnsName ? ownerEnsName : truncateAddress(ownerAddress)}</p>
+      <p title={ownerAddress} onClick={()=> copyAddress(address)} style={{cursor:"copy"}}>Owned by {ownerEnsName ? ownerEnsName : truncateAddress(ownerAddress)}</p>
     }
   </div> 
 }

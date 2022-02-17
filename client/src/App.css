@@ -80,3 +80,27 @@ li {
   background: #b86500;
   color: white;
 }
+
+.toolTip {
+  position: relative;
+  display: inline-block;
+}
+.toolTip .toolTipText {
+  visibility: hidden;
+  background-color: white;
+  color: black;
+  text-align: center;
+  font-size: 14px;
+  padding: 5px 5px;
+  border-radius: 6px;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -50%;
+  transform: translateY(-5px);
+  position: absolute;
+  z-index: 1;
+  font-weight: 400;
+}
+.toolTip:hover .toolTipText {
+  visibility: visible;
+}

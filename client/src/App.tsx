@@ -20,7 +20,6 @@ function App() {
   const location = useLocation()
   const [{data: network}, switchNetwork] = useNetwork()
 
-  // TODO: Style switch network button
   // TODO: Check if twitter metadata works
   // TODO: Button for user to see their punk
   // TODO: Click address to copy
