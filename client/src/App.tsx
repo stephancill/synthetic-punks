@@ -35,9 +35,9 @@ function App() {
     <div className="App">
       <NeonText></NeonText>
       <div className="linksContainer" style={{display: "flex"}}>
-        <a href="https://opensea.io/collection/synthetic-cryptopunks" target="_blank" rel="noopener noreferrer"><img src={opensea}/></a>
-        <a href="https://github.com/stephancill/synthetic-punks" target="_blank" rel="noopener noreferrer"><img src={github}/></a>
-        <a href={`https://etherscan.io/address/${deployments.contracts.SyntheticPunks.address}`} target="_blank" rel="noopener noreferrer"><img src={etherscan}/></a>
+        <a href="https://opensea.io/collection/synthetic-cryptopunks" target="_blank" rel="noopener noreferrer"><img src={opensea} alt="OpenSea"/></a>
+        <a href="https://github.com/stephancill/synthetic-punks" target="_blank" rel="noopener noreferrer"><img src={github} alt="GitHub"/></a>
+        <a href={`https://etherscan.io/address/${deployments.contracts.SyntheticPunks.address}`} target="_blank" rel="noopener noreferrer"><img src={etherscan} alt="Etherscan"/></a>
       </div>
       <div style={{marginTop: "40px", marginBottom: "40px", width: "90%", maxWidth: "400px", display: "flex", justifyContent: "center"}}>
         <ConnectButton/>

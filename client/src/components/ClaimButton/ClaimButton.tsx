@@ -2,7 +2,6 @@ import { BigNumber, ethers } from "ethers"
 import deployments from "../../deployments.json"
 import style from "./ClaimButton.module.css"
 import opensea from "../../img/opensea.svg"
-import { SpinnerCircular } from 'spinners-react'
 
 interface IClaimedButtonProps {
   address: string

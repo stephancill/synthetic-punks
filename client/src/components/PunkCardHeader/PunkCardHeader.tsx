@@ -27,7 +27,7 @@ export const PunkCardHeader = ({address, addressType, ownerAddress, onTwitterSha
       
       <h1  onClick={()=> copyAddress(address)} title={address} style={{display: "inline-block",cursor:"copy"}}>{ensName ? ensName : address ? truncateAddress(address) : ""}</h1>
       <AddressTypeTag addressType={addressType} />
-      <button className={style.twitterButton} onClick={onTwitterShare}><img src={twitter}></img></button>
+      <button className={style.twitterButton} onClick={onTwitterShare} ><img src={twitter} alt="Twitter"></img></button>
     </div>
     {ownerAddress && isAddress(ownerAddress) && ethers.constants.AddressZero !== ownerAddress &&
       <p title={ownerAddress} onClick={()=> copyAddress(address)} style={{cursor:"copy"}}>Owned by {ownerEnsName ? ownerEnsName : truncateAddress(ownerAddress)}</p>
