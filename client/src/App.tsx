@@ -22,7 +22,6 @@ function App() {
 
   // TODO: Style switch network button
   // TODO: Site metadata for twitter (https://stackoverflow.com/a/26160761/11363384)
-  // TODO: Clicking the neon header should take the user to /
   // TODO: Button for user to see their punk
   // TODO: Fix claim button states
   // TODO: Show if someone owns a punk with a different address
