@@ -148,7 +148,7 @@ export const PunkCard = () => {
         <PunkCardHeader addressOrEns={addressOrEns} addressType={addressType} onTwitterShare={onTwitterShare}/>
         {address && <div>
           <PunkDetail address={address}></PunkDetail>
-          {signer && signerCanClaim && <div style={{paddingBottom: "6px", marginTop: "20px"}}>
+          {provider && <div style={{paddingBottom: "6px", marginTop: "20px"}}>
             <ClaimButton 
             address={address} 
             claimPrice={claimPrice ? claimPrice as any as BigNumber : undefined}
