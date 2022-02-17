@@ -14,6 +14,8 @@ import style from "./PunkCard.module.css"
 
 const {isAddress, getAddress} = ethers.utils
 
+const claimMessageHash = "0xdf82b3b8802b972d13d60623a6690febbca6142a008135b45c421dd951612158"
+
 export enum AddressType {
   Search,
   Signer,
@@ -54,17 +56,6 @@ export const PunkCard = () => {
     "claimPrice",
   ) 
 
-  const [{ data: claimMessage }] = useContractRead(
-    syntheticPunksConfig,
-    "claimMessage",
-  ) 
-
-  const [{ data: claimMessageHash }, readClaimMessageHash] = useContractRead(
-    syntheticPunksConfig,
-    "getMessageHash",
-    {args: [claimMessage]}
-  ) 
-
   const [{ data: ownerAddress }, readOwnerAddress] = useContractRead(
     syntheticPunksConfig,
     "ownerOf",
@@ -86,6 +77,7 @@ export const PunkCard = () => {
   const addressType = (account?.address && (account?.address === ownerAddress as any as string)) ? AddressType.Owner : randomWallet?.address === address ? AddressType.Random : account?.address === address ? AddressType.Signer : AddressType.Search
 
   useEffect(() => {
+
     readTokenId()
   // eslint-disable-next-line
   }, [address, currentTx, provider])
@@ -113,17 +105,12 @@ export const PunkCard = () => {
     }
   }, [currentTx]) 
 
-  useEffect(() => {
-    readClaimMessageHash()
-  // eslint-disable-next-line
-  }, [claimMessage])
-
   const onClaim = () => {
     claim().then(({data: tx}) => setCurrentTx(tx))
   }
 
   const onClaimRandom = () => {
-    if (!claimMessage || !randomWallet || !claimMessageHash) {
+    if (!randomWallet) {
       return
     }
     

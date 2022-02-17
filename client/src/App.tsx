@@ -21,7 +21,6 @@ function App() {
   const [{data: network}, switchNetwork] = useNetwork()
 
   // TODO: Check if twitter metadata works
-  // TODO: Use alchemy instead of infura
 
   useEffect(() => {
     if (account && location.pathname === "/") {

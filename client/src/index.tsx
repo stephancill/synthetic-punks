@@ -7,14 +7,14 @@ import { Provider, defaultChains, developmentChains } from 'wagmi'
 import { InjectedConnector } from 'wagmi/connectors/injected'
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 import deployments from "./deployments.json"
-import { JsonRpcProvider, StaticJsonRpcProvider } from '@ethersproject/providers';
+import { StaticJsonRpcProvider } from '@ethersproject/providers';
 import { HashRouter } from 'react-router-dom';
 
 // API key for Ethereum node
 const defaultRPC = process.env.REACT_APP_DEFAULT_RPC
 
 const deployedChainId = parseInt(deployments.chainId)
-const defaultProvider = deployedChainId === 31337 ? new JsonRpcProvider( "http://127.0.0.1:8545/") : new StaticJsonRpcProvider(defaultRPC, deployments.name)
+const defaultProvider = deployedChainId === 31337 ? new StaticJsonRpcProvider( "http://127.0.0.1:8545/") : new StaticJsonRpcProvider(defaultRPC, deployments.name)
 
 // Chains for connectors to support
 const chains = [...developmentChains, ...defaultChains].filter(chain => chain.id === parseInt(deployments.chainId))
