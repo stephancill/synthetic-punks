@@ -7,26 +7,14 @@ import { Provider, defaultChains, developmentChains } from 'wagmi'
 import { InjectedConnector } from 'wagmi/connectors/injected'
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 import deployments from "./deployments.json"
-import { JsonRpcProvider, WebSocketProvider } from '@ethersproject/providers';
+import { JsonRpcProvider, StaticJsonRpcProvider } from '@ethersproject/providers';
 import { HashRouter } from 'react-router-dom';
 
-export declare type Chain = {
-  id: number;
-  name: AddEthereumChainParameter['chainName'];
-  nativeCurrency?: AddEthereumChainParameter['nativeCurrency'];
-  rpcUrls: AddEthereumChainParameter['rpcUrls'];
-  blockExplorers?: {
-      name: string;
-      url: string;
-  }[];
-  testnet?: boolean;
-};
 // API key for Ethereum node
-const infuraId = process.env.REACT_APP_INFURA_PROJECT_ID
+const defaultRPC = process.env.REACT_APP_DEFAULT_RPC
 
 const deployedChainId = parseInt(deployments.chainId)
-const defaultProvider = deployedChainId === 31337 ? new JsonRpcProvider( "http://127.0.0.1:8545/") : 
-new WebSocketProvider (`wss://mainnet.infura.io/ws/v3/${infuraId}`, "mainnet")
+const defaultProvider = deployedChainId === 31337 ? new JsonRpcProvider( "http://127.0.0.1:8545/") : new StaticJsonRpcProvider(defaultRPC, deployments.name)
 
 // Chains for connectors to support
 const chains = [...developmentChains, ...defaultChains].filter(chain => chain.id === parseInt(deployments.chainId))
