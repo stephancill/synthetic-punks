@@ -38,6 +38,8 @@ export const PunkCard = () => {
   const syntheticPunks = useSyntheticPunks(signer || provider)
   const syntheticPunksConfig = useContractAdapter(syntheticPunks)
 
+  const [currentTx, setCurrentTx] = useState<ethers.providers.TransactionResponse | undefined>()
+
   const [{ data: tokenClaimed }, readTokenClaimed] = useContractRead(
     syntheticPunksConfig,
     "claimed",
@@ -66,33 +68,40 @@ export const PunkCard = () => {
     {args: [claimMessage]}
   ) 
 
-  const [{ data: claimTx }, claim] = useContractWrite(
+  const [, claim] = useContractWrite(
     syntheticPunksConfig,
     "claim",
     {overrides: {value: claimPrice}}
   )
 
-  const [{ data: claimOtherTx }, claimOther] = useContractWrite(
+  const [, claimOther] = useContractWrite(
     syntheticPunksConfig,
     "claimOther"
   )
-
-  const [{ loading: claimOtherLoading }] = useWaitForTransaction({
-    hash: claimOtherTx?.hash,
-    confirmations: 2
-  })
-
-  const [{ loading: claimLoading }] = useWaitForTransaction({
-    hash: claimTx?.hash,
-    confirmations: 2
-  })
 
   const signerCanClaim = address === account?.address || address === randomWallet?.address
 
   useEffect(() => {
     readTokenClaimed()
   // eslint-disable-next-line
-  }, [address, claimOtherLoading, claimLoading])
+  }, [address, currentTx])
+
+  useEffect(() => {
+    if (!signer) {
+      setRandomWallet(undefined)
+    }
+  }, [signer])
+
+  useEffect(() => {
+    if (currentTx) {
+      (async () => {
+        console.log("new tx", currentTx.hash)
+        await currentTx.wait(2)
+        console.log("tx done")
+        setCurrentTx(undefined)
+      })()
+    }
+  }, [currentTx]) 
 
   useEffect(() => {
     readClaimMessageHash()
@@ -100,7 +109,7 @@ export const PunkCard = () => {
   }, [claimMessage])
 
   const onClaim = () => {
-    claim()
+    claim().then(({data: tx}) => setCurrentTx(tx))
   }
 
   const onClaimRandom = () => {
@@ -109,7 +118,7 @@ export const PunkCard = () => {
     }
     
     randomWallet.signMessage(ethers.utils.arrayify(claimMessageHash)).then(signature => {
-      claimOther({args: [randomWallet.address, signature], overrides: {value: claimPrice}})
+      claimOther({args: [randomWallet.address, signature], overrides: {value: claimPrice}}).then(({data: tx}) => setCurrentTx(tx))
     })    
   }
 
@@ -148,21 +157,19 @@ export const PunkCard = () => {
         <PunkCardHeader addressOrEns={addressOrEns} addressType={addressType} onTwitterShare={onTwitterShare}/>
         {address && <div>
           <PunkDetail address={address}></PunkDetail>
-          {provider && <div style={{paddingBottom: "6px", marginTop: "20px"}}>
+          {provider && !(!tokenClaimed && !signerCanClaim) && <div style={{paddingBottom: "6px", marginTop: "20px"}}>
             <ClaimButton 
-            address={address} 
-            claimPrice={claimPrice ? claimPrice as any as BigNumber : undefined}
-            isRandom={randomWallet !== undefined}
-            signerCanClaim={signerCanClaim} 
-            claimed={tokenClaimed as any as boolean}
-            tokenId={tokenId as any as BigNumber} 
-            txHash={ 
-              (claimLoading && claimTx ? claimTx.hash : undefined) ||
-              (claimOtherLoading && claimOtherTx ? claimOtherTx.hash : undefined)}
-            onClaim={onClaim}
-            onClaimOther={onClaimRandom}
-            />
-          </div> }
+              address={address} 
+              claimPrice={claimPrice ? claimPrice as any as BigNumber : undefined}
+              isRandom={randomWallet !== undefined}
+              signerCanClaim={signerCanClaim} 
+              claimed={tokenClaimed as any as boolean}
+              tokenId={tokenId as any as BigNumber} 
+              txHash={currentTx?.hash}
+              onClaim={onClaim}
+              onClaimOther={onClaimRandom}
+              />
+          </div>}
         </div>}
       </div>
     </div>

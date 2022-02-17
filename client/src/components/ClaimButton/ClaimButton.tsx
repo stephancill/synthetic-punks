@@ -17,12 +17,6 @@ interface IClaimedButtonProps {
 }
 
 export const ClaimButton = ({signerCanClaim, claimed, isRandom, tokenId, txHash, claimPrice, onClaim, onClaimOther}: IClaimedButtonProps) => {
-  // TODO: icons
-  
-  // if not claimed and not claimable, nothing
-  if (!claimed && !signerCanClaim) {
-    return <></>
-  }
   
   // if claimed, view on opensea
   if (claimed && tokenId) {
