@@ -21,7 +21,7 @@ function App() {
   const [{data: network}, switchNetwork] = useNetwork()
 
   // TODO: Style switch network button
-  // TODO: Site metadata for twitter (https://stackoverflow.com/a/26160761/11363384)
+  // TODO: Check if twitter metadata works
   // TODO: Button for user to see their punk
   // TODO: Click address to copy
   // TODO: Use alchemy instead of infura
