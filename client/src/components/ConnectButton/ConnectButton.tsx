@@ -1,10 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState} from 'react';
+import { useNavigate } from "react-router-dom"
 import { useAccount, useConnect, useSigner } from 'wagmi'
 import { truncateAddress } from "../../utilities";
 import { GenericModal } from '../GenericModal/GenericModal';
 import style from "./ConnectButton.module.css"
+import house from "../.././img/house.svg"
 
 export const ConnectButton = () => {
+  const navigate = useNavigate()
   const [{ data: connectData }, connect] = useConnect()
   const [{ data: accountData }, disconnect] = useAccount({
     fetchEns: true,
@@ -22,7 +25,10 @@ export const ConnectButton = () => {
     <>
       {accountData 
       ? 
-        <button className={style.connectBtn}onClick={() => disconnect()}>Disconnect {ensName || truncateAddress(accountData.address)}</button> 
+        <div style={{width:"100%",display:"flex"}}>
+          <button className={style.connectBtn} style={{width:"328px"}} onClick={() => disconnect()}>Disconnect {ensName || truncateAddress(accountData.address)}</button>
+          <button className={style.homeBtn} onClick={()=>{navigate(`/address/${accountData.address}`)}}><img src={house} alt="house" className={style.homeIcon}></img></button>
+        </div>
       : 
         <button className={style.connectBtn} onClick={() => setIsConnecting(!isConnecting)}>Connect</button> 
       }

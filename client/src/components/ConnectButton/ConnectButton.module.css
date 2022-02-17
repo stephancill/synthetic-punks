@@ -49,3 +49,18 @@
 .backBtn:hover {
   color: var(--primary);
 }
+.homeBtn {
+  background: white;
+  border: none;
+  border-radius: 8px;
+  width: 60px;
+  height: 48px;
+  margin-left: 14px;
+  transition: 0.2s;
+}
+.homeBtn:hover {
+  background: rgb(193, 193, 193);
+}
+.homeIcon {
+  width: 25px;
+}
