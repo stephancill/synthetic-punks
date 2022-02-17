@@ -6,7 +6,6 @@ import { truncateAddress } from "../../utilities"
 import { useEnsLookup } from "wagmi"
 import { isAddress } from "ethers/lib/utils"
 import { ethers } from "ethers"
-import { useEffect } from "react"
 
 interface IPunkCardHeaderProps {
   address?: string
@@ -20,16 +19,8 @@ const copyAddress = (address: string | undefined) => {
   }
 }
 export const PunkCardHeader = ({address, addressType, ownerAddress, onTwitterShare}: IPunkCardHeaderProps) => {
-  const [{ data: ensName }, lookupEns] = useEnsLookup({address})
-  const [{ data: ownerEnsName }, lookupOwnerEns] = useEnsLookup({address: ownerAddress})
-
-  // useEffect(() => {
-  //   lookupEns()
-  // }, [address])
-
-  // useEffect(() => {
-  //   lookupOwnerEns()
-  // }, [ownerAddress])
+  const [{ data: ensName }] = useEnsLookup({address})
+  const [{ data: ownerEnsName }] = useEnsLookup({address: ownerAddress})
 
   return <div>
     <div style={{display: "flex"}}>

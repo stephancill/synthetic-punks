@@ -88,12 +88,12 @@ export const PunkCard = () => {
   useEffect(() => {
     readTokenId()
   // eslint-disable-next-line
-  }, 
-  [address, currentTx, provider])
+  }, [address, currentTx, provider])
 
   useEffect(() => {
     readTokenClaimed()
     readOwnerAddress()
+  // eslint-disable-next-line
   }, [tokenId])
 
   useEffect(() => {

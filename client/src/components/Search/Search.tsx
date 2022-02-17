@@ -21,6 +21,7 @@ export const Search = ({onSearch}: ISearchProps) => {
       onSearch(checksummed)
       setSearchQuery("")
     }
+  // eslint-disable-next-line
   }, [searchQuery, resolvedSearchQuery])
 
   const handleSearch = () => {
