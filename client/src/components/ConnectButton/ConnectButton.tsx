@@ -18,7 +18,7 @@ export const ConnectButton = () => {
   }, [signer])
 
   return (
-    <div style={{marginTop:"70px", marginBottom:"70px"}}>
+    <div style={{marginTop:"0px", marginBottom:"70px"}}>
       {accountData 
       ? 
         <button className={style.connectBtn}onClick={() => disconnect()}>Disconnect {ensName || truncateAddress(accountData.address)}</button> 
