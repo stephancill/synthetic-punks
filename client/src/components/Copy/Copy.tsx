@@ -11,7 +11,7 @@ export const Copy = () => {
     {
       heading: "What are Synthetic Punks?",
       body: <p><b>Synthetic CryptoPunks</b> is inspired by the historical collection of 
-      10,000 <a href="https://www.larvalabs.com/cryptopunks" target="_blank" rel="noopener noreferrer">CryptoPunks by Larva Labs</a> and <a href="https://" target="_blank" rel="noopener noreferrer">Synthetic Loot</a> by <a href="https://twitter.com/dhof" target="_blank" rel="noopener noreferrer">dhof</a>. 
+      10,000 <a href="https://www.larvalabs.com/cryptopunks" target="_blank" rel="noopener noreferrer">CryptoPunks by Larva Labs</a> and <a href="https://www.lootproject.com/" target="_blank" rel="noopener noreferrer">Synthetic Loot</a> by <a href="https://twitter.com/dhof" target="_blank" rel="noopener noreferrer">dhof</a>. 
       It generates a unique, fully on-chain CryptoPunk for each Ethereum address.
       <br/><br/>They are free to view for any address, but can be claimed as an ERC-721 NFT for a price of 0.02 ether.</p>
     },
