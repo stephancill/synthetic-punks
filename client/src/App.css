@@ -68,7 +68,8 @@ li {
 .switchNetworkBtn {
   background: none;
   border: 2px solid #b86500;
-  width: 400px;
+  max-width: 400px;
+  width: 100%;
   padding-top: 10px;
   padding-bottom: 10px;
   border-radius: 8px;
