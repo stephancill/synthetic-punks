@@ -30,7 +30,7 @@ export const ConnectButton = () => {
           <button className={style.homeBtn} onClick={()=>{navigate(`/address/${accountData.address}`)}}><img src={house} alt="house" className={style.homeIcon}></img></button>
         </div>
       : 
-        <button className={style.connectBtn} onClick={() => setIsConnecting(!isConnecting)}>Connect</button> 
+        <button className={style.connectBtn} onClick={() => setIsConnecting(!isConnecting)}>Connect to claim</button> 
       }
       <GenericModal setShouldShow={setIsConnecting} shouldShow={isConnecting} content={
         <div className={style.connectModalCard}>

@@ -31,6 +31,7 @@ h1 {
 
 button {
   cursor: pointer;
+  transition: 0.2s;
 }
 
 h2 {
@@ -111,7 +112,4 @@ li {
 }
 .toolTip:hover .toolTipText {
   visibility: visible;
-}
-button {
-  transition: 0.2s;
 }
