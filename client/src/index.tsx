@@ -14,7 +14,7 @@ import { HashRouter } from 'react-router-dom';
 const defaultRPC = process.env.REACT_APP_DEFAULT_RPC
 
 const deployedChainId = parseInt(deployments.chainId)
-const defaultProvider = deployedChainId === 31337 ? new StaticJsonRpcProvider("http://127.0.0.1:8545/", deployments.name) : new StaticJsonRpcProvider(defaultRPC, deployments.name)
+const defaultProvider = deployedChainId === 31337 ? new StaticJsonRpcProvider("http://127.0.0.1:8545/") : new StaticJsonRpcProvider(defaultRPC, deployments.name)
 
 // Chains for connectors to support
 const chains = [...developmentChains, ...defaultChains].filter(chain => chain.id === parseInt(deployments.chainId))
