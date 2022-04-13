@@ -132,4 +132,23 @@ describe("SyntheticPunks", function () {
     const attributes = await syntheticPunks.getAttributes(0)
     expect(attributes.length).to.be.gt(0)
   })
+
+  it("should transfer the token", async function() {
+    const user = signers[2]
+    const otherUser = signers[3]
+    const claimPrice = await syntheticPunks.claimPrice()
+    await syntheticPunks.connect(user).claim({value: claimPrice})
+  
+
+    const tokenId = await syntheticPunks.getTokenID(user.address)
+    const initialOwnerAddress = await syntheticPunks.ownerOf(tokenId)
+    expect(initialOwnerAddress).to.equal(user.address)
+
+    console.log(user.address, otherUser.address, tokenId)
+
+    await syntheticPunks.transferFrom(user.address, otherUser.address, tokenId)
+    const newOwnerAddress = await syntheticPunks.ownerOf(tokenId)
+
+    expect(newOwnerAddress).to.equal(otherUser.address)
+  })
 })
