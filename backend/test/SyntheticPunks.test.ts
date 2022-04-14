@@ -137,16 +137,16 @@ describe("SyntheticPunks", function () {
     const user = signers[2]
     const otherUser = signers[3]
     const claimPrice = await syntheticPunks.claimPrice()
-    await syntheticPunks.connect(user).claim({value: claimPrice})
-  
+    let tx = await syntheticPunks.connect(user).claim({value: claimPrice})
+    await tx.wait()
 
     const tokenId = await syntheticPunks.getTokenID(user.address)
     const initialOwnerAddress = await syntheticPunks.ownerOf(tokenId)
+
     expect(initialOwnerAddress).to.equal(user.address)
 
-    console.log(user.address, otherUser.address, tokenId)
-
-    await syntheticPunks.transferFrom(user.address, otherUser.address, tokenId)
+    tx = await syntheticPunks.connect(user).transferFrom(user.address, otherUser.address, tokenId)
+    await tx.wait()
     const newOwnerAddress = await syntheticPunks.ownerOf(tokenId)
 
     expect(newOwnerAddress).to.equal(otherUser.address)

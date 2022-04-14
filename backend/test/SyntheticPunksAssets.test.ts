@@ -6,7 +6,7 @@ import { spritesheetImageData, allRanges, attributesContentURI } from "../utils/
 import isSvg from "is-svg"
 import { getENSReverseAddressOrZero } from "../utils/ENSReverseAddresses"
 
-describe("SyntheticPunks", function () {
+describe("SyntheticPunksAssets", function () {
   let signers: SignerWithAddress[]
   let syntheticPunksAssets: SyntheticPunksAssets
 
